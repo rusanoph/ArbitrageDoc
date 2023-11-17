@@ -1,0 +1,40 @@
+/* PT Sans */
+@import url('https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+    font-family: 'PT Sans', sans-serif;
+
+    padding: 0;
+    margin: 0;
+}
+
+.container {
+    border: 1px solid #ccc;
+    max-width: 1200px;
+    width: 100%;
+}
+
+main {
+    width: 100%;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1 1 100%;
+}
+
+main .wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+}

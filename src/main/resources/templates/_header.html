@@ -1,0 +1,19 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Вставка файла стилей с использованием Thymeleaf -->
+    <link th:fragment="header" rel="stylesheet" th:href="@{/css/header.css}"/>
+</head>
+<body>
+    <header th:fragment="header">
+        <div th:class="'container'">
+            <div th:class="'wrapper'">
+                <div th:class="'label'">Something</div>
+                <div th:class="'label'">Push</div>
+                <div th:class="'label'">Exit</div>
+            </div>
+        </div>
+    </header>
+</body>
+</html>

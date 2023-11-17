@@ -1,0 +1,23 @@
+header {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    background-color: #ccc;
+}
+
+
+header .wrapper {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+}
+
+header .label {
+    margin: 10px 0;
+    background-color: #eee;
+    border-radius: 2px;
+    padding: 3px 10px;
+    cursor: pointer;
+}
