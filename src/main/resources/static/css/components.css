@@ -1,0 +1,114 @@
+/*#region Root Colors */
+
+:root {
+    --main-color: #63B175;
+    --main-color-dark: #4E9359;
+}
+
+/*#endregion  */
+
+
+/*#region Tree view with ul  */
+
+ul {
+    padding: 0 0 0 20px;
+    list-style-type: none;
+}
+
+.caret {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.caret::before {
+    content: "";
+    background-image: url("../img/folder.svg");
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+    background-size: 16px;
+}
+
+.caret-down::before {
+    content: "";
+    background-image: url("../img/folder-open.svg");
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+    background-size: 16px;
+}
+
+.nested-tree {
+    display: none;
+}
+
+.active-tree {
+    display: block;
+}
+
+/*#endregion */
+
+/*#region Form row  */
+.form-row {
+    position: relative;
+    margin-bottom: 20px;
+}
+.form-row input {
+    display: block;
+    border-radius: 0;
+    width: 100%;
+    padding: 0 10px;
+    line-height: 40px;
+    background: none;
+    border-width: 0;
+    border-bottom: 2px solid #ccc;
+    transition: all 0.2s ease;
+}
+.form-row input:focus {
+    outline: none;
+    border-color: var(--main-color);
+}
+
+.form-row input:focus + label, .form-row input:not(:placeholder-shown) + label {
+    transform: translateY(-60px);
+    margin-left: -14px;
+    font-size: 12px;
+    font-weight: 400;
+    border-color: var(--main-color);
+    color: var(--main-color);
+}
+.form-row label {
+    position: absolute;
+    left: 13px;
+    color: var(--main-color-dark);
+    font-size: 16px;
+    font-weight: 300;
+    transform: translateY(-35px);
+    transition: all 0.2s ease;
+}
+/*#endregion */
+
+/*#region Button */
+.button-component {
+    padding: 7px 12px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+}
+
+.button-component:hover:not(:disabled) {
+    color: #63B175;
+    background-color: #eee;
+    border: 1px solid #ccc;
+}
+
+.button-component:hover > a {
+    color: #63B175;
+}
+
+/*#endregion */
+

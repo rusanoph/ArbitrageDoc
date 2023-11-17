@@ -1,6 +1,14 @@
 /* PT Sans */
 @import url('https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
+* {
+    /* Remove size impact from padding and border */
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;         /* Opera/IE 8+ */
+}
+
+/* #region General Styles */
 body {
     display: flex;
     flex-direction: column;
@@ -9,16 +17,36 @@ body {
     width: 100%;
     font-family: 'PT Sans', sans-serif;
 
+    color: #333;
+    background-color: #eee;
+
     padding: 0;
     margin: 0;
 }
 
 .container {
     border: 1px solid #ccc;
-    max-width: 1200px;
+    max-width: 1440px;
     width: 100%;
 }
 
+.container:not(:last-child) {
+    margin: 0 0 20px 0;
+}
+
+pre {
+    /* width: 100%; */
+    white-space: pre-line;
+}
+
+a {
+    color: #fefefe;
+    text-decoration: none;
+}
+
+/* #endregion */
+
+/* #region Main tag */
 main {
     width: 100%;
 }
@@ -27,8 +55,8 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     flex: 1 1 100%;
+    margin: 20px 0;
 }
 
 main .wrapper {
@@ -37,4 +65,107 @@ main .wrapper {
     justify-content: center;
     align-items: center;
     background-color: #fff;
+    padding: 20px;
 }
+/* #endregion */
+
+/* #region Search  */
+
+.search {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+.search-row {
+    display: flex;
+    justify-content: right;
+    width: 100%;
+}
+.search-col {
+    width: 100%;
+}
+
+/* #endregion */
+
+/* #region Content */
+
+
+
+.content {
+    width: 100%;
+}
+
+.content-row {
+    display: flex;
+    width: 100%;
+}
+
+.content-col {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    overflow: auto;
+}
+
+.content-col:first-child {
+    flex: 2;
+    border-right: 1px solid #ccc;
+    width: 30%;
+
+    max-height: 640px;
+    overflow: auto;
+}
+
+.content-col:last-child {
+    display: flex;
+    flex-direction: column;
+    flex: 5;
+    justify-content: center;
+    align-items: center;
+    width: 70%;
+    height: fit-content;
+}
+
+
+#document-list-tree {
+    padding: 0;
+    margin: 0;
+}
+
+#document-list-tree li:not(:has(span.caret)) {
+    padding: 5px 10px;
+}
+
+#document-list-tree li > span {
+    display: inline-block;
+    width: 100%;
+    padding: 5px 10px;
+}
+
+#document-list-tree li:hover > span {
+    width: 100%;
+    color: #fefefe;
+    background-color: var(--main-color);
+
+    cursor: pointer;
+}
+
+#document-list-tree li:not(:has(span.caret))::before {
+    content: "";
+    background-image: url("../img/file-blank.svg");
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+    background-size: 16px;
+}
+
+#document-list-tree li:not(:has(span.caret)):hover {
+    color: #fefefe;
+    background-color: var(--main-color);
+
+    cursor: pointer;
+}
+
+/* #endregion */

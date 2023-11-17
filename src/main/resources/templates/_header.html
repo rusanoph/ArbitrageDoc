@@ -9,9 +9,16 @@
     <header th:fragment="header">
         <div th:class="'container'">
             <div th:class="'wrapper'">
-                <div th:class="'label'">Something</div>
-                <div th:class="'label'">Push</div>
-                <div th:class="'label'">Exit</div>
+                <div class="header-row">
+                    <div class="header-col">
+                        <div class="logo">DevDoc</div>
+                    </div>
+                    <div class="header-col">
+                        <div th:class="button-component"><a href="/">Документы</a></div>
+                        <div th:class="button-component"><a href="/statistic">Статистика документа</a></div>
+                        <div th:class="button-component">Ключевые слова</div>
+                    </div>
+                </div>
             </div>
         </div>
     </header>

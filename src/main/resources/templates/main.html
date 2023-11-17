@@ -6,7 +6,10 @@
     <title>Document</title>
 
     <!-- CSS -->
+    <link rel="stylesheet" href="/css/components.css">
+    
     <link rel="stylesheet" href="/css/main.css">
+
 
 </head>
 <body>
@@ -16,9 +19,43 @@
     <main>
         <div class="container">
             <div class="wrapper">
-                <p>Spring + Thymeleaf</p>
-                <p>Here will be document controller output:</p>
-                <p id="api-data"></p>
+                <div class="search">
+                    <div class="search">
+                        <div class="search-row">
+                            <div class="search-col">
+                                <div class="form-row" style="width: 80%;">
+                                    <input id="document-path" name="documentPath" type="text" placeholder="" onkeyup="saveValue(this)">
+                                    <label for="documentPath">Путь</label>
+                                </div>
+                            </div>
+                            <div class="search-col">
+                                <div class="form-row" style="width: 80%;">
+                                    <input id="document-name" name="documentName" type="text" placeholder="" onkeyup="saveValue(this)">
+                                    <label for="documentName">Название</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="search-row"><input id="document-open-text" class="button-component" type="submit" value="Открыть"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="wrapper">
+                <div class="content">
+                    <div class="content-row">
+                        <div class="content-col">
+                            <h3>Список документов</h3>
+                            <ul id="document-list-tree"></ul>
+                        </div>
+                        <div class="content-col">
+                            <h3 id="document-filename">Название файла</h3>
+                            <pre id="document-text">Текст документа</pre>
+                        </div>
+                        
+                    </div>
+                </div>
             </div>
         </div>
     </main>
@@ -27,6 +64,7 @@
     <footer th:replace="~{_footer :: footer}"></footer>
 
     <!-- JS -->
+    <script src="/js/component.js"></script>
     <script src="/js/main.js"></script>
 </body>
 </html>
