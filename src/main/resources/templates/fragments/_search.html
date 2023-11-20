@@ -1,0 +1,27 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+</head>
+<body>
+    <div th:fragment="file-search" class="search">
+        <link rel="stylesheet" th:href="@{/css/components.css}"/>
+        <div class="search-row">
+            <div class="search-col">
+                <div class="form-row" style="width: 80%;">
+                    <input id="document-path" name="documentPath" type="text" placeholder="">
+                    <label for="documentPath">Путь</label>
+                </div>
+            </div>
+            <div class="search-col">
+                <div class="form-row" style="width: 80%;">
+                    <input id="document-name" name="documentName" type="text" placeholder="">
+                    <label for="documentName">Название</label>
+                </div>
+            </div>
+        </div>
+        <div class="search-row"><input id="document-open-text" class="button-component" type="submit" value="Открыть"></div>
+    </div>
+</body>
+</html>

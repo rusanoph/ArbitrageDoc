@@ -8,12 +8,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
-public class StatisticController {
+public class KeywordController {
     
-    @RequestMapping(value="/statistic")
+    @RequestMapping(value="/keyword")
     public String pageMethod(Model model, HttpServletRequest request, HttpServletResponse response) {
 
-        return "statistic.html";
+        return "keyword.html";
     }
 
 }

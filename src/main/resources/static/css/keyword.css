@@ -1,0 +1,15 @@
+
+
+.list li {
+    display: inline-block;
+    width: 100%;
+    padding: 5px 10px;
+}
+
+.list li:hover {
+    width: 100%;
+    color: #fefefe;
+    background-color: var(--main-color);
+
+    cursor: pointer;
+}

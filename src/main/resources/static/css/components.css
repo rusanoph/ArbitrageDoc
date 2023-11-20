@@ -100,6 +100,7 @@ ul {
     transition: all 0.15s ease-in-out;
 }
 
+
 .button-component:hover:not(:disabled) {
     color: #63B175;
     background-color: #eee;
@@ -110,5 +111,74 @@ ul {
     color: #63B175;
 }
 
+
 /*#endregion */
 
+/* #region Search  */
+
+.search {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+.search-row {
+    display: flex;
+    justify-content: right;
+    width: 100%;
+}
+.search-col {
+    width: 100%;
+}
+
+/* #endregion */
+
+/* #region List  */
+
+.list {
+    padding: 0;
+    margin: 0;
+
+    max-height: 640px;
+
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+
+    overflow: auto;
+}
+
+.list li {
+    padding: 5px 10px;
+}
+
+.list li > span {
+    display: inline-block;
+    width: 100%;
+    padding: 5px 10px;
+}
+
+.list li:hover > span {
+    width: 100%;
+    color: #fefefe;
+    background-color: var(--main-color);
+
+    cursor: pointer;
+}
+
+.selected {
+    width: 100%;
+    color: #fefefe;
+    background-color: var(--main-color);
+
+    cursor: pointer;
+}
+
+/* #endregion */
+
+/* #region  Other */
+
+.highlight-text {
+    background-color: rgba(251, 255, 64, 0.9);
+}
+
+/* #endregion */

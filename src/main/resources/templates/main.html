@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Документы</title>
 
     <!-- CSS -->
     <link rel="stylesheet" href="/css/components.css">
@@ -13,31 +13,13 @@
 
 </head>
 <body>
-    <header th:replace="~{_header :: header}"></header>
+    <header th:replace="~{/fragments/_header :: header}"></header>
 
 
     <main>
         <div class="container">
             <div class="wrapper">
-                <div class="search">
-                    <div class="search">
-                        <div class="search-row">
-                            <div class="search-col">
-                                <div class="form-row" style="width: 80%;">
-                                    <input id="document-path" name="documentPath" type="text" placeholder="" onkeyup="saveValue(this)">
-                                    <label for="documentPath">Путь</label>
-                                </div>
-                            </div>
-                            <div class="search-col">
-                                <div class="form-row" style="width: 80%;">
-                                    <input id="document-name" name="documentName" type="text" placeholder="" onkeyup="saveValue(this)">
-                                    <label for="documentName">Название</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="search-row"><input id="document-open-text" class="button-component" type="submit" value="Открыть"></div>
-                    </div>
-                </div>
+                <div th:replace="~{/fragments/_search :: file-search}"></div>
             </div>
         </div>
 
@@ -47,9 +29,71 @@
                     <div class="content-row">
                         <div class="content-col">
                             <h3>Список документов</h3>
-                            <ul id="document-list-tree"></ul>
+                            <ul id="document-list-tree" class="list"></ul>
                         </div>
                         <div class="content-col">
+                            <div class="tool-panel">
+                                <div id="format-tool" class="tool button-component">Форматирование</div>
+                                <div id="word-color-tool" class="tool button-component">Слова</div>
+
+                                <!-- Font -->
+                                <div class="button-component">
+                                    Шрифт: 
+                                    <select name="document-font-size" id="document-font-size">
+                                        <option value="8px"></option>
+                                        <option value="9px"></option>
+                                        <option value="10px"></option>
+                                        <option value="11px"></option>
+                                        <option value="12px"></option>
+                                        <option value="13px"></option>
+                                        <option value="14px"></option>
+                                        <option value="15px"></option>
+                                        <option value="16px"></option>
+                                        <option value="17px"></option>
+                                        <option value="18px"></option>
+                                        <option value="19px"></option>
+                                        <option value="20px"></option>
+                                        <option value="21px"></option>
+                                        <option value="22px"></option>
+                                        <option value="23px"></option>
+                                        <option value="24px"></option>
+                                        <option value="25px"></option>
+                                        <option value="26px"></option>
+                                        <option value="27px"></option>
+                                        <option value="28px"></option>
+                                        <option value="29px"></option>
+                                        <option value="30px"></option>
+                                        <option value="31px"></option>
+                                        <option value="32px"></option>
+                                    </select>
+                                </div>
+
+                                <!-- Line Height -->
+                                <div class="button-component">
+                                    Высота строки:
+                                    <select name="document-font-size" id="document-font-size">
+                                        <option value="8px"></option>
+                                        <option value="9px"></option>
+                                        <option value="10px"></option>
+                                        <option value="11px"></option>
+                                        <option value="12px"></option>
+                                        <option value="13px"></option>
+                                        <option value="14px"></option>
+                                        <option value="15px"></option>
+                                        <option value="16px"></option>
+                                        <option value="17px"></option>
+                                        <option value="18px"></option>
+                                        <option value="19px"></option>
+                                        <option value="20px"></option>
+                                        <option value="21px"></option>
+                                        <option value="22px"></option>
+                                        <option value="23px"></option>
+                                        <option value="24px"></option>
+                                    </select>
+                                </div>
+
+                            </div>
+
                             <h3 id="document-filename">Название файла</h3>
                             <pre id="document-text">Текст документа</pre>
                         </div>
@@ -61,10 +105,10 @@
     </main>
 
 
-    <footer th:replace="~{_footer :: footer}"></footer>
+    <footer th:replace="~{/fragments/_footer :: footer}"></footer>
 
     <!-- JS -->
     <script src="/js/component.js"></script>
-    <script src="/js/main.js"></script>
+    <script src="/js/main.js" type="module"></script>
 </body>
 </html>

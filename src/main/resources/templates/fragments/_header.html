@@ -1,0 +1,33 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+    <header th:fragment="header">
+        <link rel="stylesheet" th:href="@{/css/header.css}"/>
+        <div th:class="'container'">
+            <div th:class="'wrapper'">
+                <div class="header-row">
+                    <div class="header-col">
+                        <div class="logo">DevDoc</div>
+                    </div>
+                    <div class="header-col">
+                        <a href="/">
+                            <div th:class="button-component">Документы</a></div>
+                        </a>
+
+                        <!-- <a href=""> -->
+                            <div th:class="button-component">Статистика документа</div>
+                        <!-- </a> -->
+                        
+                        <a href="/keyword">
+                            <div th:class="button-component">Ключевые слова</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+</body>
+</html>
