@@ -8,31 +8,39 @@
 		<version>3.1.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+
 	<groupId>ru.idr.arbitragestatistics</groupId>
 	<artifactId>arbitrage_statistics</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+
 	<name>arbitrage_statistics</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Project to process different sets of text documents</description>
+	
 	<properties>
 		<java.version>17</java.version>
 	</properties>
+
 	<dependencies>
-		<!-- https://mvnrepository.com/artifact/org.json/json -->
+		<!-- JSON -->
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
 			<version>20231013</version>
 		</dependency>
 
+		<!-- Thymeleaf -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
+
+		<!-- Spring Web -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
+		<!-- Spring Boot Starter Test -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
