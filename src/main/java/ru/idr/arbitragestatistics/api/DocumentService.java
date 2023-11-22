@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -26,7 +27,8 @@ public class DocumentService {
     @GetMapping(value="/api/document/text", produces="application/json")    
     public String getDocumentText(@RequestParam("documentPath") String documentPath, 
         @RequestParam("documentFileName") String documentFileName,
-        @RequestParam("formated") Boolean formated) {
+        @RequestParam("formated") Boolean formated,
+        @RequestParam("lemma") Boolean lemma) {
 
         JSONObject documentJson = new JSONObject();
         documentJson.put("filename", documentFileName);
@@ -48,6 +50,10 @@ public class DocumentService {
                 targetFileText = DocumentStatistic.removeSpaceBetweenWords(targetFileText);
             }
 
+            if (lemma) {
+                targetFileText = DocumentStatistic.lemmatizeText(targetFileText, " ");
+            }
+
             documentJson.put("text", targetFileText);
         } catch (IOException ioEx) {
             documentJson.put("error", "Документ не найден.");
@@ -58,7 +64,7 @@ public class DocumentService {
     }
     
     @PostMapping(value="/api/document/text/statistic", produces="applicatoin/json")
-    public String getDocumentWordStatistic(@RequestBody String text) {
+    public String postDocumentWordStatistic(@RequestBody String text) {
 
         JSONObject wordStatisticJson = new JSONObject();
         
@@ -68,6 +74,40 @@ public class DocumentService {
         }
 
         return wordStatisticJson.toString();
+    }
+    
+    @PostMapping(value="/api/document/text/lemma/valid", produces="application/json")
+    public String postDocumentTextLemmaValid(@RequestBody String text) {
+
+        JSONObject textLemmasJson = new JSONObject();
+
+        Iterable<String> textLemmas = DocumentStatistic.getLemmasFromText(text, " ", true);
+        String simplifiedText = String.join(" ", textLemmas);
+
+        Map<String, Integer> wordStatistic = DocumentStatistic.getWordStatistic(simplifiedText, " ");
+        for (String word : wordStatistic.keySet()) {
+            textLemmasJson.put(word, wordStatistic.get(word));
+        }
+
+        return textLemmasJson.toString();
+
+    }
+
+    @PostMapping(value="/api/document/text/lemma/invalid", produces="application/json")
+    public String postDocumentTextLemmaInvalid(@RequestBody String text) {
+
+        JSONObject textLemmasJson = new JSONObject();
+
+        Iterable<String> textLemmas = DocumentStatistic.getLemmasFromText(text, " ", false);
+        String simplifiedText = String.join(" ", textLemmas);
+
+        Map<String, Integer> wordStatistic = DocumentStatistic.getWordStatistic(simplifiedText, " ");
+        for (String word : wordStatistic.keySet()) {
+            textLemmasJson.put(word, wordStatistic.get(word));
+        }
+
+        return textLemmasJson.toString();
+
     }
     //#endregion
 

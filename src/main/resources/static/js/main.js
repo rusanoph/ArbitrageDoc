@@ -13,6 +13,8 @@ class MainPageDocument {
 
         this.formatTool();
         this.wordColorTool();
+        this.fontTool();
+        this.lineHeightTool();
     }
 
     openButton() {
@@ -108,6 +110,31 @@ class MainPageDocument {
             } 
 
             wordColorTool.classList.toggle("active-tool");
+        });
+    }
+
+    fontTool() {
+        const fontSizeSelect = document.getElementById("document-font-size");
+
+        fontSizeSelect.addEventListener('change', () => {
+            const docTextHTML = document.getElementById("document-text");
+            const lineHeightSelect = document.getElementById("document-line-height");
+
+            if (parseInt(lineHeightSelect.value, 10) < parseInt(fontSizeSelect.value, 10)) {
+                lineHeightSelect.value = fontSizeSelect.value; 
+                docTextHTML.style.lineHeight = fontSizeSelect.value; 
+            }
+
+            docTextHTML.style.fontSize = fontSizeSelect.value;
+        });
+    }
+
+    lineHeightTool() {
+        const lineHeightSelect = document.getElementById("document-line-height");
+
+        lineHeightSelect.addEventListener('change', () => {
+            const docTextHTML = document.getElementById("document-text");
+            docTextHTML.style.lineHeight = lineHeightSelect.value;
         });
     }
 

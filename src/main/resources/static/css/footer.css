@@ -5,10 +5,12 @@ footer {
     justify-content: center;
     align-items: center;
     background-color: #ccc;
-    height: 50px;
 }
 
 footer .wrapper {
     display: flex;
-    justify-content: center;
+    justify-content: start;
+    align-items: center;
+    height: 50px;
+
 }

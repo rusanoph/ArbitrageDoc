@@ -13,6 +13,7 @@ public class KeywordController {
     @RequestMapping(value="/keyword")
     public String pageMethod(Model model, HttpServletRequest request, HttpServletResponse response) {
 
+        model.addAttribute("activePage", "keyword");
         return "keyword.html";
     }
 

@@ -7,6 +7,58 @@
 
 /*#endregion  */
 
+/*#region Back to Top button */
+
+#backToTop {
+    display: none;
+
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+
+    border-radius: 45%;
+
+    background-color: var(--main-color-dark);
+    background-image: url("../img/arrow-top.svg");
+    width: 50px;
+    height: 50px;
+    background-repeat: no-repeat;
+    background-size: 50px;
+
+    cursor: pointer;
+
+    transition: all 0.3 ease-in-out;
+}
+
+#backToTop:hover {
+    background-color: var(--main-color);
+}
+
+/*#endregion  */
+
+/*#region Full Page Tabs */
+
+.tab-link {
+    background-color: #555;
+    color: #fff;
+    
+    padding: 14px 16px;
+    font-size: 18px;
+    width: auto;
+
+    cursor: pointer;
+}
+
+.tab-link:hover {
+    background-color: #777;
+}
+
+.tab-content {
+    display: none;
+    height: 100%;
+}
+
+/*#endregion */
 
 /*#region Tree view with ul  */
 
@@ -51,6 +103,10 @@ ul {
 /*#endregion */
 
 /*#region Form row  */
+.side-nav-row {
+    margin: 0 0 10px 0;
+}
+
 .form-row {
     position: relative;
     margin-bottom: 20px;
@@ -102,15 +158,20 @@ ul {
 
 
 .button-component:hover:not(:disabled) {
-    color: #63B175;
+    color: var(--main-color);
     background-color: #eee;
     border: 1px solid #ccc;
 }
 
 .button-component:hover > a {
-    color: #63B175;
+    color: var(--main-color);
 }
 
+.button-component-active {
+    color: var(--main-color);
+    background-color: #eee;
+    border: 1px solid #ccc;
+}
 
 /*#endregion */
 
@@ -175,10 +236,110 @@ ul {
 
 /* #endregion */
 
+/* #region Scrollbar */
+
+/* ::-webkit-scrollbar-thumb {
+    background-image: linear-gradient(180deg, #d0368a 0%, #708ad4 99%);
+    box-shadow: inset 2px 2px 5px 0 rgba(#fff, 0.5);
+    border-radius: 100px;
+} */
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+select::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* #endregion */
+
+/* #region Key value list */
+
+.key-value-header {
+    font-size: 1.1rem;
+    background-color: #ccc;
+}
+
+.key-value-row, .key-value-header {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+
+    padding: 5px 10px;
+}
+
+.key {
+    width: 50%;
+}
+
+.value {
+    width: 50%;
+}
+
+.key-value-row:hover {
+    background-color: var(--main-color);
+}
+
+/* #endregion */
+
 /* #region  Other */
 
 .highlight-text {
     background-color: rgba(251, 255, 64, 0.9);
 }
 
+#format-tool::before {
+    content: "";
+    background-image: url("../img/format.svg");
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-repeat: no-repeat;
+    background-size: 24px;
+    padding: 0;
+    margin: 0 5px 0 0;
+}
+
+#word-color-tool::before {
+    content: "";
+    background-image: url("../img/palette-color.svg");
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-repeat: no-repeat;
+    background-size: 24px;
+    padding: 0;
+    margin: 0 5px 0 0;
+}
+
+#lemma-tool::before {
+    content: "";
+    background-image: url("../img/lemmatizate.svg");
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-repeat: no-repeat;
+    background-size: 24px;
+    padding: 0;
+    margin: 0 5px 0 0;
+}
+
 /* #endregion */
+

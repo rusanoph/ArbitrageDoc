@@ -8,22 +8,29 @@
         <link rel="stylesheet" th:href="@{/css/header.css}"/>
         <div th:class="'container'">
             <div th:class="'wrapper'">
+
                 <div class="header-row">
                     <div class="header-col">
                         <div class="logo">ArbitrageDoc</div>
                     </div>
                     <div class="header-col">
                         <a href="/">
-                            <div th:class="button-component">Документы</a></div>
+                            <div th:class="(${activePage == 'main'} ? 'button-component-active' : '') + ' button-component'">Документы</div>
+                        </a>
+                        
+                        <a href="/keyword">
+                            <div th:class="(${activePage == 'keyword'} ? 'button-component-active' : '') + ' button-component'">Ключевые слова</div>
                         </a>
 
                         <!-- <a href=""> -->
-                            <div th:class="button-component">Статистика документа</div>
+                            <div th:class="(${activePage == ''} ? 'button-component-active' : '') + ' button-component'">Статистика документа</div>
                         <!-- </a> -->
                         
-                        <a href="/keyword">
-                            <div th:class="button-component">Ключевые слова</div>
-                        </a>
+                        <!-- <a href=""> -->
+                            <div th:class="(${activePage == ''} ? 'button-component-active' : '') + ' button-component'">Загрузить</div>
+                        <!-- </a> -->
+
+
                     </div>
                 </div>
             </div>

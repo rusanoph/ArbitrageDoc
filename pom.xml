@@ -11,16 +11,31 @@
 
 	<groupId>ru.idr.arbitragestatistics</groupId>
 	<artifactId>arbitrage_statistics</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 
 	<name>arbitrage_statistics</name>
 	<description>Project to process different sets of text documents</description>
 	
 	<properties>
-		<java.version>17</java.version>
+		<java.version>15</java.version>
 	</properties>
 
+	<!-- Jitpack -->
+	<repositories>
+		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
+	</repositories>
+
 	<dependencies>
+		<!-- Jitpack | demidko.aot -->
+		<dependency>
+			<groupId>com.github.demidko</groupId>
+			<artifactId>aot</artifactId>
+			<version>2022.11.28</version>
+		</dependency>
+
 		<!-- JSON -->
 		<dependency>
 			<groupId>org.json</groupId>

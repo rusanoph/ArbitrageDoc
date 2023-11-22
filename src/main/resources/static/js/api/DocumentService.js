@@ -1,11 +1,12 @@
 
 export class DocumentService {
     
-    static async getDocumentText(path, filename, formated=false) {
+    static async getDocumentText(path, filename, formated=false, lemma=false) {
         let params = {
             "documentPath": path,
             "documentFileName": filename,
             "formated": formated,
+            "lemma": lemma,
         }
     
         let query = Object.keys(params)
@@ -20,16 +21,33 @@ export class DocumentService {
         return data;
     } 
 
-    static async getDocumentWordStatistic(text) {
-        let params = {
-            "text": text,
-        }
+    static async postDocumentWordStatistic(text) {
+        let url = `/api/document/text/statistic`;
     
-        let query = Object.keys(params)
-            .map(k => `${encodeURIComponent(k)}=${encodeURIComponent(params[k])}`)
-            .join("&");
+        const response = await fetch(url, {
+            method: 'POST',
+            body: text,
+        });
+        let data = await response.json();
+
+        return data;
+    }
+
+    static async postDocumentTextLemmaValid(text) {
+        let url = `/api/document/text/lemma/valid`;
     
-        let url = `/api/document/text/statistic?${query}`;
+        const response = await fetch(url, {
+            method: 'POST',
+            body: text,
+        });
+        let data = await response.json();
+
+        return data;
+    }
+
+
+    static async postDocumentTextLemmaInvalid(text) {
+        let url = `/api/document/text/lemma/invalid`;
     
         const response = await fetch(url, {
             method: 'POST',
