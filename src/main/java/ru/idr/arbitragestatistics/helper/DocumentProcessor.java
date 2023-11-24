@@ -3,7 +3,6 @@ package ru.idr.arbitragestatistics.helper;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -26,10 +25,12 @@ public class DocumentProcessor {
 
         Map<String, TitleData> titleMap = new HashMap<>();
 
+        // Check all directories for existing files
         Set<String> dirs = ServerFile.listDirectoryServer(currentDir);
         if (dirs != null) {
             for (String dir : dirs) {
-                // Merge two maps: recursive map and titleMap
+                // If there dir, then recursively search files inside of it
+                // And merge two maps: result map and result of recursive call
                 getTitleMap(dir).forEach((key, value) -> 
                     titleMap.merge(key, value, (v1, v2) -> {
                         v1.getFiles().addAll(v2.getFiles());
@@ -41,12 +42,14 @@ public class DocumentProcessor {
             }
         }
 
+        // Add all file's titles to titleMap
         Set<String> files = ServerFile.listFilesServer(currentDir);
         if (files != null) {
                 for (String file : files) {
 
                 String title = getArbitrageTextTitle(ServerFile.fileText(currentDir, file), " ");
 
+                // Add or Increment title data
                 TitleData tmp;
                 if (titleMap.containsKey(title)) {
 
@@ -68,6 +71,7 @@ public class DocumentProcessor {
         return titleMap;
     }
 
+    
     public static String getArbitrageTextTitle(String text, String splitSymbol) {
         String arbitrageTitle = "Неизвестный заголовок";
 

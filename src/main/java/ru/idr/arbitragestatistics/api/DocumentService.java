@@ -134,7 +134,7 @@ public class DocumentService {
 
                 jsonTmp.put("title", title);                
                 jsonTmp.put("count", tmp.getCount());
-                jsonTmp.put("files", String.join(",<br><br>", tmp.getFiles()));
+                jsonTmp.put("files", String.join("<br><br>", tmp.getFiles()));
 
                 documentTitleJson.put(jsonTmp);
             }

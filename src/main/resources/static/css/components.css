@@ -10,18 +10,19 @@
 /* #region Squared Loader */
 
 .loader {
-    margin: 10px;
+    margin: 100px;
     height: 5px;
     width: 5px;
     color: #333;
-    box-shadow: -10px -10px 0 5px #777,
-                -10px -10px 0 5px #777,
-                -10px -10px 0 5px #777,
-                -10px -10px 0 5px #777;
-    animation: loader-38 6s infinite;
+
+    box-shadow: -10px -10px 0 5px,
+                -10px -10px 0 5px,
+                -10px -10px 0 5px,
+                -10px -10px 0 5px;
+    animation: loader-animation 6s infinite;
   }
 
-  @keyframes loader-38 {
+  @keyframes loader-animation {
     0% {
       box-shadow: -10px -10px 0 5px,
                   -10px -10px 0 5px,
@@ -124,7 +125,7 @@
 
     cursor: pointer;
 
-    transition: all 0.3 ease-in-out;
+    transition: all 0.15s ease-in-out;
 }
 
 #backToBottom {
@@ -145,7 +146,7 @@
 
     cursor: pointer;
 
-    transition: all 0.3 ease-in-out;
+    transition: all 0.15s ease-in-out;
 }
 
 #backToTop:hover, #backToBottom:hover {
