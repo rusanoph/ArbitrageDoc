@@ -18,10 +18,30 @@ document.addEventListener("DOMContentLoaded", function() {
         document.body.scrollTop = 0;
         document.documentElement.scrollTop = 0
     });
+
+    let backToBottomElement = document.getElementById("backToBottom");
+
+    const scrollEnd = 200;
+    window.addEventListener("scroll", function() {
+        let isHideBackToBottomDocElement = document.documentElement.scrollHeight - document.documentElement.clientHeight - scrollEnd < document.documentElement.scrollTop;
+        let isHideBackToBottomBody = document.body.scrollHeight - document.body.clientHeight - scrollEnd < document.body.scrollTop;
+
+        if (isHideBackToBottomDocElement || isHideBackToBottomBody) {
+            backToBottomElement.style.display = "none";
+        } else {
+            backToBottomElement.style.display = "block";
+        }
+    });
+
+    backToBottomElement.addEventListener("click", function() {
+        document.body.scrollTop = document.body.scrollHeight;
+        document.documentElement.scrollTop = document.documentElement.scrollHeight;
+    })
 });
 
 //#endregion
 
+//#region Tab
 function openTab(tabId, element, color) {
     
     const tabContents = document.getElementsByClassName("tab-content");
@@ -38,13 +58,12 @@ function openTab(tabId, element, color) {
     
     element.style.backgroundColor = color;
 }
-
 if (document.getElementById("defaultTab") !== null) {
     document.getElementById("defaultTab").click();
 }
+//#endregion
 
-
-
+//#region Tree View
 function treeViewToggler() {
     let treeViewToggler = document.getElementsByClassName("caret");
     for (let i = 0; i < treeViewToggler.length; i++) {
@@ -58,3 +77,42 @@ function treeViewToggler() {
 }
 
 treeViewToggler();
+//#endregion
+
+//#region Table/List Sort Functions
+
+function sortTable(elementId, columnIndex, i=1) {
+    
+    let table = document.getElementById(elementId);
+
+    let isSwap = true;
+    while (isSwap) {
+
+        isSwap = false;
+        let rows = table.rows;
+
+        for (let i = 1; i < rows.length - 1; i++) {
+            let doSwap = false;
+
+            let x = rows[i].getElementsByTagName("td")[columnIndex];
+            let y = rows[i + 1].getElementsByTagName("td")[columnIndex];
+
+            if (isNaN(x.innerHTML)) {
+                doSwap = x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase();
+            } else {
+                doSwap = parseInt(x.innerHTML) > parseInt(y.innerHTML);
+            }
+
+            if (doSwap) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                isSwap = true;
+                break;
+            }
+        }
+
+    }
+
+}
+
+//#endregion
+

@@ -14,6 +14,7 @@
 <body>
     <header th:replace="~{/fragments/_header :: header}"></header>
 
+    <div id="backToBottom"></div>
 
     <main>
         <div class="container">
@@ -33,10 +34,10 @@
                     <div class="data-row">
                         <table id="title-table" class="table-basic">
                             <thead>
-                                <th>№</th>
-                                <th>Заголовки</th>
-                                <th>Количество</th>
-                                <th>Файлы</th>
+                                <th class="sortable-asc" onclick="sortTable('title-table', 0)">№</th>
+                                <th class="sortable-asc" onclick="sortTable('title-table', 1)">Заголовки</th>
+                                <th class="sortable-asc" onclick="sortTable('title-table', 2)">Количество</th>
+                                <th >Файлы</th>
                             </thead>
                             <tbody id="title-table-body">
                             </tbody>

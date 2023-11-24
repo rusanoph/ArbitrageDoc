@@ -110,7 +110,7 @@
     display: none;
 
     position: fixed;
-    bottom: 20px;
+    bottom: 80px;
     right: 20px;
 
     border-radius: 45%;
@@ -127,7 +127,28 @@
     transition: all 0.3 ease-in-out;
 }
 
-#backToTop:hover {
+#backToBottom {
+    display: none;
+
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+
+    border-radius: 45%;
+
+    background-color: var(--main-color-dark);
+    background-image: url("../img/arrow-bottom.svg");
+    width: 50px;
+    height: 50px;
+    background-repeat: no-repeat;
+    background-size: 50px;
+
+    cursor: pointer;
+
+    transition: all 0.3 ease-in-out;
+}
+
+#backToTop:hover, #backToBottom:hover {
     background-color: var(--main-color);
 }
 
@@ -436,6 +457,34 @@ select::-webkit-scrollbar {
     background-size: 24px;
     padding: 0;
     margin: 0 5px 0 0;
+}
+
+
+.sortable-asc {
+    cursor: pointer;
+}
+
+.sortable-asc::after {
+    content: "";
+    background-image: url("../img/sort-ascending.svg");
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-repeat: no-repeat;
+    background-size: 24px;
+    padding: 0;
+    margin: 0 5px 0 5px;
+
+    position: relative;
+    bottom: -6px;
+}
+
+.sortable-asc:hover {
+    background-color: #eee;
+}
+
+.sortable-asc:hover::after {
+    filter: invert(0.5);
 }
 
 /* #endregion */
