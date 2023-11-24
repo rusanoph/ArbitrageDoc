@@ -1,19 +1,138 @@
 package ru.idr.arbitragestatistics.helper;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.github.demidko.aot.WordformMeaning;
 
-public class DocumentStatistic {
+import ru.idr.arbitragestatistics.model.TitleData;
+
+public class DocumentProcessor {
 
     private static String regexCapital = "[А-Я]";
     private static String regexSpecialCharacters = "[^а-яА-Я0-9. ]";
 
-    
+    //#region Data
+
+    public static Map<String, TitleData> getTitleMap(String currentDir) throws IOException {
+
+        Map<String, TitleData> titleMap = new HashMap<>();
+
+        Set<String> dirs = ServerFile.listDirectoryServer(currentDir);
+        if (dirs != null) {
+            for (String dir : dirs) {
+                // Merge two maps: recursive map and titleMap
+                getTitleMap(dir).forEach((key, value) -> 
+                    titleMap.merge(key, value, (v1, v2) -> {
+                        v1.getFiles().addAll(v2.getFiles());
+                        return new TitleData(
+                            v1.getCount() + v2.getCount(), 
+                            v1.getFiles()
+                        );
+                    }));
+            }
+        }
+
+        Set<String> files = ServerFile.listFilesServer(currentDir);
+        if (files != null) {
+                for (String file : files) {
+
+                String title = getArbitrageTextTitle(ServerFile.fileText(currentDir, file), " ");
+
+                TitleData tmp;
+                if (titleMap.containsKey(title)) {
+
+                    tmp = titleMap.get(title); 
+                    tmp.addFile(file);
+                    tmp.setCount(tmp.getCount() + 1);
+
+                } else {
+
+                    tmp = new TitleData();
+                    tmp.setCount(1);
+                    tmp.addFile(file);
+                    titleMap.put(title, tmp);
+                
+                }
+            }
+        }
+
+        return titleMap;
+    }
+
+    public static String getArbitrageTextTitle(String text, String splitSymbol) {
+        String arbitrageTitle = "Неизвестный заголовок";
+
+        List<String> possibleTitles = new ArrayList<>(List.of(
+            "резолютивный",
+            "определение",
+            "постановление",
+            "протокольный",
+            "решение"
+        ));
+
+        text = DocumentProcessor.removeLineSeparator(text);
+        text = DocumentProcessor.removeSpecialCharacters(text);
+        text = DocumentProcessor.removeSpaceBetweenWords(text);
+        text = text.toLowerCase();
+
+        String lemmatizeText = DocumentProcessor.lemmatizeText(text, " ");
+
+        // Find index of first word in title
+        Integer titleIndex = 0;
+        for (String title : possibleTitles) {
+            if (lemmatizeText.contains(title)) {
+                
+                Integer candidateTitleIndex = lemmatizeText.indexOf(title);
+
+                if (titleIndex == 0) {
+                    titleIndex = candidateTitleIndex;
+                } else {
+                    titleIndex = titleIndex < candidateTitleIndex ? titleIndex : candidateTitleIndex; 
+                }
+            }
+        }
+
+        // Cut off all words before first word in title
+        String candidateTitle = text.substring(titleIndex);
+
+        // Get substring by regexp
+        List<String> patterns = new ArrayList<>(List.of(
+            "(.*?дело)",
+            "(.*?г\\.)",
+            "(.*?Г\\.)"
+        ));
+        
+        // Find regexp result with minimal length
+
+        for (String patternRaw : patterns) {
+            Pattern pattern = Pattern.compile(patternRaw);
+            Matcher matcher = pattern.matcher(candidateTitle);
+
+            if (matcher.find()) {
+                String title = matcher.group();
+
+                if (title.length() < candidateTitle.length()) {
+                    candidateTitle = title;
+                }
+            }
+        }
+
+        arbitrageTitle = candidateTitle;
+        
+        return arbitrageTitle;
+    }
+
+    //#endregion
+
     //#region Statistic methods
 
     private static Iterable<WordformMeaning> getValidWordformMeaningFromText(String text, String splitSymbol) {
@@ -120,6 +239,7 @@ public class DocumentStatistic {
         return text.replaceAll(separator, " ");
     }
 
+    // Work Incorrect
     public static String removeSpaceBetweenWords(String text) {
 
         text = text.replaceAll("\n|\r", " ");
@@ -135,7 +255,7 @@ public class DocumentStatistic {
             return word;
         }
 
-        return Character.toUpperCase(word.charAt(0)) + word.substring(1);
+        return word.substring(0, 1).toUpperCase() + word.substring(1);
     }
 
     public static String toCapitalText(String text) {

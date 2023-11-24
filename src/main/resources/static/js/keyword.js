@@ -1,4 +1,5 @@
 import { DocumentService } from "./api/DocumentService.js";
+import { ComponentTools } from "./helper/ComponentTools.js";
 import { Util } from "./util/Util.js";
 
 function createLineChart(x, y, ctx, color=null) {
@@ -31,6 +32,10 @@ class KeywordPage {
     documentPath;
     documentFileName;
 
+    allWordsCount = 0;
+    lemmaCount = 0;
+    unknownCount = 0;
+
     isFormated = false;
     isWordColor = false;
     isLemma = false;
@@ -56,19 +61,7 @@ class KeywordPage {
             this.documentPath = docPathInputValue;
             this.documentFileName = docFileNameInputValue;
 
-            DocumentService.getDocumentText(docPathInputValue, docFileNameInputValue, this.isFormated)
-            .then((data) => {
-                const docFileName = document.getElementById("document-filename");
-                const docText = document.getElementById("document-text");
-            
-                docFileName.innerHTML = `Имя файла - ${docPathInputValue}/${docFileNameInputValue}`;
-                
-                if (data.error === undefined) {
-                    docText.innerHTML = data.text;
-                } else {
-                    docText.innerHTML = data.error;
-                }
-            });
+            ComponentTools.updateDocumentView("document-filename", "document-title", "document-text", docPathInputValue, docFileNameInputValue, this.isFormated);
         });
     }
 
@@ -78,20 +71,7 @@ class KeywordPage {
         formatTool.addEventListener('click', async () => {
             this.isFormated = !this.isFormated;
 
-            DocumentService.getDocumentText(this.documentPath, this.documentFileName, this.isFormated, this.isLemma)
-            .then((data) => {
-                const docFileName = document.getElementById("document-filename");
-                const docText = document.getElementById("document-text");
-            
-                docFileName.innerHTML = `Имя файла - ${this.documentPath}/${this.documentFileName}`;
-                
-                if (data.error === undefined) {
-                    docText.innerHTML = data.text;
-                } else {
-                    docText.innerHTML = data.error;
-                }
-            });
-            
+            ComponentTools.updateDocumentView("document-filename", "document-title", "document-text", this.documentPath, this.documentFileName, this.isFormated, this.isLemma);
 
             formatTool.classList.toggle("active-tool");
         });
@@ -150,19 +130,7 @@ class KeywordPage {
         lemmatizationTool.addEventListener('click', async () => {
             this.isLemma = !this.isLemma;
             
-            DocumentService.getDocumentText(this.documentPath, this.documentFileName, this.isFormated, this.isLemma)
-            .then((data) => {
-                const docFileName = document.getElementById("document-filename");
-                const docText = document.getElementById("document-text");
-            
-                docFileName.innerHTML = `Имя файла - ${this.documentPath}/${this.documentFileName}`;
-                
-                if (data.error === undefined) {
-                    docText.innerHTML = data.text;
-                } else {
-                    docText.innerHTML = data.error;
-                }
-            });
+            ComponentTools.updateDocumentView("document-filename", "document-title", "document-text", this.documentPath, this.documentFileName, this.isFormated, this.isLemma);
 
             lemmatizationTool.classList.toggle("active-tool");
         });
@@ -222,7 +190,11 @@ class KeywordPage {
             divKeyValueRow.appendChild(divValue);
 
             keywordListElement.appendChild(divKeyValueRow);
+
+            this.allWordsCount++;
         }
+
+        document.getElementById("all-words-count").innerHTML = this.allWordsCount;
     }
 
     async generateLemmaValidList(listId) {
@@ -249,7 +221,12 @@ class KeywordPage {
             divKeyValueRow.appendChild(divValue);
 
             validLemmasListElement.appendChild(divKeyValueRow);
+
+            this.lemmaCount++;
         }
+
+        document.getElementById("lemma-count").innerHTML = this.lemmaCount;
+
     }
 
     async generateLemmaInvalidList(listId) {
@@ -276,7 +253,12 @@ class KeywordPage {
             divKeyValueRow.appendChild(divValue);
 
             validLemmasListElement.appendChild(divKeyValueRow);
+
+            this.unknownCount++;
         }
+
+        document.getElementById("unknown-count").innerHTML = this.unknownCount;
+        
     }
 }
 

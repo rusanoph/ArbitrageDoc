@@ -1,18 +1,24 @@
 import { DocumentService } from "./api/DocumentService.js";
+import { ComponentTools } from "./helper/ComponentTools.js";
 import { Util } from "./util/Util.js";
 
 class MainPageDocument {
     documentPath;
     documentFileName;
 
+    documentCount = 0;
+
     isFormated = false;
-    isWordColor = false;
+    isWordColor = false;    
+    isLemma = false;
 
     constructor() {
         this.openButton();
 
         this.formatTool();
-        this.wordColorTool();
+        this.wordColorTool();        
+        this.lemmatizationTool();
+
         this.fontTool();
         this.lineHeightTool();
     }
@@ -27,19 +33,7 @@ class MainPageDocument {
             this.documentPath = docPathInputValue;
             this.documentFileName = docFileNameInputValue;
 
-            DocumentService.getDocumentText(docPathInputValue, docFileNameInputValue, this.isFormated)
-            .then((data) => {
-                const docFileName = document.getElementById("document-filename");
-                const docText = document.getElementById("document-text");
-            
-                docFileName.innerHTML = `Имя файла - ${docPathInputValue}/${docFileNameInputValue}`;
-                
-                if (data.error === undefined) {
-                    docText.innerHTML = data.text;
-                } else {
-                    docText.innerHTML = data.error;
-                }
-            });
+            ComponentTools.updateDocumentView("document-filename", "document-title", "document-text", docPathInputValue, docFileNameInputValue, this.isFormated);
         });
     }
 
@@ -48,20 +42,7 @@ class MainPageDocument {
         formatTool.addEventListener('click', async () => {
             this.isFormated = !this.isFormated;
 
-            DocumentService.getDocumentText(this.documentPath, this.documentFileName, this.isFormated)
-            .then((data) => {
-                const docFileName = document.getElementById("document-filename");
-                const docText = document.getElementById("document-text");
-            
-                docFileName.innerHTML = `Имя файла - ${this.documentPath}/${this.documentFileName}`;
-                
-                if (data.error === undefined) {
-                    docText.innerHTML = data.text;
-                } else {
-                    docText.innerHTML = data.error;
-                }
-            });
-            
+            ComponentTools.updateDocumentView("document-filename", "document-title", "document-text", this.documentPath, this.documentFileName, this.isFormated);
 
             formatTool.classList.toggle("active-tool");
         });
@@ -111,6 +92,20 @@ class MainPageDocument {
 
             wordColorTool.classList.toggle("active-tool");
         });
+    }
+
+    lemmatizationTool() {
+        const lemmatizationTool = document.getElementById("lemma-tool");
+
+        lemmatizationTool.addEventListener('click', async () => {
+            this.isLemma = !this.isLemma;
+            
+            ComponentTools.updateDocumentView("document-filename", "document-title", "document-text", this.documentPath, this.documentFileName, this.isFormated, this.isLemma);
+
+            lemmatizationTool.classList.toggle("active-tool");
+        });
+
+
     }
 
     fontTool() {
@@ -196,19 +191,7 @@ class MainPageDocument {
                 Util.saveValue(document.getElementById("document-path"));
                 Util.saveValue(document.getElementById("document-name"));
 
-                DocumentService.getDocumentText(currDir, file, this.isFormated)
-                .then((data) => {
-                    const docFileName = document.getElementById("document-filename");
-                    const docText = document.getElementById("document-text");
-                
-                    docFileName.innerHTML = `Имя файла - ${currDir}/${file}`;
-                    
-                    if (data.error === undefined) {
-                        docText.innerHTML = data.text;
-                    } else {
-                        docText.innerHTML = data.error;
-                    }
-                });;
+                ComponentTools.updateDocumentView("document-filename", "document-title", "document-text", currDir, file, this.isFormated);
 
                 let previouslySelected = document.querySelector('.selected');
                 if (previouslySelected) {
@@ -219,9 +202,10 @@ class MainPageDocument {
             });
 
             documentListElement.appendChild(li);
+            this.documentCount++;
         }
 
-        
+        document.getElementById("doc-list-count").innerHTML = this.documentCount;
     }
 }
 
@@ -242,4 +226,5 @@ document.getElementById("document-name").addEventListener('keyup', function () {
 
 let mainPageDocument = new MainPageDocument(); 
 mainPageDocument.generateDocumentList("document-list-tree");
+
 

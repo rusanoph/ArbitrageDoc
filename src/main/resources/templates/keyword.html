@@ -30,9 +30,9 @@
                     <div class="content-col">
 
                         <div class="side-nav-row">
-                            <div id="defaultTab" class="tab-link" onclick="openTab('all-words', this, 'var(--main-color)')">Все слова</div>
-                            <div class="tab-link" onclick="openTab('lemmas', this, 'red')">Леммы</div>
-                            <div class="tab-link" onclick="openTab('unknown', this, 'blue')">Неизвестные леммы</div>
+                            <div id="defaultTab" class="tab-link" onclick="openTab('all-words', this, 'var(--main-color)')">Все слова: <span id="all-words-count">0</span></div>
+                            <div class="tab-link" onclick="openTab('lemmas', this, 'red')">Леммы: <span id="lemma-count">0</span></div>
+                            <div class="tab-link" onclick="openTab('unknown', this, 'blue')">Неизвестные леммы: <span id="unknown-count">0</span></div>
                         </div>
 
                         <div class="side-nav-row">
@@ -153,7 +153,8 @@
                             </div>
                         </div>
 
-                        <h3 id="document-filename">Название файла</h3>
+                        <h3 id="document-filename">Файл: </h3>
+                        <h3 id="document-title">Заголовок: </h3>
                         <pre id="document-text">Текст документа</pre>
                     </div>
                 </div>

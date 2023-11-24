@@ -38,7 +38,10 @@ function openTab(tabId, element, color) {
     
     element.style.backgroundColor = color;
 }
-document.getElementById("defaultTab").click();
+
+if (document.getElementById("defaultTab") !== null) {
+    document.getElementById("defaultTab").click();
+}
 
 
 

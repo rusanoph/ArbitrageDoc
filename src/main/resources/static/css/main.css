@@ -103,6 +103,14 @@ main .wrapper {
     height: fit-content;
 }
 
+.content-col h3 {
+    width: 100%;
+
+    margin: 0;
+    padding: 0;
+
+}
+
 
 #document-list-tree {
     padding: 0;

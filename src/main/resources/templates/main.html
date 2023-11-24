@@ -29,7 +29,7 @@
                     <div class="content-row">
                         <div class="content-col">
                             <div class="side-nav-row">
-                                <div id="defaultTab" class="tab-link" onclick="openTab('document-tree', this, '#777')">Список документов</div>
+                                <div id="defaultTab" class="tab-link" onclick="openTab('document-tree', this, '#777')">Список документов: <span id="doc-list-count">0</span></div>
                             </div>
                             <div class="side-nav-row">
                                 <div id="document-tree" class="tab-content">
@@ -43,6 +43,7 @@
                                     <div class="tool-col">
                                         <div id="format-tool" class="tool button-component">Форматирование</div>
                                         <div id="word-color-tool" class="tool button-component">Слова</div>
+                                        <div id="lemma-tool" class="tool button-component">Лемматизация</div>
                                     </div>
 
                                     <div class="tool-col">
@@ -128,7 +129,8 @@
                                 </div>
                             </div>
 
-                            <h3 id="document-filename">Название файла</h3>
+                            <h3 id="document-filename">Файл: </h3>
+                            <h3 id="document-title">Заголовок: </h3>
                             <pre id="document-text">Текст документа</pre>
                         </div>
                         
@@ -140,6 +142,8 @@
 
 
     <footer th:replace="~{/fragments/_footer :: footer}"></footer>
+
+    <div id="backToTop"></div>
 
     <!-- JS -->
     <script src="/js/component.js"></script>

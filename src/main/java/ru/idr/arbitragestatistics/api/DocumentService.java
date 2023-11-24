@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.zone.ZoneOffsetTransitionRule.TimeDefinition;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,8 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import ru.idr.arbitragestatistics.helper.DocumentStatistic;
+import ru.idr.arbitragestatistics.helper.DocumentProcessor;
 import ru.idr.arbitragestatistics.helper.ServerFile;
+import ru.idr.arbitragestatistics.model.TitleData;
 
 @RestController
 public class DocumentService {
@@ -44,17 +46,21 @@ public class DocumentService {
         try {
             String targetFileText = new String(Files.readAllBytes(documentURI), StandardCharsets.UTF_8);
 
+            String arbitrageTitle = DocumentProcessor.getArbitrageTextTitle(targetFileText, " ");
+
             if (formated) {
-                targetFileText = DocumentStatistic.removeLineSeparator(targetFileText);
-                targetFileText = DocumentStatistic.removeSpecialCharacters(targetFileText);
-                targetFileText = DocumentStatistic.removeSpaceBetweenWords(targetFileText);
+                // targetFileText = DocumentStatistic.removeLineSeparator(targetFileText);
+                targetFileText = DocumentProcessor.removeSpecialCharacters(targetFileText);
+                targetFileText = DocumentProcessor.removeSpaceBetweenWords(targetFileText);
             }
 
             if (lemma) {
-                targetFileText = DocumentStatistic.lemmatizeText(targetFileText, " ");
+                targetFileText = DocumentProcessor.lemmatizeText(targetFileText, " ");
             }
 
+            documentJson.put("title", arbitrageTitle);
             documentJson.put("text", targetFileText);
+
         } catch (IOException ioEx) {
             documentJson.put("error", "Документ не найден.");
             ioEx.printStackTrace();
@@ -68,7 +74,7 @@ public class DocumentService {
 
         JSONObject wordStatisticJson = new JSONObject();
         
-        Map<String, Integer> wordStatistic = DocumentStatistic.getWordStatistic(text, " ");
+        Map<String, Integer> wordStatistic = DocumentProcessor.getWordStatistic(text, " ");
         for (String word : wordStatistic.keySet()) {
             wordStatisticJson.put(word, wordStatistic.get(word));
         }
@@ -81,10 +87,10 @@ public class DocumentService {
 
         JSONObject textLemmasJson = new JSONObject();
 
-        Iterable<String> textLemmas = DocumentStatistic.getLemmasFromText(text, " ", true);
+        Iterable<String> textLemmas = DocumentProcessor.getLemmasFromText(text, " ", true);
         String simplifiedText = String.join(" ", textLemmas);
 
-        Map<String, Integer> wordStatistic = DocumentStatistic.getWordStatistic(simplifiedText, " ");
+        Map<String, Integer> wordStatistic = DocumentProcessor.getWordStatistic(simplifiedText, " ");
         for (String word : wordStatistic.keySet()) {
             textLemmasJson.put(word, wordStatistic.get(word));
         }
@@ -98,10 +104,10 @@ public class DocumentService {
 
         JSONObject textLemmasJson = new JSONObject();
 
-        Iterable<String> textLemmas = DocumentStatistic.getLemmasFromText(text, " ", false);
+        Iterable<String> textLemmas = DocumentProcessor.getLemmasFromText(text, " ", false);
         String simplifiedText = String.join(" ", textLemmas);
 
-        Map<String, Integer> wordStatistic = DocumentStatistic.getWordStatistic(simplifiedText, " ");
+        Map<String, Integer> wordStatistic = DocumentProcessor.getWordStatistic(simplifiedText, " ");
         for (String word : wordStatistic.keySet()) {
             textLemmasJson.put(word, wordStatistic.get(word));
         }
@@ -109,9 +115,37 @@ public class DocumentService {
         return textLemmasJson.toString();
 
     }
+    
     //#endregion
 
     //#region Files
+    @GetMapping(value="/api/document/list/title", produces="application/json")
+    public String getTitleData(@RequestParam("directoryPath") String directoryPath) {
+
+        JSONArray documentTitleJson = new JSONArray();
+
+        try {
+            Map<String, TitleData> textTitles = DocumentProcessor.getTitleMap(directoryPath);
+            
+            for (String title : textTitles.keySet()) {
+                
+                TitleData tmp = textTitles.get(title);
+                JSONObject jsonTmp = new JSONObject();
+
+                jsonTmp.put("title", title);                
+                jsonTmp.put("count", tmp.getCount());
+                jsonTmp.put("files", String.join(",<br><br>", tmp.getFiles()));
+
+                documentTitleJson.put(jsonTmp);
+            }
+
+        } catch (IOException ioEx) {
+            ioEx.printStackTrace();
+        }
+
+        return documentTitleJson.toString();
+    }
+
     @GetMapping(value="/api/document/list/doc", produces="application/json")
     public String getListOfFiles(@RequestParam("directoryPath") String directoryPath) {
 

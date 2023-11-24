@@ -58,6 +58,27 @@ export class DocumentService {
         return data;
     }
 
+    static async getTitleDataTable(path=null) {
+        if (path === null) {
+            path = "";
+        }
+
+        let params = {
+            "directoryPath": path,
+        }
+
+        let query = Object.keys(params)
+            .map(k => `${encodeURIComponent(k)}=${encodeURIComponent(params[k])}`)
+            .join("&");
+
+        let url = `/api/document/list/title?${query}`;
+
+        const response = await fetch(url);
+        let data = await response.json();
+
+        return data;
+    }
+
     static async getListOfFiles(path=null) {
         if (path === null) {
             path = "";

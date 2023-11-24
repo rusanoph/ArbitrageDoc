@@ -7,6 +7,103 @@
 
 /*#endregion  */
 
+/* #region Squared Loader */
+
+.loader {
+    margin: 10px;
+    height: 5px;
+    width: 5px;
+    color: #333;
+    box-shadow: -10px -10px 0 5px #777,
+                -10px -10px 0 5px #777,
+                -10px -10px 0 5px #777,
+                -10px -10px 0 5px #777;
+    animation: loader-38 6s infinite;
+  }
+
+  @keyframes loader-38 {
+    0% {
+      box-shadow: -10px -10px 0 5px,
+                  -10px -10px 0 5px,
+                  -10px -10px 0 5px,
+                  -10px -10px 0 5px;
+    }
+    8.33% {
+      box-shadow: -10px -10px 0 5px,
+                  10px -10px 0 5px,
+                  10px -10px 0 5px,
+                  10px -10px 0 5px;
+    }
+    16.66% {
+      box-shadow: -10px -10px 0 5px,
+                  10px -10px 0 5px,
+                  10px 10px 0 5px,
+                  10px 10px 0 5px;
+    }
+    24.99% {
+      box-shadow: -10px -10px 0 5px,
+                  10px -10px 0 5px,
+                  10px 10px 0 5px,
+                  -10px 10px 0 5px;
+    }
+    33.32% {
+      box-shadow: -10px -10px 0 5px,
+                  10px -10px 0 5px,
+                  10px 10px 0 5px,
+                  -10px -10px 0 5px;
+    }
+    41.65% {
+      box-shadow: 10px -10px 0 5px,
+                  10px -10px 0 5px,
+                  10px 10px 0 5px,
+                  10px -10px 0 5px;
+    }
+    49.98% {
+      box-shadow: 10px 10px 0 5px,
+                10px 10px 0 5px,
+                10px 10px 0 5px,
+                10px 10px 0 5px;
+    }
+    58.31% {
+      box-shadow: -10px 10px 0 5px,
+                  -10px 10px 0 5px,
+                  10px 10px 0 5px,
+                  -10px 10px 0 5px;
+    }
+    66.64% {
+      box-shadow: -10px -10px 0 5px,
+                  -10px -10px 0 5px,
+                  10px 10px 0 5px,
+                  -10px 10px 0 5px;
+    }
+    74.97% {
+      box-shadow: -10px -10px 0 5px,
+                  10px -10px 0 5px,
+                  10px 10px 0 5px,
+                  -10px 10px 0 5px;
+    }
+    83.3% {
+      box-shadow: -10px -10px 0 5px,
+                  10px 10px 0 5px,
+                  10px 10px 0 5px,
+                  -10px 10px 0 5px;
+    }
+    91.63% {
+      box-shadow: -10px -10px 0 5px,
+                  -10px 10px 0 5px,
+                  -10px 10px 0 5px,
+                  -10px 10px 0 5px;
+    }
+    100% {
+      box-shadow: -10px -10px 0 5px,
+                  -10px -10px 0 5px,
+                  -10px -10px 0 5px,
+                  -10px -10px 0 5px;
+    }
+  }
+
+/* #endregion */
+
 /*#region Back to Top button */
 
 #backToTop {
@@ -343,3 +440,35 @@ select::-webkit-scrollbar {
 
 /* #endregion */
 
+/* #region Table Basic */
+.table-basic {
+    margin: 0;
+    padding: 0;
+    border-spacing: 0;
+    width: 100%;
+}
+
+.table-basic th, .table-basic td {
+    border: 1px solid #ccc;
+    border-top: none;
+    margin: 0;
+    padding: 5px 10px;
+}
+
+.table-basic th {
+    border: 1px solid #ccc;
+}
+
+.table-basic th:first-child {
+    border-radius: 5px 0 0 0;
+} 
+
+.table-basic th:last-child {
+    border-radius: 0 5px 0 0;
+}
+
+.table-basic tbody tr:hover {
+    background-color: #eee;
+    color: var(--basic-light);
+}
+/* #endregion */

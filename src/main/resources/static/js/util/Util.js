@@ -12,4 +12,10 @@ export class Util {
         }
         return localStorage.getItem(v);
     }
+
+    static removeSavedValue(v) {
+        if (localStorage.getItem(v)) {
+            localStorage.removeItem(v);
+        }
+    }
 }
