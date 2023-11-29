@@ -21,6 +21,18 @@ export class DocumentService {
         return data;
     } 
 
+    static async postDocumentMoneySum(text) {
+        let url = `/api/document/text/data/moneysum`;
+
+        const response = await fetch(url, {
+            method: 'POST',
+            body: text,
+        });
+        let data = await response.json();
+
+        return data;
+    }
+
     static async postDocumentWordStatistic(text) {
         let url = `/api/document/text/statistic`;
     
@@ -44,7 +56,6 @@ export class DocumentService {
 
         return data;
     }
-
 
     static async postDocumentTextLemmaInvalid(text) {
         let url = `/api/document/text/lemma/invalid`;

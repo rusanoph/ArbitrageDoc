@@ -69,6 +69,7 @@ public class DocumentService {
         return documentJson.toString();
     }
     
+    //#region Document Statistic
     @PostMapping(value="/api/document/text/statistic", produces="applicatoin/json")
     public String postDocumentWordStatistic(@RequestBody String text) {
 
@@ -115,7 +116,22 @@ public class DocumentService {
         return textLemmasJson.toString();
 
     }
-    
+    //#endregion
+
+    @PostMapping(value="/api/document/text/data/moneysum", produces="application/json")
+    public String postDocumentMoneySum(@RequestBody String text) {
+
+        JSONArray moneySumJson = new JSONArray();
+
+        Iterable<String> moneySums = DocumentProcessor.getMoneySum(text);
+
+        for (String moneySum : moneySums) {
+            moneySumJson.put(moneySum);
+        }
+
+        return moneySumJson.toString();
+    }
+
     //#endregion
 
     //#region Files
@@ -132,7 +148,7 @@ public class DocumentService {
                 TitleData tmp = textTitles.get(title);
                 JSONObject jsonTmp = new JSONObject();
 
-                jsonTmp.put("title", title);                
+                jsonTmp.put("title", title);
                 jsonTmp.put("count", tmp.getCount());
                 jsonTmp.put("files", String.join("<br><br>", tmp.getFiles()));
 

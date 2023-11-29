@@ -161,46 +161,6 @@ main .wrapper {
 
 /* #endregion */
 
-/* #region Tool Panel */
-
-.tool-panel {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-}
-
-.tool-row {
-    display: flex;
-    width: 100%;
-    margin: 0 0 5px 0;
-
-    justify-content: space-between;
-}
-
-.tool-col {
-    display: flex;
-}
-
-.tool {
-    display: flex;
-    align-items: center;
-    margin: 0 5px 0 0;
-}
-
-.tool div {
-    margin: 0 5px 0 0;
-}
-
-.active-tool {
-    background-color: var(--main-color);
-    color: #eee;
-}
-
-#format-tool {
-
-}
-/* #endregion */
-
 select {
     border: none;
 

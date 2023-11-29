@@ -1,8 +1,8 @@
 /*#region Root Colors */
 
 :root {
-    --main-color: #63B175;
-    --main-color-dark: #4E9359;
+    --main-color: rgb(99, 176, 117);
+    --main-color-dark: rgb(77, 147, 89)
 }
 
 /*#endregion  */
@@ -179,6 +179,25 @@
 
 /*#endregion */
 
+/* #region Accordion */
+
+.accordion {
+    padding: 5px;
+
+    transition: all 0.15s ease-in-out;
+}
+
+.accordion-active, .accordion:hover {
+    background-color: #333;
+}
+
+.panel {
+    display: none;
+}
+
+
+/* #endregion */
+
 /*#region Tree view with ul  */
 
 ul {
@@ -230,23 +249,25 @@ ul {
     position: relative;
     margin-bottom: 20px;
 }
-.form-row input {
+.form-row input, .form-row textarea {
     display: block;
     border-radius: 0;
     width: 100%;
     padding: 0 10px;
     line-height: 40px;
+    font-family: 'PT Sans', sans-serif;
     background: none;
     border-width: 0;
     border-bottom: 2px solid #ccc;
     transition: all 0.2s ease;
 }
-.form-row input:focus {
+.form-row input:focus, .form-row textarea:focus {
     outline: none;
     border-color: var(--main-color);
 }
 
-.form-row input:focus + label, .form-row input:not(:placeholder-shown) + label {
+.form-row input:focus + label, .form-row input:not(:placeholder-shown) + label,
+.form-row textarea:focus + label, .form-row textarea:not(:placeholder-shown) + label {
     transform: translateY(-60px);
     margin-left: -14px;
     font-size: 12px;
@@ -418,9 +439,197 @@ select::-webkit-scrollbar {
 
 /* #endregion */
 
+/* #region Table Basic */
+.table-basic {
+    margin: 0;
+    padding: 0;
+    border-spacing: 0;
+    width: 100%;
+}
+
+.table-basic th, .table-basic td {
+    border: 1px solid #ccc;
+    border-top: none;
+    margin: 0;
+    padding: 5px 10px;
+}
+
+.table-basic th {
+    border: 1px solid #ccc;
+}
+
+.table-basic th:first-child {
+    border-radius: 5px 0 0 0;
+} 
+
+.table-basic th:last-child {
+    border-radius: 0 5px 0 0;
+}
+
+.table-basic tbody tr:hover {
+    background-color: #eee;
+    color: var(--basic-light);
+}
+/* #endregion */
+
+/* #region File View */
+
+.tool-panel {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.tool-row {
+    display: flex;
+    width: 100%;
+    margin: 0 0 5px 0;
+
+    justify-content: space-between;
+}
+
+.tool-col {
+    display: flex;
+}
+
+.tool {
+    display: flex;
+    align-items: center;
+    margin: 0 5px 0 0;
+    width: fit-content;
+}
+
+.tool div {
+    margin: 0 5px 0 0;
+}
+
+.active-tool {
+    background-color: var(--main-color);
+    color: #eee;
+}
+
+#format-tool {
+
+}
+/* #endregion */
+
+/* #region RegEx Input */
+
+.regex-color-text-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    width: 100%;
+}
+
+.regex-color-text-col {
+    margin: 10px;
+}
+
+.regex-param-title {
+    margin: 0 0 5px 0;
+}
+
+.regex-param {
+    display: flex;
+    align-items: end;
+    justify-content: end;
+    text-wrap: nowrap;
+    text-align: right;
+}
+
+.regex-param > .checkbox-row {
+    margin: 0 0 5px 15px;
+}
+
+.regex-param-key {
+    display: inline-block;
+    color: var(--main-color-dark);
+    font-weight: bold;
+}
+
+
+#regex-input:focus {
+    box-shadow: 0px 10px 30px rgba(51, 255, 0, 0.3);
+}
+
+
+
+/* #endregion */
+
+/* #region Checkbox */
+
+.checkbox {
+    display: inline-block;
+    position: relative;
+    padding-right: 30px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+.checkbox input:checked ~ .checkbox__checkmark {
+    background-color: #fff;
+}
+.checkbox input:checked ~ .checkbox__checkmark:after {
+    opacity: 1;
+    left: 8px;
+}
+.checkbox input:checked ~ .checkbox__body {
+    font-weight: bold;
+}
+.checkbox:hover input ~ .checkbox__checkmark {
+    background-color: #eee;
+}
+.checkbox:hover input:checked ~ .checkbox__checkmark {
+    background-color: #eee;
+}
+.checkbox .checkbox__checkmark {
+    position: absolute;
+    top: 1px;
+    right: 0;
+    height: 22px;
+    width: 22px;
+    background-color: #eee;
+    transition: background-color 0.25s ease;
+    border-radius: 4px;
+}
+.checkbox .checkbox__checkmark:after {
+    content: "";
+    position: absolute;
+    left: 0px;
+    top: 6px;
+    width: 3px;
+    height: 5px;
+    border: solid var(--main-color);
+    border-width: 0 4px 4px 0;
+    transform: rotate(45deg);
+    opacity: 0;
+    transition: opacity 0.25s ease, left 0.25s ease;
+}
+.checkbox .checkbox__body {
+    color: #333;
+    line-height: 1.4;
+    font-size: 16px;
+    transition: font-weight 0.25s ease;
+}
+
+/* #endregion */
+
 /* #region  Other */
 
-.highlight-text {
+.highlight {
+    padding: 2px;
+    border: 1px solid #ccc;
     background-color: rgba(251, 255, 64, 0.9);
 }
 
@@ -460,6 +669,17 @@ select::-webkit-scrollbar {
     margin: 0 5px 0 0;
 }
 
+#regex-tool::before {
+    content: "";
+    background-image: url("../img/regex.svg");
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-repeat: no-repeat;
+    background-size: 24px;
+    padding: 0;
+    margin: 0 5px 0 0;
+}
 
 .sortable-asc {
     cursor: pointer;
@@ -490,35 +710,4 @@ select::-webkit-scrollbar {
 
 /* #endregion */
 
-/* #region Table Basic */
-.table-basic {
-    margin: 0;
-    padding: 0;
-    border-spacing: 0;
-    width: 100%;
-}
 
-.table-basic th, .table-basic td {
-    border: 1px solid #ccc;
-    border-top: none;
-    margin: 0;
-    padding: 5px 10px;
-}
-
-.table-basic th {
-    border: 1px solid #ccc;
-}
-
-.table-basic th:first-child {
-    border-radius: 5px 0 0 0;
-} 
-
-.table-basic th:last-child {
-    border-radius: 0 5px 0 0;
-}
-
-.table-basic tbody tr:hover {
-    background-color: #eee;
-    color: var(--basic-light);
-}
-/* #endregion */

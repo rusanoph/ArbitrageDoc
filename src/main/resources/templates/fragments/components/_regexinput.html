@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+</head>
+<body>
+
+    <th:block th:fragment="regex-input">
+        <div id="regex-input-component" class="regex-color-text-col">
+
+            <!-- RegEx input field -->
+            <div class="form-row">
+                <textarea id="regex-input" type="text" spellcheck="false" rows="1"></textarea>
+                <!-- <input id="regex-input" type="text" spellcheck="false"> -->
+                <div id="regex-is-valid"></div>
+            </div>
+
+            <!-- RegEx Params -->
+            <div class="regex-param">
+                <label class="checkbox-row checkbox">
+                    <div class="checkbox__body"><div class="regex-param-key">\g</div> global</div>
+                    <input type="checkbox" name="global" id="regex-param-global">
+                    <div class="checkbox__checkmark"></div>
+                </label>
+
+                <label class="checkbox-row checkbox">
+                    <div class="checkbox__body"><div class="regex-param-key">\i</div> case insensitive</div>
+                    <input type="checkbox" name="case-insensitive" id="regex-param-case-insensitive">
+                    <div class="checkbox__checkmark"></div>
+                </label>
+
+                <label class="checkbox-row checkbox">
+                    <div class="checkbox__body"><div class="regex-param-key">\m</div> multiline</div>
+                    <input type="checkbox" name="multiline" id="regex-param-multiline">
+                    <div class="checkbox__checkmark"></div>
+                </label>
+
+                <label class="checkbox-row checkbox">
+                    <div class="checkbox__body"><div class="regex-param-key">\s</div> dotall</div>
+                    <input type="checkbox" name="dotall" id="regex-param-dotall">
+                    <div class="checkbox__checkmark"></div>
+                </label>
+            </div>
+        </div>
+    </th:block>
+
+</body>
+</html>

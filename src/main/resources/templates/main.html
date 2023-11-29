@@ -39,103 +39,10 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="content-col">
-                            <div class="tool-panel">
-                                <div class="tool-row">
-                                    <div class="tool-col">
-                                        <div id="format-tool" class="tool button-component">Форматирование</div>
-                                        <div id="word-color-tool" class="tool button-component">Слова</div>
-                                        <div id="lemma-tool" class="tool button-component">Лемматизация</div>
-                                    </div>
-
-                                    <div class="tool-col">
-                                        <!-- Font -->
-                                        <div class="tool button-component">
-                                            <div>Шрифт:</div>
-                                            <select name="document-font-size" id="document-font-size">
-                                                <option value="8px">8px</option>
-                                                <option value="9px">9px</option>
-                                                <option value="10px">10px</option>
-                                                <option value="11px">11px</option>
-                                                <option value="12px">12px</option>
-                                                <option value="13px" selected>13px</option>
-                                                <option value="14px">14px</option>
-                                                <option value="15px">15px</option>
-                                                <option value="16px">16px</option>
-                                                <option value="17px">17px</option>
-                                                <option value="18px">18px</option>
-                                                <option value="19px">19px</option>
-                                                <option value="20px">20px</option>
-                                                <option value="21px">21px</option>
-                                                <option value="22px">22px</option>
-                                                <option value="23px">23px</option>
-                                                <option value="24px">24px</option>
-                                                <option value="25px">25px</option>
-                                                <option value="26px">26px</option>
-                                                <option value="27px">27px</option>
-                                                <option value="28px">28px</option>
-                                                <option value="29px">29px</option>
-                                                <option value="30px">30px</option>
-                                                <option value="31px">31px</option>
-                                                <option value="32px">32px</option>
-                                            </select>
-                                        </div>
-                                        <!-- Line Height -->
-                                        <div class="tool button-component">
-                                            <div>Высота строки:</div>
-                                            <select name="document-line-height" id="document-line-height">
-                                                <option value="8px">8px</option>
-                                                <option value="9px">9px</option>
-                                                <option value="10px">10px</option>
-                                                <option value="11px">11px</option>
-                                                <option value="12px">12px</option>
-                                                <option value="13px">13px</option>
-                                                <option value="14px">14px</option>
-                                                <option value="15px">15px</option>
-                                                <option value="16px">16px</option>
-                                                <option value="17px">17px</option>
-                                                <option value="18px" selected>18px</option>
-                                                <option value="19px">19px</option>
-                                                <option value="20px">20px</option>
-                                                <option value="21px">21px</option>
-                                                <option value="22px">22px</option>
-                                                <option value="23px">23px</option>
-                                                <option value="24px">24px</option>
-                                                <option value="25px">25px</option>
-                                                <option value="26px">26px</option>
-                                                <option value="27px">27px</option>
-                                                <option value="28px">28px</option>
-                                                <option value="29px">29px</option>
-                                                <option value="30px">30px</option>
-                                                <option value="31px">31px</option>
-                                                <option value="32px">32px</option>
-                                                <option value="33px">33px</option>
-                                                <option value="34px">34px</option>
-                                                <option value="35px">35px</option>
-                                                <option value="36px">36px</option>
-                                                <option value="37px">37px</option>
-                                                <option value="38px">38px</option>
-                                                <option value="39px">39px</option>
-                                                <option value="40px">40px</option>
-                                                <option value="41px">41px</option>
-                                                <option value="42px">42px</option>
-                                                <option value="43px">43px</option>
-                                                <option value="44px">44px</option>
-                                                <option value="45px">45px</option>
-                                                <option value="46px">46px</option>
-                                                <option value="47px">47px</option>
-                                                <option value="48px">48px</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <h3 id="document-filename">Файл: </h3>
-                            <h3 id="document-title">Заголовок: </h3>
-                            <pre id="document-text">Текст документа</pre>
+                            <div th:replace="~{/fragments/components/_fileview :: file-view}"></div>
                         </div>
-                        
                     </div>
                 </div>
             </div>

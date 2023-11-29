@@ -114,5 +114,35 @@ function sortTable(elementId, columnIndex, i=1) {
 
 }
 
+function sortDivList(elementId, columnIndex, i=1) {
+    
+}
+
 //#endregion
+
+//#region Accordion
+
+function initAccordion() {
+    const displayStyle = "block";
+    for (let accordion of accordions) {
+        accordion.addEventListener('click', function() {
+            this.classList.toggle("accordion-active");
+            
+            let panel = this.nextElementSibling;
+            if (panel.style.display === displayStyle) {
+                panel.style.display = "none";
+            } else {
+                panel.style.display = displayStyle;
+            }
+        });
+    }
+}
+
+let accordions = document.getElementsByClassName("accordion");
+if (accordions.length > 0) {
+    initAccordion();
+}
+
+//#endregion
+
 

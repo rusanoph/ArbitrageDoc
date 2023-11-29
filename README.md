@@ -14,11 +14,3 @@
 * Нет статистики документов
 * Color Tool Работатет не так как надо
 * Создать Error page
-
----
-Код:
-* codeJava: 656
-* codeCss: 889
-* codeJs: 892
-* codeHtml: 481
-* s: 2918

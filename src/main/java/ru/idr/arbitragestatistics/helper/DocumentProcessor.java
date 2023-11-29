@@ -2,6 +2,7 @@ package ru.idr.arbitragestatistics.helper;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,29 @@ public class DocumentProcessor {
     private static String regexCapital = "[А-Я]";
     private static String regexSpecialCharacters = "[^а-яА-Я0-9. ]";
 
+    private static String regexMoneySumFull = "(\\s*\\d+)+\\s*(р\\.|руб\\.|рублей)\\s*((\\s*\\d+)+\\s*(к\\.|коп\\.|копеек))?";    
+    private static String regexMoneySumComma = "(\\s*\\d+)+,\\s*(\\s*\\d+)+\\s*(р\\.|руб\\.|рублей)";
+    private static String regexMoneySumComment = "(\\s*\\d+)+\\s*(\\([А-Яа-я ]*\\))?\\s*(р\\.|руб\\.|рублей)\\s*((\\s*\\d+)+\\s*(к\\.|коп\\.|копеек))?";
+
+    private static String regexSpecial = "(\\s*\\d+)+\\s*(р\\.|руб\\.|рублей)\\s*((\\s*\\d+)+\\s*(к\\.|коп\\.|копеек))?|(\\s*\\d+)+,\\s*(\\s*\\d+)+\\s*(р\\.|руб\\.|рублей)|(\\s*\\d+)+\\s*(\\([А-Яа-я ]*\\))?\\s*(р\\.|руб\\.|рублей)\\s*((\\s*\\d+)+\\s*(к\\.|коп\\.|копеек))?";
+
+
     //#region Data
+
+    public static Iterable<String> getMoneySum(String text) {
+
+        List<String> moneySum = new ArrayList<>();
+
+        final String regexString = regexMoneySumFull + "|" + regexMoneySumComma + "|" + regexMoneySumComment;
+
+        Matcher matcher = Pattern.compile(regexString, Pattern.MULTILINE).matcher(text);
+
+        while (matcher.find()) {
+            moneySum.add(matcher.group().replaceAll("\\s+", " "));
+        }
+
+        return moneySum;
+    }
 
     public static Map<String, TitleData> getTitleMap(String currentDir) throws IOException {
 
@@ -70,67 +93,117 @@ public class DocumentProcessor {
 
         return titleMap;
     }
-
     
     public static String getArbitrageTextTitle(String text, String splitSymbol) {
         String arbitrageTitle = "Неизвестный заголовок";
-
-        List<String> possibleTitles = new ArrayList<>(List.of(
-            "резолютивный",
-            "определение",
-            "постановление",
-            "протокольный",
-            "решение"
-        ));
 
         text = DocumentProcessor.removeLineSeparator(text);
         text = DocumentProcessor.removeSpecialCharacters(text);
         text = DocumentProcessor.removeSpaceBetweenWords(text);
         text = text.toLowerCase();
 
-        String lemmatizeText = DocumentProcessor.lemmatizeText(text, " ");
+        String lemmatizeText = DocumentProcessor.lemmatizeText(text, splitSymbol);
+
+        String[] textSplit = text.split(splitSymbol);
+        String[] lemmatizeTextSplit = lemmatizeText.split(splitSymbol);
+
+        int textLength = lemmatizeTextSplit.length;
+
+        List<String> possibleTitlesStart = new ArrayList<>(List.of(
+            "резолютивный",
+            "определение",
+            "постановление",
+            "протокольный",
+            "решение"
+            // "судебный"
+        ));
 
         // Find index of first word in title
-        Integer titleIndex = 0;
-        for (String title : possibleTitles) {
-            if (lemmatizeText.contains(title)) {
-                
-                Integer candidateTitleIndex = lemmatizeText.indexOf(title);
+        Integer titleIndexStart = -1;
+        for (String titleStart : possibleTitlesStart) {
+            for (int i = 0; i < textLength; i++) {
+                if (lemmatizeTextSplit[i].trim().toLowerCase().equals(titleStart)) {
+                    if (titleIndexStart == -1 || titleIndexStart > i) {
+                        titleIndexStart = i;
+                    }
 
-                if (titleIndex == 0) {
-                    titleIndex = candidateTitleIndex;
-                } else {
-                    titleIndex = titleIndex < candidateTitleIndex ? titleIndex : candidateTitleIndex; 
+                    break;
                 }
             }
         }
 
-        // Cut off all words before first word in title
-        String candidateTitle = text.substring(titleIndex);
+        // If didn't find anything -> return
+        if (titleIndexStart == -1) {
+            return arbitrageTitle;
+        }
 
-        // Get substring by regexp
-        List<String> patterns = new ArrayList<>(List.of(
-            "(.*?дело)",
-            "(.*?г\\.)",
-            "(.*?Г\\.)"
-        ));
+
+        //Regexp end rules
+        String[] regexpEndRules = {
+            "дело",
+            "деть",
+            "г\\..*",
+            "Г\\.(.*)?",
+            "город",
+            "а\\d+",
+            "имя",
+            "\\d{1,2}"
+        };
         
-        // Find regexp result with minimal length
+        String patternTitleEndString = String.join("?|", regexpEndRules) + "?";
+        Pattern patternTitleEnd = Pattern.compile(patternTitleEndString, Pattern.CASE_INSENSITIVE);
 
-        for (String patternRaw : patterns) {
-            Pattern pattern = Pattern.compile(patternRaw);
-            Matcher matcher = pattern.matcher(candidateTitle);
+        String[] regexpInnerBeforeEndRules = {
+            "\\s?по\\s"
+        };
 
-            if (matcher.find()) {
-                String title = matcher.group();
+        String patternTitleInnerBeforeEndString = String.join("?|", regexpInnerBeforeEndRules) + "?";
+        Pattern patternTitleInnerBeforeEnd = Pattern.compile(patternTitleInnerBeforeEndString, Pattern.CASE_INSENSITIVE);
 
-                if (title.length() < candidateTitle.length()) {
-                    candidateTitle = title;
+        String[] regexpInnerAfterEndRules = {
+            "\\s?к\\s|\\sк\\s?",
+            "ст\\."
+        };
+
+        String patternTitleInnerAfterEndString = String.join("?|", regexpInnerAfterEndRules) + "?";
+        Pattern patternTitleInnerAfterEnd = Pattern.compile(patternTitleInnerAfterEndString, Pattern.CASE_INSENSITIVE);
+
+        // Find index of last word in title
+        Integer titleIndexEnd = -1;
+        for (int i = titleIndexStart + 1; i < textLength - 1; i++) {
+            if (lemmatizeTextSplit[i].isBlank()) {
+                continue;
+            }
+
+            Matcher currentWord = patternTitleEnd.matcher(lemmatizeTextSplit[i].trim());
+
+            if (currentWord.find()) {
+                Matcher wordBefore = patternTitleInnerBeforeEnd.matcher(lemmatizeTextSplit[i - 1].trim());
+                if (wordBefore.find()) {
+                    continue;
+                }
+                
+                Matcher wordAfter = patternTitleInnerAfterEnd.matcher(lemmatizeTextSplit[i + 1].trim());
+                if (wordAfter.find()) {
+                    continue;
+                }
+
+                if (titleIndexEnd == -1 || titleIndexEnd > i) {
+                    titleIndexEnd = i;
                 }
             }
         }
+        
+        if (titleIndexStart != -1 && titleIndexEnd != -1) {
+            String[] arbitrageTitleSplit = Arrays.copyOfRange(textSplit, titleIndexStart, titleIndexEnd);
 
-        arbitrageTitle = candidateTitle;
+            arbitrageTitle = "";
+            for (String titleWord : arbitrageTitleSplit) {
+                if (!titleWord.isBlank()) {
+                    arbitrageTitle += titleWord.trim() + " ";
+                }
+            }
+        } 
         
         return arbitrageTitle;
     }

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Статистика документа</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="/css/main.css">
+
+    <link rel="stylesheet" href="/css/filestatistic.css">
+
+</head>
+<body>
+    <header th:replace="~{/fragments/_header :: header}"></header>
+
+    <div id="backToBottom"></div>
+
+    
+    <main>
+        <div class="container">
+            <div class="wrapper">
+                <p id="document-name">Имя файла не определено</p>  
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="wrapper">
+                <div class="content-row">
+                    <!-- Side panel -->
+                    <div class="content-col">
+                        <div class="side-nav-row">
+                            <div id="all-word-tab-link" class="tab-link" onclick="openTab('all-word-tab', this, 'var(--main-color)')">Слова</div>
+                            <div id="lemma-tab-link" class="tab-link" onclick="openTab('lemma-tab', this, 'red')">Леммы</div>
+                            <!-- <div id="random-chart-tab-link" class="tab-link" onclick="openTab('random-chart-tab', this, 'red')">Random</div> -->
+                        </div>
+                        <div class="side-nav-row">
+                            <!-- Word -->
+                            <div id="id1" class="tab-content">
+                                <p>Random</p>
+                            </div>
+                            <div id="id2" class="tab-content">
+                                <p>Content</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Main content panel -->
+                    <div class="content-col">
+                        <div class="chart-content-row">
+                            <!-- All word Chart -->
+                            <div id="all-word-tab" class="tab-content">
+                                <h3>Все слова</h3>
+                                <canvas id="all-word-chart"></canvas>
+                            </div>
+
+                            <!-- Lemma Chart -->
+                            <div id="lemma-tab" class="tab-content">
+                                <h3>Леммы</h3>
+                                <canvas id="lemma-chart"></canvas>
+                            </div>
+
+                            <!-- Random Chart -->
+                            <div id="random-chart-tab" class="tab-content">
+                                <h3>Случайные значения</h3>
+                                <div id="random-chart-reset" class="button-component tool">Обновить</div>
+                                <canvas id="random-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="~{/fragments/_footer :: footer}"></footer>
+
+    <div id="backToTop"></div>
+
+    <!-- JS Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-zoom/2.0.1/chartjs-plugin-zoom.min.js"></script>
+
+    <!-- JS -->
+    <script src="/js/component.js"></script>
+    <script type="module" src="/js/filestatistic.js"></script>
+</main>
+</body>
+</html>

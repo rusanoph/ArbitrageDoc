@@ -1,136 +1,18 @@
 import { DocumentService } from "./api/DocumentService.js";
+import { FileView } from "./fileview.js";
 import { ComponentTools } from "./helper/ComponentTools.js";
 import { Util } from "./util/Util.js";
 
 class MainPageDocument {
-    documentPath;
-    documentFileName;
-
     documentCount = 0;
 
     isFormated = false;
-    isWordColor = false;    
     isLemma = false;
 
+    fileViewClass;
+
     constructor() {
-        this.openButton();
-
-        this.formatTool();
-        this.wordColorTool();        
-        this.lemmatizationTool();
-
-        this.fontTool();
-        this.lineHeightTool();
-    }
-
-    openButton() {
-        const openButton = document.getElementById("document-open-text");
-
-        openButton.addEventListener('click', async () => {
-            const docPathInputValue = document.getElementById("document-path").value;
-            const docFileNameInputValue = document.getElementById("document-name").value;
-
-            this.documentPath = docPathInputValue;
-            this.documentFileName = docFileNameInputValue;
-
-            ComponentTools.updateDocumentView("document-filename", "document-title", "document-text", docPathInputValue, docFileNameInputValue, this.isFormated);
-        });
-    }
-
-    formatTool() {
-        const formatTool = document.getElementById("format-tool");
-        formatTool.addEventListener('click', async () => {
-            this.isFormated = !this.isFormated;
-
-            ComponentTools.updateDocumentView("document-filename", "document-title", "document-text", this.documentPath, this.documentFileName, this.isFormated);
-
-            formatTool.classList.toggle("active-tool");
-        });
-    }
-
-    wordColorTool() {
-        const wordColorTool = document.getElementById("word-color-tool");
-        
-        const spanHighlight = function() {
-            let textElement = document.getElementById("document-text");
-            let words = textElement.innerText.split(' ');
-
-            textElement.innerHTML = "";
-            for (let word of words) {
-                const span = document.createElement("span");
-                span.textContent = word + ' ';
-                textElement.appendChild(span);
-            }
-
-            textElement.addEventListener('mouseover', highlightWords);
-            textElement.addEventListener('mouseout', unhighlightWords);
-        }
-
-        const highlightWords = function(event) {
-            let target = event.target;
-
-            if (target.tagName === "SPAN") {
-                target.classList.add('highlight-text');
-            }
-        }
-
-        const unhighlightWords = function(event) {
-            let target = event.target;
-
-            if (target.tagName === "SPAN") {
-                target.classList.remove('highlight-text');
-            }
-        }
-
-
-        wordColorTool.addEventListener('click', async () => {
-            this.isWordColor = !this.isWordColor;
-
-            if (this.isWordColor) {
-                spanHighlight();
-            } 
-
-            wordColorTool.classList.toggle("active-tool");
-        });
-    }
-
-    lemmatizationTool() {
-        const lemmatizationTool = document.getElementById("lemma-tool");
-
-        lemmatizationTool.addEventListener('click', async () => {
-            this.isLemma = !this.isLemma;
-            
-            ComponentTools.updateDocumentView("document-filename", "document-title", "document-text", this.documentPath, this.documentFileName, this.isFormated, this.isLemma);
-
-            lemmatizationTool.classList.toggle("active-tool");
-        });
-
-
-    }
-
-    fontTool() {
-        const fontSizeSelect = document.getElementById("document-font-size");
-
-        fontSizeSelect.addEventListener('change', () => {
-            const docTextHTML = document.getElementById("document-text");
-            const lineHeightSelect = document.getElementById("document-line-height");
-
-            if (parseInt(lineHeightSelect.value, 10) < parseInt(fontSizeSelect.value, 10)) {
-                lineHeightSelect.value = fontSizeSelect.value; 
-                docTextHTML.style.lineHeight = fontSizeSelect.value; 
-            }
-
-            docTextHTML.style.fontSize = fontSizeSelect.value;
-        });
-    }
-
-    lineHeightTool() {
-        const lineHeightSelect = document.getElementById("document-line-height");
-
-        lineHeightSelect.addEventListener('change', () => {
-            const docTextHTML = document.getElementById("document-text");
-            docTextHTML.style.lineHeight = lineHeightSelect.value;
-        });
+        this.fileViewClass = new FileView();
     }
 
     async generateDocumentList(elementId, currDir=null) {
@@ -182,8 +64,8 @@ class MainPageDocument {
             li.innerHTML = file;
 
             li.addEventListener('click', () => {
-                this.documentPath = currDir;
-                this.documentFileName = file;
+                this.fileViewClass.documentPath = currDir;
+                this.fileViewClass.documentFileName = file;
 
                 document.getElementById("document-path").value = currDir;
                 document.getElementById("document-name").value = file;
@@ -191,13 +73,17 @@ class MainPageDocument {
                 Util.saveValue(document.getElementById("document-path"));
                 Util.saveValue(document.getElementById("document-name"));
 
-                ComponentTools.updateDocumentView("document-filename", "document-title", "document-text", currDir, file, this.isFormated);
+                ComponentTools.updateDocumentView("document-filename", "document-title", "document-text", currDir, file, this.isFormated, this.isLemma)
+                .then(() => {
+                    if (this.fileViewClass.isRegEx) {
+                        document.getElementById("regex-input").dispatchEvent(new Event('input'));
+                    }
+                });
 
                 let previouslySelected = document.querySelector('.selected');
                 if (previouslySelected) {
                     previouslySelected.classList.remove('selected');
                 }
-
                 li.classList.add('selected');
             });
 

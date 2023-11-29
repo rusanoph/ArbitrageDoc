@@ -8,13 +8,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
-public class KeywordController {
+public class FileDataController {
     
-    @RequestMapping(value="/keyword")
+    @RequestMapping(value="/filedata")
     public String pageMethod(Model model, HttpServletRequest request, HttpServletResponse response) {
 
-        model.addAttribute("activePage", "keyword");
-        return "keyword.html";
+        model.addAttribute("activePage", "filedata");
+        return "filedata.html";
     }
 
 }
