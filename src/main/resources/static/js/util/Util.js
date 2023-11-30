@@ -18,4 +18,28 @@ export class Util {
             localStorage.removeItem(v);
         }
     }
+
+    static isNumeric(str) {
+        if (typeof str !== "string")
+            return false;
+        return !isNaN(str) && !isNaN(parseFloat(str));
+    }
+
+    static onEnterPressedEvent(action) {
+        if (event.key === "Enter") {
+            action();
+        }
+    }
+
+    static onArrowRightPressedEvent(action) {
+        if (event.code === "ArrowRight") {
+            action();
+        }
+    }
+
+    static onArrowLeftPressedEvent(action) {
+        if (event.code === "ArrowLeft") {
+            action();
+        }
+    }
 }

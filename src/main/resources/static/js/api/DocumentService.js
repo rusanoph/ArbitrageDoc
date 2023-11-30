@@ -21,6 +21,24 @@ export class DocumentService {
         return data;
     } 
 
+    static async getDocumentCourt(path, filename) {
+        let params = {
+            "documentPath": path,
+            "documentFileName": filename,
+        }
+    
+        let query = Object.keys(params)
+            .map(k => `${encodeURIComponent(k)}=${encodeURIComponent(params[k])}`)
+            .join("&");
+    
+        let url = `/api/document/court?${query}`;
+    
+        const response = await fetch(url);
+        let data = await response.text();
+
+        return data;
+    }
+
     static async postDocumentMoneySum(text) {
         let url = `/api/document/text/data/moneysum`;
 
@@ -126,6 +144,27 @@ export class DocumentService {
             .join("&");
 
         let url = `/api/document/list/dir?${query}`;
+
+        const response = await fetch(url);
+        let data = await response.json();
+
+        return data;
+    }
+
+    static async getDeepListOfDirectories(path=null) {
+        if (path === null) {
+            path = "";
+        }
+
+        let params = {
+            "directoryPath": path,
+        }
+
+        let query = Object.keys(params)
+            .map(k => `${encodeURIComponent(k)}=${encodeURIComponent(params[k])}`)
+            .join("&");
+
+        let url = `/api/document/list/dir/deep?${query}`;
 
         const response = await fetch(url);
         let data = await response.json();

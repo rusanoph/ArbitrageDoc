@@ -1,6 +1,10 @@
 package ru.idr.arbitragestatistics.helper;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -26,6 +30,28 @@ public class DocumentProcessor {
 
     private static String regexSpecial = "(\\s*\\d+)+\\s*(р\\.|руб\\.|рублей)\\s*((\\s*\\d+)+\\s*(к\\.|коп\\.|копеек))?|(\\s*\\d+)+,\\s*(\\s*\\d+)+\\s*(р\\.|руб\\.|рублей)|(\\s*\\d+)+\\s*(\\([А-Яа-я ]*\\))?\\s*(р\\.|руб\\.|рублей)\\s*((\\s*\\d+)+\\s*(к\\.|коп\\.|копеек))?";
 
+    //#region Document
+
+    public static String getText(String documentPath, String documentFileName) throws IOException {
+
+        documentPath = documentPath.trim();
+        documentFileName = documentFileName.trim();
+
+        if (documentPath.startsWith(".") || documentPath.contains(":")) {
+            throw new IOException("Документ не найден");
+        }
+        
+        try {
+            Path documentURI = Paths.get("", "txtFiles", documentPath, documentFileName).toAbsolutePath();
+            String targetFileText = new String(Files.readAllBytes(documentURI), StandardCharsets.UTF_8);
+
+            return targetFileText;
+        } catch (IOException ioEx) {
+            throw new IOException("Документ не найден");
+        }
+    }
+
+    //#endregion
 
     //#region Data
 
@@ -208,6 +234,30 @@ public class DocumentProcessor {
         return arbitrageTitle;
     }
 
+    public static String getCourt(String text) {
+
+        String court = "Суд не определен";
+        // List<String> courtList = new ArrayList<String>();
+        // courtList.add("Суд не определен");
+
+        String regexCourt = "(арбитражный(.*?)(округа|москвы|республики|области|края))";
+        Matcher matcher = Pattern.compile(regexCourt, Pattern.DOTALL | Pattern.CASE_INSENSITIVE).matcher(text.toLowerCase());
+        
+        if (matcher.find()) {
+            court = matcher.group();
+        }
+
+        // List<String> matchCourt = new ArrayList<>();
+        // while (matcher.find()) {
+        //     matchCourt.add(matcher.group());
+        // }
+
+        // if (matchCourt.size() > 0) {
+        //     courtList = matchCourt;
+        // }
+
+        return court;
+    }
     //#endregion
 
     //#region Statistic methods

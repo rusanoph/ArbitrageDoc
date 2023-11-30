@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Таблица документов</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/components.css">
+    
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/documenttable.css">
+</head>
+<body>
+    <header th:replace="~{/fragments/_header :: header}"></header>
+
+    <div id="backToBottom"></div>
+
+    <main>
+        <div class="container">
+            <div class="wrapper">
+
+                <div class="data-panel">
+                    <div class="data-row data-header">
+                        <div class="data-col">
+                            <h3>Данные по документам</h3>
+                        </div>
+
+                        <div class="data-col data-input">
+                            <div class="form-row">
+                                <input type="text" id="go-to-page-input" placeholder="">
+                                <label for="go-to-page-input">Введите номер страницы</label>
+                            </div>
+                            <div id="go-to-page-button" class="button-component">Перейти на страницу <span class="current-page"></span></div>
+                        </div>
+
+                        <div class="data-col">
+                            <div id="reload-table-button" class="button-component">Обновить</div>
+                        </div>
+                    </div>
+
+                    <div class="data-row">
+                        <table id="data-table" class="table-basic">
+                            <thead>
+                                <th class="sortable-asc" onclick="sortTable('data-table', 0)">№</th>
+                                <th class="sortable-asc" onclick="sortTable('data-table', 1)">Имя файла</th>
+                                <th class="sortable-asc" onclick="sortTable('data-table', 2)">Суд</th>
+                            </thead>
+                            <tbody id="data-table-body">
+                                <!-- ... Data here ... -->
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+
+                <div id="data-table-preloader" class="data-row"></div>
+
+                <div class="data-row data-header">
+                    <div class="data-col">
+                        <div id="previous-page-button" class="button-component">Назад</div>
+                    </div>
+
+                    <div class="data-col">
+                        <div class="current-page"></div>
+                    </div>
+
+                    <div class="data-col">
+                        <div id="next-page-button" class="button-component">Вперед</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer th:replace="~{/fragments/_footer :: footer}"></footer>
+
+    <div id="backToTop"></div>
+
+    <!-- JS -->
+    <script src="/js/component.js"></script>
+    <script type="module" src="/js/documenttable.js"></script>
+</body>
+</html>

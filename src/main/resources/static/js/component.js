@@ -145,4 +145,21 @@ if (accordions.length > 0) {
 
 //#endregion
 
+//#region Table Pagination
 
+function renderPageData(tableBodyId, data, pageSize, currentPage) {
+
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    const pageData = data.slice(startIndex, endIndex);
+
+    const tableBody = document.getElementById(tableBodyId);
+    tableBody.innerHTML = '';
+
+    pageData.forEach(rowData => {
+        const row = document.createElement('tr');
+
+        tableBody.appendChild(row);
+    });
+}
+//#endregion

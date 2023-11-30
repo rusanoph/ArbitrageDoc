@@ -472,6 +472,62 @@ select::-webkit-scrollbar {
 }
 /* #endregion */
 
+/* #region Data Panel, Table */
+
+.data-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.data-header {
+    justify-content: start;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 0 0 10px 0;
+}
+
+.data-header .button-component {
+    width: fit-content;
+    margin: 0 0 5px 5px;
+}
+
+.data-row {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: 0 0 10px 0;
+}
+
+.data-row.data-header {
+    justify-content: space-between;
+    align-items: center;
+}
+
+.data-col {
+    width: fit-content;
+}
+
+.data-footer {
+}
+
+.data-pagination {
+    display: flex;
+}
+
+.data-pagination div {
+    margin: 0 2.5px;
+}
+
+#title-table th, #title-table td {
+    max-width: 640px;
+}
+
+/* #endregion */
+
 /* #region File View */
 
 .tool-panel {

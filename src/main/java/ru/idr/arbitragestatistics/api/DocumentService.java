@@ -1,12 +1,6 @@
 package ru.idr.arbitragestatistics.api;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.zone.ZoneOffsetTransitionRule.TimeDefinition;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -34,18 +28,9 @@ public class DocumentService {
 
         JSONObject documentJson = new JSONObject();
         documentJson.put("filename", documentFileName);
-        
-
-        if (documentPath.startsWith(".") || documentPath.contains(":")) {
-            documentJson.put("error", "Документ не найден.");
-            return documentJson.toString();
-        }
-
-        Path documentURI = Paths.get("", "txtFiles", documentPath, documentFileName).toAbsolutePath();
 
         try {
-            String targetFileText = new String(Files.readAllBytes(documentURI), StandardCharsets.UTF_8);
-
+            String targetFileText = DocumentProcessor.getText(documentPath, documentFileName);
             String arbitrageTitle = DocumentProcessor.getArbitrageTextTitle(targetFileText, " ");
 
             if (formated) {
@@ -69,6 +54,22 @@ public class DocumentService {
         return documentJson.toString();
     }
     
+    @GetMapping(value="/api/document/court")
+    public String getDocumentCourt(@RequestParam("documentPath") String documentPath, @RequestParam("documentFileName") String documentFileName) {
+
+        try {
+            String text = DocumentProcessor.getText(documentPath, documentFileName);
+            String court = DocumentProcessor.getCourt(text);
+            
+            return court;
+        } catch (IOException ioEx) {
+            ioEx.printStackTrace();
+            
+            return ioEx.getMessage();
+        }
+
+    }
+
     //#region Document Statistic
     @PostMapping(value="/api/document/text/statistic", produces="applicatoin/json")
     public String postDocumentWordStatistic(@RequestBody String text) {
@@ -195,6 +196,22 @@ public class DocumentService {
 
         return returnJson.toString();
 
+    }
+    
+    @GetMapping(value="/api/document/list/dir/deep", produces="application/json")
+    public String getDeepListOfDirectories(@RequestParam("directoryPath") String directoryPath) {
+
+        JSONArray returnJson = new JSONArray();
+
+        Set<String> listOfDirectories = ServerFile.deepListDirectoryServer(directoryPath);
+
+        if (listOfDirectories != null) {
+            for (String dirName : listOfDirectories) {
+                returnJson.put(dirName);
+            }
+        }
+
+        return returnJson.toString();
     }
     //#endregion
 
