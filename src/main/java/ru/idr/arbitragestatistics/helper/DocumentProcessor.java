@@ -28,6 +28,8 @@ public class DocumentProcessor {
     private static String regexMoneySumComma = "(\\s*\\d+)+,\\s*(\\s*\\d+)+\\s*(р\\.|руб\\.|рублей)";
     private static String regexMoneySumComment = "(\\s*\\d+)+\\s*(\\([А-Яа-я ]*\\))?\\s*(р\\.|руб\\.|рублей)\\s*((\\s*\\d+)+\\s*(к\\.|коп\\.|копеек))?";
 
+    private static String regexAfterHyphenText = "((\\s*[–-]\\s*[А-Яа-я ]+[\\.,;])?)";
+
     private static String regexSpecial = "(\\s*\\d+)+\\s*(р\\.|руб\\.|рублей)\\s*((\\s*\\d+)+\\s*(к\\.|коп\\.|копеек))?|(\\s*\\d+)+,\\s*(\\s*\\d+)+\\s*(р\\.|руб\\.|рублей)|(\\s*\\d+)+\\s*(\\([А-Яа-я ]*\\))?\\s*(р\\.|руб\\.|рублей)\\s*((\\s*\\d+)+\\s*(к\\.|коп\\.|копеек))?";
 
     //#region Document
@@ -60,6 +62,20 @@ public class DocumentProcessor {
         List<String> moneySum = new ArrayList<>();
 
         final String regexString = regexMoneySumFull + "|" + regexMoneySumComma + "|" + regexMoneySumComment;
+
+        Matcher matcher = Pattern.compile(regexString, Pattern.MULTILINE).matcher(text);
+
+        while (matcher.find()) {
+            moneySum.add(matcher.group().replaceAll("\\s+", " "));
+        }
+
+        return moneySum;
+    }
+
+    public static Iterable<String> getMoneySumHyphen(String text) {
+        List<String> moneySum = new ArrayList<>();
+
+        final String regexString = String.format("(%s|%s|%s)%s", regexMoneySumFull, regexMoneySumComma, regexMoneySumComment, regexAfterHyphenText);
 
         Matcher matcher = Pattern.compile(regexString, Pattern.MULTILINE).matcher(text);
 

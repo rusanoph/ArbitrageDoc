@@ -70,6 +70,33 @@ public class DocumentService {
 
     }
 
+     @PostMapping(value="/api/document/text/data/moneysum", produces="application/json")
+    public String postDocumentMoneySum(@RequestBody String text) {
+
+        JSONArray moneySumJson = new JSONArray();
+
+        Iterable<String> moneySums = DocumentProcessor.getMoneySum(text);
+
+        for (String moneySum : moneySums) {
+            moneySumJson.put(moneySum);
+        }
+
+        return moneySumJson.toString();
+    }
+
+    @PostMapping(value="/api/document/text/data/moneysum/hyphen", produces="application/json")
+    public String postDocumentMoneySumHyphen(@RequestBody String text) {
+
+        JSONArray moneySumJson = new JSONArray();
+        Iterable<String> moneySums = DocumentProcessor.getMoneySumHyphen(text);
+
+        for (String moneySum : moneySums) {
+            moneySumJson.put(moneySum);
+        }
+
+        return moneySumJson.toString();
+    }
+
     //#region Document Statistic
     @PostMapping(value="/api/document/text/statistic", produces="applicatoin/json")
     public String postDocumentWordStatistic(@RequestBody String text) {
@@ -119,25 +146,11 @@ public class DocumentService {
     }
     //#endregion
 
-    @PostMapping(value="/api/document/text/data/moneysum", produces="application/json")
-    public String postDocumentMoneySum(@RequestBody String text) {
-
-        JSONArray moneySumJson = new JSONArray();
-
-        Iterable<String> moneySums = DocumentProcessor.getMoneySum(text);
-
-        for (String moneySum : moneySums) {
-            moneySumJson.put(moneySum);
-        }
-
-        return moneySumJson.toString();
-    }
-
-    //#endregion
+   //#endregion
 
     //#region Files
     @GetMapping(value="/api/document/list/title", produces="application/json")
-    public String getTitleData(@RequestParam("directoryPath") String directoryPath) {
+    public String getTitleMapData(@RequestParam("directoryPath") String directoryPath) {
 
         JSONArray documentTitleJson = new JSONArray();
 
