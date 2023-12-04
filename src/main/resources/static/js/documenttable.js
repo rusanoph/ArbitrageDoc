@@ -5,7 +5,7 @@ class DataTablePage {
     tableColumn;
     maxRowWidth;
 
-    pageSize = 10;
+    pageSize = 30;
     currentPage = 1;
     maxPage;
 
@@ -13,7 +13,7 @@ class DataTablePage {
         this.generateDataTable(elementId, preloaderId, this.currentPage);
 
         this.tableColumn = document.getElementById("data-table").rows[0].cells.length;
-        this.maxRowWidth = `${Math.floor(100/this.tableColumn)}%`;
+        // this.maxRowWidth = `${Math.floor(100/this.tableColumn)}%`;
     }
 
     async generateDataTable(elementId, preloaderId, currentPage) {        
@@ -33,6 +33,8 @@ class DataTablePage {
 
         // Remove Table Content
         dataTableBodyElement.innerHTML = "";
+
+        
 
         let allDataDirs = await DocumentService.getDeepListOfDirectories()
         .then( async (dirList) =>  {
@@ -67,14 +69,14 @@ class DataTablePage {
                 // tdOrder.style.maxWidth = this.maxRowWidth;
 
                 tdFilename.innerHTML = `${file.dir}\\${file.file}`;
-                tdFilename.style.maxWidth = this.maxRowWidth;
+                // tdFilename.style.maxWidth = this.maxRowWidth;
 
                 let court = await DocumentService.getDocumentCourt(file.dir, file.file);
                 if (court.includes("Суд не определен")) {
                     court = `<span class='highlight'>${court}</span>`
                 }
                 tdCourt.innerHTML = `<div style="overflow-y: auto; max-height: ${maxRowHeight};">${court}</div>`;
-                tdCourt.style.maxWidth = this.maxRowWidth;
+                // tdCourt.style.maxWidth = this.maxRowWidth;
 
                 let moneySum = await DocumentService.getDocumentText(file.dir, file.file)
                 .then((data) => DocumentService.postDocumentMoneySum(data.text));
@@ -86,9 +88,9 @@ class DataTablePage {
                 tdMoneySumHyphen.innerHTML = `<div style="overflow-y: auto; max-height: ${maxRowHeight}">${moneySumHyphen.join("<br><br>")}</div>`;
 
                 // tdMoneySum.innerHTML = moneySum.join("<br><br>");
-                tdMoneySum.classList.add("nowrap-text");
+                // tdMoneySum.classList.add("nowrap-text");
                 // tdMoneySumHyphen.innerHTML = moneySumHyphen.join("<br><br>");
-                tdMoneySumHyphen.classList.add("nowrap-text");
+                // tdMoneySumHyphen.classList.add("nowrap-text");
 
                 tr.appendChild(tdOrder);
                 tr.appendChild(tdFilename);

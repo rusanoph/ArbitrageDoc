@@ -32,8 +32,7 @@ class MainPageDocument {
             span.innerHTML = dir;
             span.path = `${currDir}/${dir}` 
 
-            const obj = this;
-            const recursionGenerateDocs = async function() {
+            const recursionGenerateDocs = async () => {
                 const ul = document.createElement("ul");
                 ul.classList.add("nested-tree");
                 ul.id = `ul-${span.path}`;
@@ -41,16 +40,16 @@ class MainPageDocument {
                 
                 treeViewToggler();
                 
-                await obj.generateDocumentList(ul.id, span.path)
+                await this.generateDocumentList(ul.id, span.path)
                 .then(() => {
-                    span.removeEventListener('click', recursionGenerateDocs, false);
-                });
-                
-                span.click();
-            }
-
-            span.addEventListener('click', recursionGenerateDocs);
-
+                        span.removeEventListener('click', recursionGenerateDocs);
+                    });
+                    
+                    span.click();
+            };
+            
+            span.addEventListener('click', recursionGenerateDocs, { once: true });
+            
             li.appendChild(span);
             documentListElement.appendChild(li);
         }

@@ -3,7 +3,6 @@
 .data-input {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     width: 30%;
     
     margin: 0 10px;

@@ -36,7 +36,8 @@ body {
 
 pre {
     /* width: 100%; */
-    line-height: 18px;
+    font-size: 18px;
+    line-height: 22px;
     white-space: pre-line;
 }
 

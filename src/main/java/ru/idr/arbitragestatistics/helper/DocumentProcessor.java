@@ -18,6 +18,7 @@ import java.util.regex.Pattern;
 import com.github.demidko.aot.WordformMeaning;
 
 import ru.idr.arbitragestatistics.model.TitleData;
+import ru.idr.arbitragestatistics.model.arbitrage.Person;
 
 public class DocumentProcessor {
 
@@ -51,6 +52,24 @@ public class DocumentProcessor {
         } catch (IOException ioEx) {
             throw new IOException("Документ не найден");
         }
+    }
+
+    //#endregion
+
+    //#region Complainant & Defendant
+
+    public static Person getComplainant(String text) {
+
+        Person person = new Person();
+
+        return person;
+    }
+
+    public static Person getDefendant(String text) {
+
+        Person person = new Person();
+
+        return person;
     }
 
     //#endregion
@@ -113,22 +132,19 @@ public class DocumentProcessor {
                 for (String file : files) {
 
                 String title = getArbitrageTextTitle(ServerFile.fileText(currentDir, file), " ");
+                String filapath = Paths.get(currentDir, file).toString();
 
                 // Add or Increment title data
                 TitleData tmp;
                 if (titleMap.containsKey(title)) {
-
                     tmp = titleMap.get(title); 
-                    tmp.addFile(file);
+                    tmp.addFile(filapath);
                     tmp.setCount(tmp.getCount() + 1);
-
                 } else {
-
                     tmp = new TitleData();
                     tmp.setCount(1);
-                    tmp.addFile(file);
+                    tmp.addFile(filapath);
                     titleMap.put(title, tmp);
-                
                 }
             }
         }
@@ -184,15 +200,15 @@ public class DocumentProcessor {
         String[] regexpEndRules = {
             "дело",
             "деть",
-            "г\\..*",
-            "Г\\.(.*)?",
+            "г\\.",
+            "Г\\.",
             "город",
             "а\\d+",
             "имя",
             "\\d{1,2}"
         };
         
-        String patternTitleEndString = String.join("?|", regexpEndRules) + "?";
+        String patternTitleEndString = String.join("|", regexpEndRules) + "";
         Pattern patternTitleEnd = Pattern.compile(patternTitleEndString, Pattern.CASE_INSENSITIVE);
 
         String[] regexpInnerBeforeEndRules = {
@@ -200,11 +216,12 @@ public class DocumentProcessor {
         };
 
         String patternTitleInnerBeforeEndString = String.join("?|", regexpInnerBeforeEndRules) + "?";
-        Pattern patternTitleInnerBeforeEnd = Pattern.compile(patternTitleInnerBeforeEndString, Pattern.CASE_INSENSITIVE);
+        Pattern patternTitleInnerBeforeEnd = Pattern.compile(patternTitleInnerBeforeEndString, Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 
         String[] regexpInnerAfterEndRules = {
             "\\s?к\\s|\\sк\\s?",
-            "ст\\."
+            "ст\\.",
+            // ""
         };
 
         String patternTitleInnerAfterEndString = String.join("?|", regexpInnerAfterEndRules) + "?";
@@ -217,18 +234,19 @@ public class DocumentProcessor {
                 continue;
             }
 
-            Matcher currentWord = patternTitleEnd.matcher(lemmatizeTextSplit[i].trim());
+            Matcher currentWord = patternTitleEnd.matcher(lemmatizeTextSplit[i].trim().toLowerCase());
 
             if (currentWord.find()) {
-                Matcher wordBefore = patternTitleInnerBeforeEnd.matcher(lemmatizeTextSplit[i - 1].trim());
-                if (wordBefore.find()) {
-                    continue;
-                }
+                // Matcher wordBefore = patternTitleInnerBeforeEnd.matcher(lemmatizeTextSplit[i - 1].trim());
+                // if (wordBefore.find()) {
+                //     continue;
+                // }
                 
-                Matcher wordAfter = patternTitleInnerAfterEnd.matcher(lemmatizeTextSplit[i + 1].trim());
-                if (wordAfter.find()) {
-                    continue;
-                }
+                // Matcher wordAfter = patternTitleEnd.matcher(lemmatizeTextSplit[i + 1].trim());
+                // if (wordAfter.find()) {
+                //     titleIndexEnd = i - 1;
+                //     break;
+                // }
 
                 if (titleIndexEnd == -1 || titleIndexEnd > i) {
                     titleIndexEnd = i;
@@ -382,7 +400,6 @@ public class DocumentProcessor {
         return text.replaceAll(separator, " ");
     }
 
-    // Work Incorrect
     public static String removeSpaceBetweenWords(String text) {
 
         text = text.replaceAll("\n|\r", " ");
