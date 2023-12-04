@@ -182,17 +182,28 @@
 /* #region Accordion */
 
 .accordion {
+    border-bottom: 1px solid #ccc;
+
+    width: 100%;
     padding: 5px;
 
     transition: all 0.15s ease-in-out;
 }
 
-.accordion-active, .accordion:hover {
-    background-color: #333;
+.accordion-active {
+    background-color: #555;
+    color: #eee;
+}
+
+.accordion:hover {
+    background-color: #ccc;
+    color: #333;
+    cursor: pointer;
 }
 
 .panel {
     display: none;
+    padding: 5px 0 10px;
 }
 
 
@@ -259,6 +270,7 @@ ul {
     background: none;
     border-width: 0;
     border-bottom: 2px solid #ccc;
+    resize: vertical;
     transition: all 0.2s ease;
 }
 .form-row input:focus, .form-row textarea:focus {
@@ -314,6 +326,19 @@ ul {
 }
 
 /*#endregion */
+
+/* #region Text Block */
+
+.text-block {
+    background-color: #555;
+    color: #fff;
+    
+    padding: 14px 16px;
+    font-size: 18px;
+    width: auto;
+}
+
+/* #endregion */
 
 /* #region Search  */
 
@@ -386,7 +411,7 @@ ul {
 
 /* width */
 ::-webkit-scrollbar {
-    width: 10px;
+    width: 15px;
 }
 
 select::-webkit-scrollbar {
@@ -395,17 +420,17 @@ select::-webkit-scrollbar {
 
 /* Track */
 ::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: rgba(242, 242, 242, 1);
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: #888;
+    background: rgba(135, 135, 135, 1);
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-    background: #555;
+    background: rgba(84, 84, 84, 1);
 }
 
 /* #endregion */
@@ -564,9 +589,17 @@ select::-webkit-scrollbar {
     color: #eee;
 }
 
-#format-tool {
-
+.tab-link-row {
+    display: flex;
+    justify-content: start;
+    position: relative;
+    width: 100%;
 }
+
+.tab-content-row {
+    width: 100%;
+}
+
 /* #endregion */
 
 /* #region RegEx Input */

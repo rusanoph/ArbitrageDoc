@@ -22,7 +22,7 @@ public class Person {
     }
     //#endregion
 
-    //#region INN Getter/Setter
+    //#region OGRNIP Getter/Setter
     public String getOgrnip() {
         return ogrnip;
     }
@@ -55,6 +55,4 @@ public class Person {
     public void setArbitrageSide(ArbitrageSide arbitrageSide) {
         this.arbitrageSide = arbitrageSide;
     }
-
-    
 }

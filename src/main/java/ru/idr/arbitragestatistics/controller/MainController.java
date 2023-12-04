@@ -13,6 +13,8 @@ public class MainController {
     @RequestMapping(value = {"/", "/main"})
     public String pageMethod(Model model, HttpServletRequest request, HttpServletResponse response) {
 
+        
+
         model.addAttribute("activePage", "main");
         return "main.html";
     }

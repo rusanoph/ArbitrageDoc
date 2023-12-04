@@ -22,17 +22,6 @@ import ru.idr.arbitragestatistics.model.arbitrage.Person;
 
 public class DocumentProcessor {
 
-    private static String regexCapital = "[А-Я]";
-    private static String regexSpecialCharacters = "[^а-яА-Я0-9. ]";
-
-    private static String regexMoneySumFull = "(\\s*\\d+)+\\s*(р\\.|руб\\.|рублей)\\s*((\\s*\\d+)+\\s*(к\\.|коп\\.|копеек))?";    
-    private static String regexMoneySumComma = "(\\s*\\d+)+,\\s*(\\s*\\d+)+\\s*(р\\.|руб\\.|рублей)";
-    private static String regexMoneySumComment = "(\\s*\\d+)+\\s*(\\([А-Яа-я ]*\\))?\\s*(р\\.|руб\\.|рублей)\\s*((\\s*\\d+)+\\s*(к\\.|коп\\.|копеек))?";
-
-    private static String regexAfterHyphenText = "((\\s*[–-]\\s*[А-Яа-я ]+[\\.,;])?)";
-
-    private static String regexSpecial = "(\\s*\\d+)+\\s*(р\\.|руб\\.|рублей)\\s*((\\s*\\d+)+\\s*(к\\.|коп\\.|копеек))?|(\\s*\\d+)+,\\s*(\\s*\\d+)+\\s*(р\\.|руб\\.|рублей)|(\\s*\\d+)+\\s*(\\([А-Яа-я ]*\\))?\\s*(р\\.|руб\\.|рублей)\\s*((\\s*\\d+)+\\s*(к\\.|коп\\.|копеек))?";
-
     //#region Document
 
     public static String getText(String documentPath, String documentFileName) throws IOException {
@@ -74,13 +63,19 @@ public class DocumentProcessor {
 
     //#endregion
 
+    //#region Court Case Solution
+
+    // . . . 
+
+    //#endregion
+
     //#region Data
 
     public static Iterable<String> getMoneySum(String text) {
 
         List<String> moneySum = new ArrayList<>();
 
-        final String regexString = regexMoneySumFull + "|" + regexMoneySumComma + "|" + regexMoneySumComment;
+        final String regexString = RegExRepository.regexMoneySumFull + "|" + RegExRepository.regexMoneySumComma + "|" + RegExRepository.regexMoneySumComment;
 
         Matcher matcher = Pattern.compile(regexString, Pattern.MULTILINE).matcher(text);
 
@@ -94,7 +89,7 @@ public class DocumentProcessor {
     public static Iterable<String> getMoneySumHyphen(String text) {
         List<String> moneySum = new ArrayList<>();
 
-        final String regexString = String.format("(%s|%s|%s)%s", regexMoneySumFull, regexMoneySumComma, regexMoneySumComment, regexAfterHyphenText);
+        final String regexString = String.format("(%s|%s|%s)%s", RegExRepository.regexMoneySumFull, RegExRepository.regexMoneySumComma, RegExRepository.regexMoneySumComment, RegExRepository.regexAfterHyphenText);
 
         Matcher matcher = Pattern.compile(regexString, Pattern.MULTILINE).matcher(text);
 
@@ -172,8 +167,9 @@ public class DocumentProcessor {
             "определение",
             "постановление",
             "протокольный",
-            "решение"
-            // "судебный"
+            "решение",
+            "протокол",
+            "судебный"
         ));
 
         // Find index of first word in title
@@ -205,7 +201,8 @@ public class DocumentProcessor {
             "город",
             "а\\d+",
             "имя",
-            "\\d{1,2}"
+            "\\d{1,2}",
+            // "приказ"
         };
         
         String patternTitleEndString = String.join("|", regexpEndRules) + "";
@@ -371,6 +368,10 @@ public class DocumentProcessor {
 
     //#region Preprocessing
 
+    public static String removePageNumbersAndDocNumbers(String text) {
+        return text.replaceAll("\\b\\d+_\\d+\\b|\\d+(\r\n|[\r\n])", "");
+    }
+
     public static String lemmatizeText(String text, String splitSymbol) {
 
         var lemmaList = new ArrayList<String>();
@@ -392,7 +393,7 @@ public class DocumentProcessor {
     }
 
     public static String removeSpecialCharacters(String text) {
-        return text.replaceAll(regexSpecialCharacters, "");
+        return text.replaceAll(RegExRepository.regexSpecialCharacters, "");
     }
 
     public static String removeLineSeparator(String text) {
@@ -405,7 +406,7 @@ public class DocumentProcessor {
         text = text.replaceAll("\n|\r", " ");
         text = toCapitalText(text);
 
-        String[] textSplit = text.split("\\s(?="+regexCapital+")");
+        String[] textSplit = text.split("\\s(?="+RegExRepository.regexCapital+")");
 
         return String.join(" ", textSplit);
     }
@@ -427,7 +428,7 @@ public class DocumentProcessor {
         for (String currentWord : textSplit) {
             // If previous word ends with capital char, then no space, 
             // else has space after current word
-            boolean hasNoSpace = previousWord.matches("\\.*"+regexCapital+"$|\\.*"+regexCapital+" ") && previousWord.length() <= 1 && currentWord.length() <= 1;
+            boolean hasNoSpace = previousWord.matches("\\.*"+RegExRepository.regexCapital+"$|\\.*"+RegExRepository.regexCapital+" ") && previousWord.length() <= 1 && currentWord.length() <= 1;
             String separator = hasNoSpace ? "" : " ";
 
             newText += toCapitalWord(previousWord) + separator;

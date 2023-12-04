@@ -6,18 +6,23 @@ import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ru.idr.arbitragestatistics.helper.ArbitrageTemplateSeeker;
 import ru.idr.arbitragestatistics.helper.DocumentProcessor;
 import ru.idr.arbitragestatistics.helper.ServerFile;
 import ru.idr.arbitragestatistics.model.TitleData;
 
 @RestController
 public class DocumentService {
+
+    @Autowired
+    ArbitrageTemplateSeeker ats;
 
     //#region Document Object
     @GetMapping(value="/api/document/text", produces="application/json")    
@@ -54,6 +59,30 @@ public class DocumentService {
         return documentJson.toString();
     }
     
+    @GetMapping(value="/api/document/text/part", produces="application/json")    
+    public String getDocumentStructureParts(@RequestParam("documentPath") String documentPath, @RequestParam("documentFileName") String documentFileName) {
+
+        JSONObject documentPartsJson = new JSONObject();
+
+        try {
+            String targetFileText = DocumentProcessor.getText(documentPath, documentFileName);
+
+            documentPartsJson.put("header", ats.getHeaderPart(targetFileText));
+            documentPartsJson.put("found", ats.getAfterFoundPart(targetFileText));
+            documentPartsJson.put("determined", ats.getAfterDeterminedPart(targetFileText));
+            documentPartsJson.put("decided", ats.getAfterDecidedPart(targetFileText));
+            documentPartsJson.put("solution", ats.getAfterSolutionPart(targetFileText));
+
+            documentPartsJson.put("complainantAndDefendant", ats.getComplainantAndDefendantPart(targetFileText));
+
+        } catch (IOException ioEx) {
+            documentPartsJson.put("error", "Документ не найден.");
+            ioEx.printStackTrace();
+        }
+
+        return documentPartsJson.toString();
+    }
+
     @GetMapping(value="/api/document/court")
     public String getDocumentCourt(@RequestParam("documentPath") String documentPath, @RequestParam("documentFileName") String documentFileName) {
 
@@ -228,4 +257,19 @@ public class DocumentService {
     }
     //#endregion
 
+
+    //#region Method For Test
+
+    @GetMapping(value="/api/test")
+    public String  getResultOfTestFunction(@RequestBody String text) {
+
+        ArbitrageTemplateSeeker ats = new ArbitrageTemplateSeeker();
+
+        text = DocumentProcessor.removePageNumbersAndDocNumbers(text);
+        text = DocumentProcessor.removeLineSeparator(text);
+
+        return ats.getAfterDecidedPart(text);
+    }
+
+    //#endregion
 }

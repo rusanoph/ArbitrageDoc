@@ -94,6 +94,12 @@ main .wrapper {
     width: 30%;
 }
 
+.content-col:first-child .side-nav-row:last-child {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 10px;
+}
+
 .content-col:last-child {
     display: flex;
     flex-direction: column;

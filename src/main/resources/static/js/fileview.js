@@ -137,6 +137,8 @@ export class FileView {
                     return;
                 }
 
+                console.log(regexInputValue);
+
                 let newText;
                 if (regexParam.global.checked) {
                     newText = text.innerText.replaceAll(regex, "<span class='highlight'>$1</span>");
@@ -179,3 +181,5 @@ export class FileView {
     //#endregion
 
 }
+
+document.getElementById("all-word-tab-link").click();
