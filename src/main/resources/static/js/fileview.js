@@ -1,8 +1,12 @@
 
+import { DocumentService } from "./api/DocumentService.js";
 import { ComponentTools } from "./helper/ComponentTools.js";
 import { Util } from "./util/Util.js";
 
 export class FileView {
+
+    documentPartsObject;
+
     isFormated = false;
     isLemma = false;
     isRegEx = false;
@@ -39,6 +43,24 @@ export class FileView {
                     document.getElementById("regex-input").dispatchEvent(new Event('click'));
                 }
             });
+
+            await DocumentService.getDocumentStructureParts(docPathInputValue, docFileNameInputValue)
+            .then((data) => {
+                this.documentPartsObject = data;
+            });
+
+            let structureData = this.getMainStructureData();
+            ComponentTools.updateDocumentStructureView(
+                "document-header-text", 
+                "document-found-text", 
+                "document-determined-text", 
+                "document-decided-text", 
+                "document-solution-text", 
+                structureData
+            );
+
+            let complainantAndDefendantData = this.getComplainantAndDefendantData();
+            ComponentTools.updateComplainantAndDefendantView("document-complainant-defendant-text", complainantAndDefendantData);
         });
     }
 
@@ -76,7 +98,7 @@ export class FileView {
         const regexTool = document.getElementById("regex-tool");
         const regexInput = document.getElementById("regex-input");
 
-        const text = document.getElementById("document-text");
+        const textArray = document.getElementsByClassName("regex-processed");
 
         const regexParam = {
             "global": document.getElementById("regex-param-global"),
@@ -132,21 +154,22 @@ export class FileView {
                     return;
                 }
                 
-                if (regex.source === "()") {
-                    text.innerHTML = text.innerText;
-                    return;
-                }
-
-                console.log(regexInputValue);
-
-                let newText;
-                if (regexParam.global.checked) {
-                    newText = text.innerText.replaceAll(regex, "<span class='highlight'>$1</span>");
-                } else {
-                    newText = text.innerText.replace(regex, "<span class='highlight'>$1</span>");
-                }
+                // Highlighting Match Patterns 
+                for (let text of textArray) {
+                    if (regex.source === "()") {
+                        text.innerHTML = text.innerText;
+                        return;
+                    }
     
-                text.innerHTML = newText;
+                    let newText;
+                    if (regexParam.global.checked) {
+                        newText = text.innerText.replaceAll(regex, "<span class='highlight'>$1</span>");
+                    } else {
+                        newText = text.innerText.replace(regex, "<span class='highlight'>$1</span>");
+                    }
+        
+                    text.innerHTML = newText;
+                }
             });
         });
     }
@@ -180,6 +203,27 @@ export class FileView {
     }
     //#endregion
 
+    getMainStructureData() {
+        let structure = {
+            header: this.documentPartsObject.header,
+            found: this.documentPartsObject.found,
+            determined: this.documentPartsObject.determined,
+            decided: this.documentPartsObject.decided,
+            solution: this.documentPartsObject.solution,
+        }
+
+        return structure
+    }
+
+    getComplainantAndDefendantData() {
+
+        let complainantAndDefendant = {
+            complainantAndDefendant: this.documentPartsObject.complainantAndDefendant,
+        }
+
+        return complainantAndDefendant;
+    }
 }
+
 
 document.getElementById("all-word-tab-link").click();

@@ -118,32 +118,42 @@
         <div class="tab-content-row">
             <!-- Text -->
             <div id="text-tab" class="tab-content">
-                <pre id="document-text">Текст документа</pre>
+                <pre id="document-text" class="regex-processed">Текст документа</pre>
             </div>
 
             <!-- Document Structure Parts -->
             <div id="text-structure-tab" class="tab-content">
                 
                 <div class="accordion">Шапка</div>
-                <div class="panel"></div>
+                <div class="panel">
+                    <pre id="document-header-text" class="regex-processed"></pre>
+                </div>
 
                 <div class="accordion">Установил</div>
-                <div class="panel"></div>
+                <div class="panel">
+                    <pre id="document-found-text" class="regex-processed"></pre>
+                </div>
                 
                 <div class="accordion">Определил</div>
-                <div class="panel"></div>
+                <div class="panel">
+                    <pre id="document-determined-text" class="regex-processed"></pre>
+                </div>
                 
                 <div class="accordion">Постановил</div>
-                <div class="panel"></div>
-                
+                <div class="panel">
+                    <pre id="document-decided-text" class="regex-processed"></pre>
+                </div>
+                    
                 <div class="accordion">Решил</div>
-                <div class="panel"></div>
+                <div class="panel">
+                    <pre id="document-solution-text" class="regex-processed"></pre>
+                </div>
 
             </div>
 
             <!-- Complainant & Defendant -->
             <div id="complainant-defendant-tab" class="tab-content">
-
+                <pre id="document-complainant-defendant-text" class="regex-processed"></pre>
             </div>
         </div>
 

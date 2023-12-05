@@ -21,6 +21,24 @@ export class DocumentService {
         return data;
     } 
 
+    static async getDocumentStructureParts(path, filename) {
+        let params = {
+            "documentPath": path,
+            "documentFileName": filename,
+        }
+    
+        let query = Object.keys(params)
+            .map(k => `${encodeURIComponent(k)}=${encodeURIComponent(params[k])}`)
+            .join("&");
+    
+        let url = `/api/document/text/part?${query}`;
+    
+        const response = await fetch(url);
+        let data = await response.json();
+
+        return data;
+    }
+
     static async getDocumentCourt(path, filename) {
         let params = {
             "documentPath": path,

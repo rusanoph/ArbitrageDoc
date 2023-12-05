@@ -62,7 +62,7 @@ class MainPageDocument {
 
             li.innerHTML = file;
 
-            li.addEventListener('click', () => {
+            li.addEventListener('click', async () => {
                 this.fileViewClass.documentPath = currDir;
                 this.fileViewClass.documentFileName = file;
 
@@ -79,6 +79,24 @@ class MainPageDocument {
                     }
                 });
 
+                await DocumentService.getDocumentStructureParts(currDir, file)
+                .then((data) => {
+                    this.fileViewClass.documentPartsObject = data;
+                });
+
+                let structureData = this.fileViewClass.getMainStructureData();
+                ComponentTools.updateDocumentStructureView(
+                    "document-header-text", 
+                    "document-found-text", 
+                    "document-determined-text", 
+                    "document-decided-text", 
+                    "document-solution-text", 
+                    structureData
+                );
+
+                let complainantAndDefendantData = this.fileViewClass.getComplainantAndDefendantData();
+                ComponentTools.updateComplainantAndDefendantView("document-complainant-defendant-text", complainantAndDefendantData);
+
                 let previouslySelected = document.querySelector('.selected');
                 if (previouslySelected) {
                     previouslySelected.classList.remove('selected');
@@ -87,11 +105,24 @@ class MainPageDocument {
             });
 
             documentListElement.appendChild(li);
+            
             this.documentCount++;
         }
 
-        document.getElementById("doc-list-count").innerHTML = this.documentCount;
+        if (this.documentCount !== 0) {
+            document.getElementById("doc-list-count").innerHTML = this.documentCount;
+        }
     }
+
+/*
+--- main structure ---
+
+
+--- subject structure ---
+
+*/
+
+
 }
 
 //#region Save input docPath, docFileName after reload

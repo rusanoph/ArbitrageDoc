@@ -21,5 +21,48 @@ export class ComponentTools {
                 docText.innerHTML = data.error;
             }
         });
+
+    }
+
+    static async updateDocumentStructureView(headerId, foundId, determinedId, decidedId, solutionId, structureObj) {
+        const headerElement = document.getElementById(headerId);
+        const foundElement = document.getElementById(foundId);
+        const determinedElement = document.getElementById(determinedId);
+        const decidedElement = document.getElementById(decidedId);
+        const solutionElement = document.getElementById(solutionId);
+
+        this.showAccordionIfCondition(headerId, structureObj.header.length > 0);
+        this.showAccordionIfCondition(foundId, structureObj.found.length > 0);
+        this.showAccordionIfCondition(determinedId, structureObj.determined.length > 0);
+        this.showAccordionIfCondition(decidedId, structureObj.decided.length > 0);
+        this.showAccordionIfCondition(solutionId, structureObj.solution.length > 0);
+
+        headerElement.innerHTML = structureObj.header;
+        foundElement.innerHTML = structureObj.found;
+        determinedElement.innerHTML = structureObj.determined;
+        decidedElement.innerHTML = structureObj.decided;
+        solutionElement.innerHTML = structureObj.solution;
+    }
+
+    static async updateComplainantAndDefendantView(complainantDefendantId, structureObj) {
+        const complainantDefendantElement = document.getElementById(complainantDefendantId);
+
+        complainantDefendantElement.innerHTML = structureObj.complainantAndDefendant;
+    }
+
+    static showAccordionIfCondition(elementId, condition) {
+        const element = document.getElementById(elementId);
+        const accPanel = element.parentElement;
+        const accTab = accPanel.previousElementSibling;
+
+        if (!condition) {
+            element.style.display = "none";
+            accPanel.style.display = "none";
+            accTab.style.display = "none";
+        } else {
+            element.style.display = "block";
+            accPanel.style.display = "block";
+            accTab.style.display = "block";
+        }
     }
 }

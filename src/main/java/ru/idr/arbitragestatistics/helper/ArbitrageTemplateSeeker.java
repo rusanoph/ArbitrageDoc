@@ -12,7 +12,7 @@ public class ArbitrageTemplateSeeker {
     // [Уу]\s*[Сс]\s*[Тт]\s*[Аа]\s*[Нн]\s*[Оо]\s*[Вв]\s*[Ии]\s*[Лл]\s*:?|[Оо]\s*[Пп]\s*[Рр]\s*[Ее]\s*[Дд]\s*[Ее]\s*[Лл]\s*[Ии]\s*[Лл]\s*:?|[Пп]\s*[Оо]\s*[Сс]\s*[Тт]\s*[Аа]\s*[Нн]\s*[Оо]\s*[Вв]\s*[Ии]\s*[Лл]\s*:?|[Рр]\s*[Ее]\s*[Шш]\s*[Ии]\s*[Лл]\s*:?
 
     private List<String> textPartsRegex = new ArrayList<>();
-    private List<Matcher> matchers = new ArrayList<>();
+    private List<Pattern> patterns = new ArrayList<>();
 
     private String text = "";
     public String getText() {
@@ -36,11 +36,11 @@ public class ArbitrageTemplateSeeker {
         textPartsRegex.add(wordToUniversalRegex("постановил")+":?");
         textPartsRegex.add(wordToUniversalRegex("решил")+":?");
         
-        matchers.clear();
-        matchers.add(Pattern.compile(textPartsRegex.get(0)).matcher(text));
-        matchers.add(Pattern.compile(textPartsRegex.get(1)).matcher(text));
-        matchers.add(Pattern.compile(textPartsRegex.get(2)).matcher(text));
-        matchers.add(Pattern.compile(textPartsRegex.get(3)).matcher(text));
+        patterns.clear();
+        patterns.add(Pattern.compile(textPartsRegex.get(0)));
+        patterns.add(Pattern.compile(textPartsRegex.get(1)));
+        patterns.add(Pattern.compile(textPartsRegex.get(2)));
+        patterns.add(Pattern.compile(textPartsRegex.get(3)));
     }
     
     //#region Text Structure Methods
@@ -98,11 +98,13 @@ public class ArbitrageTemplateSeeker {
     }
     //#endregion
 
-    //#region Text Special Structure 
-    public String getComplainantAndDefendantPart(String text) {
-        String result = "";
+    //#region Text Special Structure
 
-        Pattern pattern = Pattern.compile(RegExRepository.regexComplainantAndDefendat);
+    // Incomplete search algorithm
+    public String getComplainantAndDefendantPart(String text) {
+        String result = "Истец и ответчик не определены";
+
+        Pattern pattern = Pattern.compile(RegExRepository.regexComplainantAndDefendat, Pattern.DOTALL);
         Matcher matcher = pattern.matcher(text);
 
         if (matcher.find()) {
@@ -117,14 +119,14 @@ public class ArbitrageTemplateSeeker {
 
     //#region Other
     private String getTextPartByIndex(String text, int index) {
-        Matcher matcherFound = matchers.get(index);
+        Matcher matcher = patterns.get(index).matcher(text);
         
-        if (matcherFound.find()) {
+        if (matcher.find()) {
             String[] textSplit = text.split(textPartsRegex.get(index));
             text = textSplit[textSplit.length - 1];
 
-            for (int i = index + 1; i < matchers.size(); i++) {
-                if (matchers.get(i).find()) {
+            for (int i = index + 1; i < patterns.size(); i++) {
+                if (patterns.get(i).matcher(text).find()) {
                     textSplit = text.split(textPartsRegex.get(i));
                     text = textSplit[0];
 
