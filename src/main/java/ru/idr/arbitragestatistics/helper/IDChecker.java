@@ -23,18 +23,18 @@ public class IDChecker {
     } 
 
     // ОГРН ИП
-    public static boolean isCorrectOGRNIP(String ogrnip) {
+    public static boolean isCorrectOGRNIP(String ogrnie) {
 
-        if (ogrnip.length() != 15) {
+        if (ogrnie.length() != 15) {
             return false;
         }
 
-        if (!ogrnip.startsWith("3") && !ogrnip.startsWith("4")) {
+        if (!ogrnie.startsWith("3") && !ogrnie.startsWith("4")) {
             return false;
         }
 
-        long ogrnFirst12Digits = Long.parseLong(ogrnip.substring(0, ogrnip.length() - 1));
-        long ogrnLastDigit = ogrnip.toCharArray()[ogrnip.length() - 1] - '0';
+        long ogrnFirst12Digits = Long.parseLong(ogrnie.substring(0, ogrnie.length() - 1));
+        long ogrnLastDigit = ogrnie.toCharArray()[ogrnie.length() - 1] - '0';
 
         long controlNumber = ogrnFirst12Digits % 13;
         controlNumber %= 10;

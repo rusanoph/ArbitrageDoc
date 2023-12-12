@@ -11,13 +11,15 @@
 
             <!-- RegEx input field -->
             <div class="form-row">
-                <textarea id="regex-input" type="text" spellcheck="false" rows="1"></textarea>
+                <textarea id="regex-input" type="text" spellcheck="false" rows="3"></textarea>
                 <!-- <input id="regex-input" type="text" spellcheck="false"> -->
                 <div id="regex-is-valid"></div>
             </div>
 
             <!-- RegEx Params -->
             <div class="regex-param">
+                <div id="regex-count"></div>
+
                 <label class="checkbox-row checkbox">
                     <div class="checkbox__body"><div class="regex-param-key">\g</div> global</div>
                     <input type="checkbox" name="global" id="regex-param-global">

@@ -136,7 +136,7 @@ document.getElementById('all-word-tab-link').click();
 
 function addResetZoomButton(canvasId, chartObj) {
     let resetBtn = document.createElement("div");
-    resetBtn.innerHTML = "Масштаб";
+    resetBtn.innerHTML = "Вернуть масштаб (Alt)";
     resetBtn.classList.add("button-component");
     resetBtn.classList.add("tool");
     resetBtn.addEventListener('click', function() {

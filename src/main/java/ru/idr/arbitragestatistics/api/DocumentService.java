@@ -17,6 +17,7 @@ import ru.idr.arbitragestatistics.helper.ArbitrageTemplateSeeker;
 import ru.idr.arbitragestatistics.helper.DocumentProcessor;
 import ru.idr.arbitragestatistics.helper.ServerFile;
 import ru.idr.arbitragestatistics.model.TitleData;
+import ru.idr.arbitragestatistics.util.HTMLWrapper;
 
 @RestController
 public class DocumentService {
@@ -48,6 +49,11 @@ public class DocumentService {
                 targetFileText = DocumentProcessor.lemmatizeText(targetFileText, " ");
             }
 
+            targetFileText = targetFileText.replaceAll("\t", "&#8195;");
+            targetFileText = targetFileText.replaceAll("\\*\\*(.*?)\\*\\*", HTMLWrapper.tag("span", "$1", "sub-accent"));            
+            targetFileText = targetFileText.replaceAll("(\\*)", HTMLWrapper.tag("span", "$1", "sub-accent"));
+
+
             documentJson.put("title", arbitrageTitle);
             documentJson.put("text", targetFileText);
 
@@ -73,7 +79,14 @@ public class DocumentService {
             documentPartsJson.put("decided", ats.getAfterDecidedPart(targetFileText));
             documentPartsJson.put("solution", ats.getAfterSolutionPart(targetFileText));
 
-            documentPartsJson.put("complainantAndDefendant", ats.getComplainantAndDefendantPart(targetFileText));
+            //#region Complainant And Defendant Part
+            String header_v1 = HTMLWrapper.tag("h2", "Алгоритм поиска 'истец и ответчик' version 1") + "<br>";
+            String header_v2 = HTMLWrapper.tag("h2", "Алгоритм поиска 'истец и ответчик' version 2") + "<br>";
+            String breaker = "<br>" + HTMLWrapper.tag("span", "-".repeat(10), "accent") + "<br><br><br>";
+
+            documentPartsJson.put("complainantAndDefendant", header_v1 + ats.getComplainantAndDefendantPart_v1(targetFileText) + 
+            breaker + header_v2 + ats.getComplainantAndDefendantPart(targetFileText));
+            //#endregion
 
         } catch (IOException ioEx) {
             documentPartsJson.put("error", "Документ не найден.");

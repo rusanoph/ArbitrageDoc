@@ -99,6 +99,7 @@ export class FileView {
         const regexInput = document.getElementById("regex-input");
 
         const textArray = document.getElementsByClassName("regex-processed");
+        // const textArray = [document.getElementById("document-header-text")];
 
         const regexParam = {
             "global": document.getElementById("regex-param-global"),
@@ -107,6 +108,7 @@ export class FileView {
             "dotall": document.getElementById("regex-param-dotall"),
         };
 
+        console.log("Toggle active tools");
         regexTool.addEventListener('click', () => {
             this.isRegEx = !this.isRegEx;
             regexTool.classList.toggle("active-tool");
@@ -118,18 +120,22 @@ export class FileView {
             }
         });
 
+        console.log("Read params");
         for (let param of Object.keys(regexParam)) {
             regexParam[param].addEventListener("change", () => {
-                regexInput.dispatchEvent(new Event('input'));
+                regexInput.dispatchEvent(new Event('click'));
             });
         }
 
+
         const regexEvenets = ["input", "click"];
 
+        console.log("Start of regex computation");
         regexEvenets.forEach(function(regexEvent) {
             regexInput.addEventListener(regexEvent, () => {
                 let regexInputValue = regexInput.value;
     
+                console.log("Set flags to regex");
                 let flags = "";
                 if (regexParam.global.checked) {
                     flags += "g";
@@ -144,28 +150,41 @@ export class FileView {
                     flags += "s";
                 }
     
+                console.log("Check for valis syntax of regex");
                 const regexIsValid = document.getElementById("regex-is-valid");
                 let regex;
                 try {
                     regex = new RegExp(`(${regexInputValue})`, flags);
+                    // regex = //
                     regexIsValid.innerText = "";
                 } catch(e) {
                     regexIsValid.innerText = "Не верный синтаксис регулярного выражения";
                     return;
                 }
                 
+                // console.log("Count regex matches text");
+                // const countRegExMatches = (str) => ((str || '').match(regex) || []).length;
+                // let patternCount = countRegExMatches(document.getElementById("document-text").innerText);
+                // document.getElementById("regex-count").innerText = `Найдено: ${patternCount}`;
+
+                console.log(regex);
+
                 // Highlighting Match Patterns 
+
+                console.log("Highlighting Match Patterns");
                 for (let text of textArray) {
-                    if (regex.source === "()") {
+                    if (regex.source === "()" || !text.innerText.match(regex)) {
                         text.innerHTML = text.innerText;
                         return;
                     }
-    
-                    let newText;
+                    
+                    console.log("Regex");
+
+                    let newText = text.innerText;
                     if (regexParam.global.checked) {
-                        newText = text.innerText.replaceAll(regex, "<span class='highlight'>$1</span>");
+                        newText = text.innerText.replaceAll(regex, "<span class='highlight' onclick='copyToClipboard(this)'>$1</span>");
                     } else {
-                        newText = text.innerText.replace(regex, "<span class='highlight'>$1</span>");
+                        newText = text.innerText.replace(regex, "<span class='highlight' onclick='copyToClipboard(this)'>$1</span>");
                     }
         
                     text.innerHTML = newText;

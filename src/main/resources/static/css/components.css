@@ -639,12 +639,17 @@ select::-webkit-scrollbar {
 }
 
 #regex-input-component {
-    position: -webkit-sticky; /* Safari */
     position: sticky;
     top: 0;
     background: #fff;
     padding: 10px 0 10px 0;
     border-bottom: 2px solid var(--main-color);
+
+    z-index: 1;
+}
+
+#regex-input {
+    font-size: 18px;
 }
 
 #regex-input:focus {
@@ -723,6 +728,19 @@ select::-webkit-scrollbar {
 /* #endregion */
 
 /* #region  Other */
+
+.accent {
+    background-color: rgba(99, 176, 117, 0.5);
+    width: fit-content;
+    height: fit-content;
+}
+
+.sub-accent {
+    background-color: rgba(99, 117, 176, 0.3);
+    color: rgba(9, 17, 255, 1);
+    width: fit-content;
+    height: fit-content;
+}
 
 .nowrap-text {
     text-wrap: nowrap;

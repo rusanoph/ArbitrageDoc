@@ -41,6 +41,16 @@ document.addEventListener("DOMContentLoaded", function() {
 
 //#endregion
 
+//#region Copy to Clipboard
+
+function copyToClipboard(elementObj) {
+    navigator.clipboard.writeText(elementObj.innerText);
+
+    alert("Текст скопирован в буфер обмена");
+}
+
+//#endregion
+
 //#region Tab
 function openTab(tabId, element, color) {
     
@@ -126,10 +136,11 @@ function initAccordion() {
     const displayStyle = "block";
     for (let accordion of accordions) {
         accordion.addEventListener('click', function() {
-            this.classList.toggle("accordion-active");
+            accordion.classList.toggle("accordion-active");
             
-            let panel = this.nextElementSibling;
+            let panel = accordion.nextElementSibling;
             if (panel.style.display === displayStyle) {
+                console.log(panel.style.display);
                 panel.style.display = "none";
             } else {
                 panel.style.display = displayStyle;
@@ -163,3 +174,5 @@ function renderPageData(tableBodyId, data, pageSize, currentPage) {
     });
 }
 //#endregion
+
+

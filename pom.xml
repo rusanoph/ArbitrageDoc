@@ -36,6 +36,14 @@
 			<version>2022.11.28</version>
 		</dependency>
 
+		<!-- slf4j -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>2.0.9</version>
+		</dependency>
+
+
 		<!-- JSON -->
 		<dependency>
 			<groupId>org.json</groupId>

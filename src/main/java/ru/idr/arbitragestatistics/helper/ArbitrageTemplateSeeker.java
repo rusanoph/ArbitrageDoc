@@ -1,14 +1,23 @@
 package ru.idr.arbitragestatistics.helper;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
+import ru.idr.arbitragestatistics.helper.regex.RegExRepository;
+import ru.idr.arbitragestatistics.model.StaticTrees;
+import ru.idr.arbitragestatistics.util.HTMLWrapper;
+import ru.idr.arbitragestatistics.util.Tree;
 
 @Component
 public class ArbitrageTemplateSeeker {
+    private final Logger logger = LoggerFactory.getLogger(ArbitrageTemplateSeeker.class);
     // [Уу]\s*[Сс]\s*[Тт]\s*[Аа]\s*[Нн]\s*[Оо]\s*[Вв]\s*[Ии]\s*[Лл]\s*:?|[Оо]\s*[Пп]\s*[Рр]\s*[Ее]\s*[Дд]\s*[Ее]\s*[Лл]\s*[Ии]\s*[Лл]\s*:?|[Пп]\s*[Оо]\s*[Сс]\s*[Тт]\s*[Аа]\s*[Нн]\s*[Оо]\s*[Вв]\s*[Ии]\s*[Лл]\s*:?|[Рр]\s*[Ее]\s*[Шш]\s*[Ии]\s*[Лл]\s*:?
 
     private List<String> textPartsRegex = new ArrayList<>();
@@ -47,10 +56,10 @@ public class ArbitrageTemplateSeeker {
     public String getHeaderPart(String text) {
         // String regexSolution = "";
         
-        String regexFound = wordToUniversalRegex("установил")+":?";
-        String regexDetermined = wordToUniversalRegex("определил")+":?";
-        String regexDecided = wordToUniversalRegex("постановил")+":?";
-        String regexSolution = wordToUniversalRegex("решил")+":?";
+        String regexFound = wordToUniversalRegex("установил")+":?\\n";
+        String regexDetermined = wordToUniversalRegex("определил")+":?\\n";
+        String regexDecided = wordToUniversalRegex("постановил")+":?\\n";
+        String regexSolution = wordToUniversalRegex("решил")+":?\\n";
 
         Matcher matcherFound = Pattern.compile(regexFound).matcher(text);
         Matcher matcherDetermined = Pattern.compile(regexDetermined).matcher(text);
@@ -99,19 +108,104 @@ public class ArbitrageTemplateSeeker {
     //#endregion
 
     //#region Text Special Structure
+    public String getComplainantAndDefendantPart(String text) {
+        // cdp -> Complainant Defendant Part
+        Tree<Pattern> cdpTree = (new Tree<Pattern>(null))
+        .appendChild(StaticTrees.cdpTree_1)     // ознакомившись
+        .appendChild(StaticTrees.cdpTree_2)     // возобновлено 
+        .appendChild(StaticTrees.cdpTree_3)     // рассмотрев | рассматривает | рассмотрев
+        ;
+
+        List<String> textSplit = List.of(text.split("\\s+"));
+        text = String.join(" " , textSplit).toLowerCase();
+
+        String path = "";
+        while (cdpTree.getChildren().size() != 0) {
+            boolean continueSearch = false;
+
+            for (var childCdpTree : cdpTree.getChildren()) {
+                Matcher m = childCdpTree.getValue().matcher(text);
+
+                if (m.find() && (cdpTree.getDeepth() == 0 || m.start() == 0)) {
+                    int sliceIndex = m.end();
+                    text = text.substring(sliceIndex).trim();
+                    path += "(" + childCdpTree.getValue().pattern() + ") -> ";
+
+                    cdpTree = childCdpTree;
+
+                    continueSearch = true;
+                    break;
+                }
+            }
+
+            if (!continueSearch) {
+                break;
+            }
+        }
+
+        if (cdpTree.hasAction()) {
+            text = cdpTree.doAction(text);
+        }
+
+        return String.format("Tree path: %s\n%s", HTMLWrapper.tag("span", path, "sub-accent"), text);
+    }
+
 
     // Incomplete search algorithm
-    public String getComplainantAndDefendantPart(String text) {
+    public String getComplainantAndDefendantPart_v1(String text) {
         String result = "Истец и ответчик не определены";
 
-        Pattern pattern = Pattern.compile(RegExRepository.regexComplainantAndDefendat, Pattern.DOTALL);
-        Matcher matcher = pattern.matcher(text);
+        Pattern pattern = Pattern.compile(RegExRepository.regexComplainantAndDefendat_v2, Pattern.DOTALL | Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+        Matcher matcher = pattern.matcher(text.toLowerCase());
 
         if (matcher.find()) {
-            result = matcher.group();
+            String complainant = matcher.group(1);
+            String defendant = matcher.group(2);
+
+            String complainantOgrn = "Не определен";
+            String defendantOgrn = "Не определен";
+
+
+            logger.debug("\nmatch Истец и Ответчик: {}", matcher.group(0));
+
+            Matcher complainantOgrnMatcher = Pattern.compile(RegExRepository.regexOgrn + "|" + RegExRepository.regexOgrnip).matcher(complainant);
+            Matcher defendantOgrnMatcher = Pattern.compile(RegExRepository.regexOgrn + "|" + RegExRepository.regexOgrnip).matcher(defendant);
+
+
+            if (complainantOgrnMatcher.find()) {
+                complainantOgrn = complainantOgrnMatcher.group(0);
+                logger.debug("\n\nОГРН Истца: {}", complainantOgrn);
+            }
+
+            if (defendantOgrnMatcher.find()) {
+                defendantOgrn = defendantOgrnMatcher.group(0);
+                logger.debug("\n\nОГРН ответчика: {}", defendantOgrn);
+            }
+
+            // result = result.replaceAll(, result)
+            // result = result.replaceAll(RegExRepository.regexComplainanDefendatStart, "");
+            // result = result.replaceAll(RegExRepository.regexComplainanDefendatEnd, "");
+
+            // var resultSplit = result.split("");
+
+
+
+            
+
+            result = String.format("%s %s<br><br>%s %s<br><br>%s %s<br><br>%s %s<br><br>%s %s<br><br>",
+                wrapAccent("Найдено:"), matcher.group(0),
+                wrapAccent("Истец"), complainant,
+                wrapAccent("ОГРН истца"), complainantOgrn,
+                wrapAccent("Ответчик"), defendant,
+                wrapAccent("ОГРН ответчика"), defendantOgrn
+            );
         }
 
         return result;
+    }
+
+    private String wrapAccent(String str) {
+        return String.format("<span class='accent'>%s</span>", str);
     }
 
     //#endregion
@@ -151,5 +245,7 @@ public class ArbitrageTemplateSeeker {
 
         return regex;
     }
+
+    
     //#endregion
 }

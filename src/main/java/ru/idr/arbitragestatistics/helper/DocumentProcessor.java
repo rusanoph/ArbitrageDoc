@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 
 import com.github.demidko.aot.WordformMeaning;
 
+import ru.idr.arbitragestatistics.helper.regex.RegExRepository;
 import ru.idr.arbitragestatistics.model.TitleData;
 import ru.idr.arbitragestatistics.model.arbitrage.Person;
 
