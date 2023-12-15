@@ -1,7 +1,7 @@
 
-import { DocumentService } from "./api/DocumentService.js";
-import { ComponentTools } from "./helper/ComponentTools.js";
-import { Util } from "./util/Util.js";
+import { DocumentService } from "../api/DocumentService.js";
+import { ComponentTools } from "../helper/ComponentTools.js";
+import { Util } from "../util/Util.js";
 
 export class FileView {
 
@@ -60,7 +60,12 @@ export class FileView {
             );
 
             let complainantAndDefendantData = this.getComplainantAndDefendantData();
-            ComponentTools.updateComplainantAndDefendantView("document-complainant-defendant-text", complainantAndDefendantData);
+            ComponentTools.updateComplainantAndDefendantView(
+                "document-complainant-defendant-regex-text",
+                "document-complainant-defendant-tree-text",
+                "document-complainant-defendant-graph-text", 
+                complainantAndDefendantData
+            );
         });
     }
 
@@ -237,7 +242,9 @@ export class FileView {
     getComplainantAndDefendantData() {
 
         let complainantAndDefendant = {
-            complainantAndDefendant: this.documentPartsObject.complainantAndDefendant,
+            complainantAndDefendantRegex: this.documentPartsObject.complainantAndDefendantRegex,
+            complainantAndDefendantTree: this.documentPartsObject.complainantAndDefendantTree,
+            complainantAndDefendantGraph: this.documentPartsObject.complainantAndDefendantGraph,
         }
 
         return complainantAndDefendant;
@@ -245,4 +252,8 @@ export class FileView {
 }
 
 
-document.getElementById("all-word-tab-link").click();
+// Open Default Tab
+const defaultTab = document.getElementById("all-word-tab-link");
+if (defaultTab !== null) {
+    defaultTab.click();
+}

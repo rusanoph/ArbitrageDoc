@@ -1,5 +1,5 @@
 import { DocumentService } from "./api/DocumentService.js";
-import { FileView } from "./fileview.js";
+import { FileView } from "./view/fileview.js";
 import { Util } from "./util/Util.js";
 
 class FileDataPage {

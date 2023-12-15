@@ -64,12 +64,29 @@ function openTab(tabId, element, color) {
         link.style.backgroundColor = "";
     }
 
+    const tabSubLinks = document.getElementsByClassName("tab-sub-link");
+    for (let subLink of tabSubLinks) {
+        subLink.style.backgroundColor = "";
+    }
+
+    // Parent tab-content
+    const parentTabContent = findParent(element, ".tab-content");
+    if (parentTabContent !== null) {
+        document.getElementById(parentTabContent.id).style.display = "block";
+    }
+
     document.getElementById(tabId).style.display = "block";
     
     element.style.backgroundColor = color;
 }
 if (document.getElementById("defaultTab") !== null) {
     document.getElementById("defaultTab").click();
+}
+
+function findParent(element, selector) {
+    if (!element) return null;
+
+    return element.matches && element.matches(selector) ? element : this.findParent(element.parentNode, selector);
 }
 //#endregion
 

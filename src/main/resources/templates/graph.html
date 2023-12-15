@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Документы</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/components.css">
+    
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" th:href="@{/css/graph.css}"/>
+</head>
+<body>
+    <script th:inline="javascript">
+        //#region cdpTree vertices and edges
+        let verticesCdpTree = /*[[${verticesCdpTree}]]*/ 'none';
+        let verticesCdpTreeJson = JSON.parse(verticesCdpTree);
+
+        let edgesCdpTree = /*[[${edgesCdpTree}]]*/ 'none';
+        let edgesCdpTreeJson = JSON.parse(edgesCdpTree);
+        //#endregion
+
+        //#region testTree vertices and edges
+        let verticesTestTree = /*[[${verticesTestTree}]]*/ 'none';
+        let verticesTestTreeJson = JSON.parse(verticesTestTree);
+
+        let edgesTestTree = /*[[${edgesTestTree}]]*/ 'none';
+        let edgesTestTreeJson = JSON.parse(edgesTestTree);
+        //#endregion
+
+
+    </script>
+
+    <header th:replace="~{/fragments/_header :: header}"></header>
+
+    <div id="backToBottom"></div>
+
+
+    <main>
+        <div class="container">
+            <div class="wrapper">
+
+                <th:block th:replace="~{/fragments/components/_graphview :: 
+                    graph-view('graph-test-tree', 'Дерево разбора истец и ответчик')}">
+                </th:block>
+
+            </div>
+        </div>
+    </main>
+
+
+    <footer th:replace="~{/fragments/_footer :: footer}"></footer>
+
+    <div id="backToTop"></div>
+
+    <!-- JS Library -->
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+
+    <!-- JS -->
+    <script src="/js/component.js"></script>
+    <script src="/js/main.js" type="module"></script>
+    <script type="module" src="/js/graph.js"></script>
+</body>
+</html>

@@ -11,9 +11,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import ru.idr.arbitragestatistics.helper.regex.RegExRepository;
-import ru.idr.arbitragestatistics.model.StaticTrees;
+import ru.idr.arbitragestatistics.model.arbitrage.StaticTrees;
 import ru.idr.arbitragestatistics.util.HTMLWrapper;
-import ru.idr.arbitragestatistics.util.Tree;
+import ru.idr.arbitragestatistics.util.datastructure.Tree;
 
 @Component
 public class ArbitrageTemplateSeeker {
@@ -107,13 +107,18 @@ public class ArbitrageTemplateSeeker {
     }
     //#endregion
 
-    //#region Text Special Structure
-    public String getComplainantAndDefendantPart(String text) {
+    //#region Text Special Structure Parsing
+    public String getComplainantAndDefendantPartGraph(String text) {
+        return "Not implemented algorithm";
+    }
+
+    // Tree's children number grows too fast because of path repeations
+    public String getComplainantAndDefendantPartTree(String text) {
         // cdp -> Complainant Defendant Part
         Tree<Pattern> cdpTree = (new Tree<Pattern>(null))
         .appendChild(StaticTrees.cdpTree_1)     // ознакомившись
         .appendChild(StaticTrees.cdpTree_2)     // возобновлено 
-        .appendChild(StaticTrees.cdpTree_3)     // рассмотрев | рассматривает | рассмотрев
+        .appendChild(StaticTrees.cdpTree_3)     // рассмотрев | рассматривает | рассмотрел
         ;
 
         List<String> textSplit = List.of(text.split("\\s+"));
@@ -126,10 +131,10 @@ public class ArbitrageTemplateSeeker {
             for (var childCdpTree : cdpTree.getChildren()) {
                 Matcher m = childCdpTree.getValue().matcher(text);
 
-                if (m.find() && (cdpTree.getDeepth() == 0 || m.start() == 0)) {
+                if (m.find() && (cdpTree.getDepth() == 0 || m.start() == 0)) {
                     int sliceIndex = m.end();
                     text = text.substring(sliceIndex).trim();
-                    path += "(" + childCdpTree.getValue().pattern() + ") -> ";
+                    path += "(" + childCdpTree.getValue().pattern() + "; depth=" + childCdpTree.getDepth() +") ⟶ ";
 
                     cdpTree = childCdpTree;
 
@@ -147,12 +152,17 @@ public class ArbitrageTemplateSeeker {
             text = cdpTree.doAction(text);
         }
 
-        return String.format("Tree path: %s\n%s", HTMLWrapper.tag("span", path, "sub-accent"), text);
+        var treeToPrint = (new Tree<Pattern>(Pattern.compile("start")))
+        .appendChild(StaticTrees.cdpTree_1)
+        .appendChild(StaticTrees.cdpTree_2)
+        .appendChild(StaticTrees.cdpTree_3);
+
+        return String.format("Tree path: %s\n%s\n\n\n%s", HTMLWrapper.tag("span", path, "sub-accent"), text, treeToPrint.toString());
     }
 
 
     // Incomplete search algorithm
-    public String getComplainantAndDefendantPart_v1(String text) {
+    public String getComplainantAndDefendantPartRegex(String text) {
         String result = "Истец и ответчик не определены";
 
         Pattern pattern = Pattern.compile(RegExRepository.regexComplainantAndDefendat_v2, Pattern.DOTALL | Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
@@ -166,7 +176,7 @@ public class ArbitrageTemplateSeeker {
             String defendantOgrn = "Не определен";
 
 
-            logger.debug("\nmatch Истец и Ответчик: {}", matcher.group(0));
+            // logger.debug("\nmatch Истец и Ответчик: {}", matcher.group(0));
 
             Matcher complainantOgrnMatcher = Pattern.compile(RegExRepository.regexOgrn + "|" + RegExRepository.regexOgrnip).matcher(complainant);
             Matcher defendantOgrnMatcher = Pattern.compile(RegExRepository.regexOgrn + "|" + RegExRepository.regexOgrnip).matcher(defendant);
@@ -174,12 +184,12 @@ public class ArbitrageTemplateSeeker {
 
             if (complainantOgrnMatcher.find()) {
                 complainantOgrn = complainantOgrnMatcher.group(0);
-                logger.debug("\n\nОГРН Истца: {}", complainantOgrn);
+                // logger.debug("\n\nОГРН Истца: {}", complainantOgrn);
             }
 
             if (defendantOgrnMatcher.find()) {
                 defendantOgrn = defendantOgrnMatcher.group(0);
-                logger.debug("\n\nОГРН ответчика: {}", defendantOgrn);
+                // logger.debug("\n\nОГРН ответчика: {}", defendantOgrn);
             }
 
             // result = result.replaceAll(, result)
@@ -187,10 +197,6 @@ public class ArbitrageTemplateSeeker {
             // result = result.replaceAll(RegExRepository.regexComplainanDefendatEnd, "");
 
             // var resultSplit = result.split("");
-
-
-
-            
 
             result = String.format("%s %s<br><br>%s %s<br><br>%s %s<br><br>%s %s<br><br>%s %s<br><br>",
                 wrapAccent("Найдено:"), matcher.group(0),

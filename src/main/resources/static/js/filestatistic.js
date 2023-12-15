@@ -206,6 +206,7 @@ function createChart(x, y, ctx, color=null) {
     return new Chart(ctx, config);
 }
 
+//#region Random Chart
 const context = document.getElementById("random-chart");
 let tmp;
 tmp = createChart([], [], context);
@@ -226,4 +227,4 @@ document.getElementById("random-chart-reset").addEventListener('click', () => {
     
 });
 document.getElementById("random-chart-reset").click();
-
+//#endregion

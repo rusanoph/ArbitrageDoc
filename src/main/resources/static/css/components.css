@@ -172,6 +172,24 @@
     background-color: #777;
 }
 
+.tab-sub-link {
+    background-color: #eee;
+    border: 1px solid #ccc;
+    /* border-radius: 5px; */
+    color: #333;
+    
+    padding: 5px 15px;
+    margin: 5px 5px 0 0;
+    font-size: 16px;
+    width: auto;
+
+    cursor: pointer;
+}
+
+.tab-sub-link:hover {
+    background-color: #fff;
+}
+
 .tab-content {
     display: none;
     height: 100%;

@@ -1,5 +1,5 @@
 import { DocumentService } from "./api/DocumentService.js";
-import { FileView } from "./fileview.js";
+import { FileView } from "./view/fileview.js";
 import { ComponentTools } from "./helper/ComponentTools.js";
 import { Util } from "./util/Util.js";
 
@@ -95,7 +95,12 @@ class MainPageDocument {
                 );
 
                 let complainantAndDefendantData = this.fileViewClass.getComplainantAndDefendantData();
-                ComponentTools.updateComplainantAndDefendantView("document-complainant-defendant-text", complainantAndDefendantData);
+                ComponentTools.updateComplainantAndDefendantView(
+                    "document-complainant-defendant-regex-text",
+                    "document-complainant-defendant-tree-text",
+                    "document-complainant-defendant-graph-text", 
+                    complainantAndDefendantData
+                );
 
                 let previouslySelected = document.querySelector('.selected');
                 if (previouslySelected) {
@@ -127,20 +132,29 @@ class MainPageDocument {
 
 //#region Save input docPath, docFileName after reload
 
-document.getElementById("document-path").value = Util.getSavedValue("document-path");
-document.getElementById("document-name").value = Util.getSavedValue("document-name");
+const documentPathElement = document.getElementById("document-path");
+const documentNameElement = document.getElementById("document-name");
 
-document.getElementById("document-path").addEventListener('keyup', function () {
-    Util.saveValue(this);
-})
-document.getElementById("document-name").addEventListener('keyup', function () {
-    Util.saveValue(this);
-})
+if (documentNameElement !== null && documentPathElement !== null) {
+    documentPathElement.value = Util.getSavedValue("document-path");
+    documentNameElement.value = Util.getSavedValue("document-name");
+
+    documentPathElement.addEventListener('keyup', function () {
+        Util.saveValue(this);
+    })
+    documentNameElement.addEventListener('keyup', function () {
+        Util.saveValue(this);
+    })
+}
 
 //#endregion
 
+const doucmentListTreeElement = document.getElementById("document-list-tree");
+if (doucmentListTreeElement !== null) {
+    let mainPageDocument = new MainPageDocument(); 
+    mainPageDocument.generateDocumentList("document-list-tree");
+}
 
-let mainPageDocument = new MainPageDocument(); 
-mainPageDocument.generateDocumentList("document-list-tree");
+
 
 

@@ -1,7 +1,6 @@
 import { DocumentService } from "./../api/DocumentService.js";
 
-export class ComponentTools {
-    
+export class ComponentTools {    
 
     static async updateDocumentView(docFileNameId, docTitleId, docTextId, documentPath, documentFileName, isFormated, isLemma) {
 
@@ -44,10 +43,15 @@ export class ComponentTools {
         solutionElement.innerHTML = structureObj.solution;
     }
 
-    static async updateComplainantAndDefendantView(complainantDefendantId, structureObj) {
-        const complainantDefendantElement = document.getElementById(complainantDefendantId);
+    static async updateComplainantAndDefendantView(complainantDefendantRegexId, complainantDefendantTreeId, complainantDefendantGraphId, structureObj) {
+        const complainantDefendantRegexElement = document.getElementById(complainantDefendantRegexId);
+        complainantDefendantRegexElement.innerHTML = structureObj.complainantAndDefendantRegex;
 
-        complainantDefendantElement.innerHTML = structureObj.complainantAndDefendant;
+        const complainantDefendantTreeElement = document.getElementById(complainantDefendantTreeId);
+        complainantDefendantTreeElement.innerHTML = structureObj.complainantAndDefendantTree;
+
+        const complainantDefendantGraphElement = document.getElementById(complainantDefendantGraphId);
+        complainantDefendantGraphElement.innerHTML = structureObj.complainantAndDefendantGraph;
     }
 
     static showAccordionIfCondition(elementId, condition) {

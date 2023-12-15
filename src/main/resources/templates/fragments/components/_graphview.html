@@ -1,0 +1,25 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+</head>
+<body>
+    
+    <th:block th:fragment="graph-view(graphContainerId, graphTitle)">
+        <div class="graph-wrapper">
+            <div class="graph-header">
+                <h3>[[${graphTitle}]]</h3>
+    
+                <div class="graph-button-container">
+                    <span class="button-component zoom-reset">Сброс масштаба</span>
+                    <span class="button-component position-reset">Сброс позиции</span>
+                </div>
+            </div>
+
+            <div th:id="${graphContainerId}" class="graph-container"></div>
+        </div>
+    </th:block>
+
+</body>
+</html>

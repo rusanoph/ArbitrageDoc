@@ -42,4 +42,10 @@ export class Util {
             action();
         }
     }
+
+    static findParent(element, selector) {
+        if (!element) return null;
+
+        return element.matches && element.matches(selector) ? element : this.findParent(element.parentNode, selector);
+    }
 }

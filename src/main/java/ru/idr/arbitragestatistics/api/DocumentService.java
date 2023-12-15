@@ -80,12 +80,28 @@ public class DocumentService {
             documentPartsJson.put("solution", ats.getAfterSolutionPart(targetFileText));
 
             //#region Complainant And Defendant Part
-            String header_v1 = HTMLWrapper.tag("h2", "Алгоритм поиска 'истец и ответчик' version 1") + "<br>";
-            String header_v2 = HTMLWrapper.tag("h2", "Алгоритм поиска 'истец и ответчик' version 2") + "<br>";
-            String breaker = "<br>" + HTMLWrapper.tag("span", "-".repeat(10), "accent") + "<br><br><br>";
+            String headerRegex = HTMLWrapper.tag("h2", "Алгоритм поиска 'истец и ответчик' version 1 (RegEx)") + "<br>";
+            String headerTree = HTMLWrapper.tag("h2", "Алгоритм поиска 'истец и ответчик' version 2 (Tree)") + "<br>";
+            String headerGraph = HTMLWrapper.tag("h2", "Алгоритм поиска 'истец и ответчик' version 3 (Graph)") + "<br>";
 
-            documentPartsJson.put("complainantAndDefendant", header_v1 + ats.getComplainantAndDefendantPart_v1(targetFileText) + 
-            breaker + header_v2 + ats.getComplainantAndDefendantPart(targetFileText));
+
+            documentPartsJson.put("complainantAndDefendantRegex", 
+                String.format("%s<br>%s", 
+                    headerRegex, 
+                    ats.getComplainantAndDefendantPartRegex(targetFileText))
+            );
+
+            documentPartsJson.put("complainantAndDefendantTree", 
+                String.format("%s<br>%s", 
+                    headerTree, 
+                    ats.getComplainantAndDefendantPartTree(targetFileText))
+            );
+
+            documentPartsJson.put("complainantAndDefendantGraph", 
+                String.format("%s<br>%s", 
+                    headerGraph, 
+                    ats.getComplainantAndDefendantPartGraph(targetFileText))
+            );
             //#endregion
 
         } catch (IOException ioEx) {
