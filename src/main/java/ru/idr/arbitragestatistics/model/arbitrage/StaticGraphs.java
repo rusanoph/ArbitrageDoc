@@ -6,10 +6,19 @@ import ru.idr.arbitragestatistics.util.datastructure.Graph;
 import ru.idr.arbitragestatistics.util.datastructure.Vertex;
 
 public class StaticGraphs {
- 
-    public static Graph<Pattern> getCDPGraph() {
 
+    public static Graph<Pattern> getCdpGraph() {
         Graph<Pattern> cdpGraph = new Graph<>();
+
+
+
+
+        return cdpGraph;
+    }
+ 
+    public static Graph<Pattern> getTestGraph1() {
+
+        Graph<Pattern> testGraph1 = new Graph<>();
 
         Vertex<Pattern> A1 = new Vertex<Pattern>(regexFromString("рассмотрев|рассматривает|рассмотрел"));
             Vertex<Pattern> B1 = new Vertex<Pattern>(regexFromString("вопрос\\s+"));
@@ -22,7 +31,7 @@ public class StaticGraphs {
                     Vertex<Pattern> D2 = new Vertex<Pattern>(regexFromString("заседании\\s+"));
                 Vertex<Pattern> C4 = new Vertex<Pattern>(regexFromString("порядке\\s+"));
 
-        cdpGraph
+        testGraph1
         .addVertex(A1)
             .addVertex(B1).addOrientedEdge(A1, B1)
                 .addVertex(C1).addOrientedEdge(B1, C1)
@@ -36,15 +45,10 @@ public class StaticGraphs {
         ;
         
 
-        return cdpGraph;
+        return testGraph1;
     } 
 
     private static Pattern regexFromString(String string) {
         return Pattern.compile(string, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
-    } 
-
-    private static Pattern regexWord(String word) {
-        return Pattern.compile("\\s+"+word+"\\s+", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
     }
-
 }

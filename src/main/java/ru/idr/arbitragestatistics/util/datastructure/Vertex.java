@@ -4,6 +4,8 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.json.JSONObject;
+
 import ru.idr.arbitragestatistics.helper.regex.RegExRepository;
 
 public class Vertex<T> {
@@ -20,6 +22,21 @@ public class Vertex<T> {
         this.value = value;
         this.action = action;
     }
+    //#endregion
+
+    //#region Json Serialization
+
+    public JSONObject toJsonObject() {
+        JSONObject vertexJson = new JSONObject();
+
+        vertexJson.put("id", this.hashCode())
+            .put("value", this.value)
+            .put("depth", depth)
+            .put("hasAction", this.hasAction());
+
+        return vertexJson;
+    }
+
     //#endregion
 
     //#region Getter / Setter

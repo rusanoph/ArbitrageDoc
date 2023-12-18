@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.*;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -41,24 +40,35 @@ public class Graph<T> implements IJsonSerializable {
     }
     //#endregion
     
-    //#region toJson
+    //#region Json Serialization
+
     @Override
     public JSONArray verticesToJsonArray() {
         JSONArray verticesJson = new JSONArray();
 
-        throw new UnsupportedOperationException();
+        for (Vertex<T> vertex : this.getVerticesSet()) {
+            verticesJson.put(vertex.toJsonObject());
+        }
 
-        // return verticesJson;
+        return verticesJson;
     }
 
     @Override
     public JSONArray edgesToJsonArray() {
         JSONArray edgesJson = new JSONArray();
 
-        throw new UnsupportedOperationException();
+        for (Vertex<T> vertexFrom : this.getVerticesSet()) {
+            for (Vertex<T> vertexTo : this.getAdjacentVertices(vertexFrom)) {
+                JSONObject edgeJson = new JSONObject();
 
+                edgeJson.put("source", vertexFrom.hashCode())
+                    .put("target", vertexTo.hashCode());
 
-        // return edgesJson;
+                edgesJson.put(edgeJson);
+            }
+        }
+
+        return edgesJson;
     }
     //#endregion
 }

@@ -1,16 +1,19 @@
-import { Util } from "./util/Util.js";
 import { GraphView } from "./view/GraphView.js";
 
 
 const sideRatio = 16 / 9;
-const width = 1200;
+const width = 1280;
 const height = width / sideRatio;
 
 // const testTreeGraphView = new GraphView("graph-test-tree", width, height, verticesTestTreeJson, edgesTestTreeJson);
 // testTreeGraphView.startSimulation();
 
+// const testGraph1GraphView = new GraphView("graph-test-tree", width, height, verticesTestGraph_1Json, edgesTestGraph_1Json);
+// testGraph1GraphView.startSimulation();
+
 const cdpTreeGraphView = new GraphView("graph-test-tree", width, height, verticesCdpTreeJson, edgesCdpTreeJson);
 cdpTreeGraphView.startSimulation();
+
 
 let buttonBindTree = cdpTreeGraphView;
 let buttonBindTreeIndex = 0;
@@ -22,7 +25,7 @@ const saveAsSvgButton = document.getElementsByClassName("save-graph-as-svg");
 saveAsSvgButton[buttonBindTreeIndex].addEventListener('click', buttonBindTree.handleSvgSave);
 
 const forceSelect = document.getElementsByClassName("force-select");
-forceSelect[buttonBindTreeIndex].addEventListener(event, () => {
+forceSelect[buttonBindTreeIndex].addEventListener('change', () => {
     const selectedForce = forceSelect[buttonBindTreeIndex].value;
 
     const forceActions = {
@@ -33,6 +36,4 @@ forceSelect[buttonBindTreeIndex].addEventListener(event, () => {
     }
 
     forceActions[selectedForce]();
-
-    console.log(selectedForce);
 });

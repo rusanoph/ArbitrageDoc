@@ -209,21 +209,21 @@ public class DocumentProcessor {
         String patternTitleEndString = String.join("|", regexpEndRules) + "";
         Pattern patternTitleEnd = Pattern.compile(patternTitleEndString, Pattern.CASE_INSENSITIVE);
 
-        String[] regexpInnerBeforeEndRules = {
-            "\\s?по\\s"
-        };
+        // String[] regexpInnerBeforeEndRules = {
+        //     "\\s?по\\s"
+        // };
 
-        String patternTitleInnerBeforeEndString = String.join("?|", regexpInnerBeforeEndRules) + "?";
-        Pattern patternTitleInnerBeforeEnd = Pattern.compile(patternTitleInnerBeforeEndString, Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+        // String patternTitleInnerBeforeEndString = String.join("?|", regexpInnerBeforeEndRules) + "?";
+        // Pattern patternTitleInnerBeforeEnd = Pattern.compile(patternTitleInnerBeforeEndString, Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 
-        String[] regexpInnerAfterEndRules = {
-            "\\s?к\\s|\\sк\\s?",
-            "ст\\.",
-            // ""
-        };
+        // String[] regexpInnerAfterEndRules = {
+        //     "\\s?к\\s|\\sк\\s?",
+        //     "ст\\.",
+        //     // ""
+        // };
 
-        String patternTitleInnerAfterEndString = String.join("?|", regexpInnerAfterEndRules) + "?";
-        Pattern patternTitleInnerAfterEnd = Pattern.compile(patternTitleInnerAfterEndString, Pattern.CASE_INSENSITIVE);
+        // String patternTitleInnerAfterEndString = String.join("?|", regexpInnerAfterEndRules) + "?";
+        // Pattern patternTitleInnerAfterEnd = Pattern.compile(patternTitleInnerAfterEndString, Pattern.CASE_INSENSITIVE);
 
         // Find index of last word in title
         Integer titleIndexEnd = -1;

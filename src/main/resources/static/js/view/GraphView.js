@@ -6,7 +6,7 @@ export class GraphView {
     width;
     height;
 
-    vertexRadius = 7;
+    vertexRadius = 10;
     vertexTextFonSize = 14;
     vertexTextMargin = {x: 15, y: 4};
 
@@ -20,7 +20,7 @@ export class GraphView {
     d3Text;
 
     simulation;
-    forceAction = this.explosionForce;
+    forceAction;
 
     zoom;
     resetTransform = {x: 0, y: 0, k: 1}
@@ -35,7 +35,6 @@ export class GraphView {
         this.links = links;
 
         this.forceAction = d3.forceManyBody();
-        // this.forceAction = this.explosionForce;
 
         this.viewId = viewId;
         //#endregion
@@ -48,15 +47,11 @@ export class GraphView {
             }
 
             this[method] = Decorator.withThisClosure(this[method].bind(this));
-
-            console.log(`GraphView method '${method}' is decorated`);
         }
         
         //#endregion
 
         this.initGraph();
-
-        console.log(`Graph '${viewId}' ${this.width}x${this.height} initialized`);
     }
 
     initGraph() {
@@ -82,7 +77,7 @@ export class GraphView {
         this.d3Nodes = this.svg.selectAll("circle")
             .data(this.nodes)
             .enter().append("circle")
-            .style("stroke", d => d.hasAction ? "#2299ab" : "transparent")
+            .style("stroke", this.nodeClassifier)
             .style("stroke-width", "4")
             .attr("r", this.vertexRadius)
             .attr("fill", "#555");
@@ -111,8 +106,6 @@ export class GraphView {
             .attr("font-size", this.vertexTextFonSize)
             .attr("x", this.vertexTextMargin.x)
             .attr("y",this.vertexTextMargin.y);
-
-        // this.forceAction = this.explosionForce;
     }
 
     startSimulation() {
@@ -166,8 +159,15 @@ export class GraphView {
     //#endregion
 
     //#region Graph Control
+    nodeClassifier(nodeData) {
+        if (nodeData.value === "Initial") return "#FFD700";
+        if (nodeData.hasAction) return "#4682B4";
+
+        return "transparent";
+    }
+
     vertexRightClick(d) {
-        alert(`Id: ${d.id};\nValue: ${d.value};\nHasAction: ${d.hasAction};`);
+        alert(`Id: ${d.id};\nValue: ${d.value};\nDepth: ${d.depth}\nHasAction: ${d.hasAction};`);
     }
 
     handleZoom() {
@@ -191,16 +191,24 @@ export class GraphView {
         // this.timerBeforeStop(1000);
     }
 
-    handleSvgSave() {
+    async handleSvgSave() {
         const svgUrl = this.generateSvgSaveLink();
+        const svgBlob = await (await fetch(svgUrl)).blob();
         
-        let downloadLink = document.createElement("a");
-        downloadLink.href = svgUrl;
-        downloadLink.download = `${this.viewId}_graph.svg`;
+        const fileDialogOptions = {
+            startIn: "pictures",
+            types: [
+                {
+                    description: "SVG file",
+                    accept: { "image/svg+xml": [".svg"] },
+                }
+            ],
+        }
+        const fileHandle = await window.showSaveFilePicker(fileDialogOptions);
+        const writable = await fileHandle.createWritable();
 
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
+        await writable.write(svgBlob);
+        await writable.close();
     }
 
     generateSvgSaveLink() {

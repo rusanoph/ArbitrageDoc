@@ -1,6 +1,5 @@
 package ru.idr.arbitragestatistics.helper;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -116,10 +115,11 @@ public class ArbitrageTemplateSeeker {
     public String getComplainantAndDefendantPartTree(String text) {
         // cdp -> Complainant Defendant Part
         Tree<Pattern> cdpTree = (new Tree<Pattern>(null))
-        .appendChild(StaticTrees.cdpTree_1)     // ознакомившись
-        .appendChild(StaticTrees.cdpTree_2)     // возобновлено 
-        .appendChild(StaticTrees.cdpTree_3)     // рассмотрев | рассматривает | рассмотрел
+        .appendChild(StaticTrees.getCdpTree1())     // ознакомившись
+        .appendChild(StaticTrees.getCdpTree2())     // возобновлено 
+        .appendChild(StaticTrees.getCdpTree3())     // рассмотрев | рассматривает | рассмотрел
         ;
+        cdpTree.recomputeDepthDFS();
 
         List<String> textSplit = List.of(text.split("\\s+"));
         text = String.join(" " , textSplit).toLowerCase();
@@ -153,9 +153,10 @@ public class ArbitrageTemplateSeeker {
         }
 
         var treeToPrint = (new Tree<Pattern>(Pattern.compile("start")))
-        .appendChild(StaticTrees.cdpTree_1)
-        .appendChild(StaticTrees.cdpTree_2)
-        .appendChild(StaticTrees.cdpTree_3);
+        .appendChild(StaticTrees.getCdpTree1())
+        .appendChild(StaticTrees.getCdpTree1())
+        .appendChild(StaticTrees.getCdpTree1());
+        treeToPrint.recomputeDepthDFS();
 
         return String.format("Tree path: %s\n%s\n\n\n%s", HTMLWrapper.tag("span", path, "sub-accent"), text, treeToPrint.toString());
     }

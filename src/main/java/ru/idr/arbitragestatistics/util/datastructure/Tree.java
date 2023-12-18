@@ -75,6 +75,15 @@ public class Tree<T> implements IJsonSerializable {
         return this;
     }
 
+    public void recomputeDepthDFS() {
+
+        for (Tree<T> child : children) {
+            child.setDepth(this.depth + 1);
+
+            child.recomputeDepthDFS();
+        }
+    }
+
     //#region Action 
     public Tree<T> setAction(Function<String, String> action) {
         this.action = action;
@@ -111,7 +120,7 @@ public class Tree<T> implements IJsonSerializable {
 
     //#region Json Serialization
 
-    private JSONObject vertexToJsonObject() {
+    public JSONObject vertexToJsonObject() {
         JSONObject vertexJson = new JSONObject();
 
         vertexJson.put("id", this.getVertexId())
@@ -138,7 +147,7 @@ public class Tree<T> implements IJsonSerializable {
             verticesJson.put(subTree.vertexToJsonObject());
 
             if (subTree.getChildren().size() > 0) {
-                JSONArray subTreeChildrenJson = subTree.verticesToJsonArray();
+                JSONArray subTreeChildrenJson = subTree.subVerticesToJsonArray();
 
                 for (int i = 0; i < subTreeChildrenJson.length(); i++) {
                     verticesJson.put(subTreeChildrenJson.getJSONObject(i));

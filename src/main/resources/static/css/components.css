@@ -2,7 +2,10 @@
 
 :root {
     --main-color: rgb(99, 176, 117);
-    --main-color-dark: rgb(77, 147, 89)
+    --main-color-dark: rgb(77, 147, 89);
+    --accent-yellow: #FFD700;
+    --accent-blue: #4682B4;
+
 }
 
 /*#endregion  */
@@ -554,9 +557,6 @@ select::-webkit-scrollbar {
     width: fit-content;
 }
 
-.data-footer {
-}
-
 .data-pagination {
     display: flex;
 }
@@ -852,6 +852,50 @@ select::-webkit-scrollbar {
     filter: invert(0.5);
 }
 
+.zoom-ico::before {
+    content: "";
+    background-image: url("../img/zoom.svg");
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-repeat: no-repeat;
+    background-size: 24px;
+    padding: 0;
+    margin: 0 5px 0 5px;
+
+    position: relative;
+    bottom: -6px;
+}
+
+.save-ico::before {
+    content: "";
+    background-image: url("../img/save-icon.svg");
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-repeat: no-repeat;
+    background-size: 24px;
+    padding: 0;
+    margin: 0 5px 0 5px;
+
+    position: relative;
+    bottom: -6px;
+}
+
+.gravity-force-ico::before {
+    content: "";
+    background-image: url("../img/gravity-force.svg");
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-repeat: no-repeat;
+    background-size: 24px;
+    padding: 0;
+    margin: 0 5px 0 5px;
+
+    position: relative;
+    bottom: -6px;
+}
 /* #endregion */
 
 
