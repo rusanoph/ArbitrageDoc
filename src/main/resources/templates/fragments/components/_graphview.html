@@ -6,16 +6,27 @@
 </head>
 <body>
     
-    <th:block th:fragment="graph-view(graphContainerId, graphTitle)">
+    <th:block th:fragment="graph-view(graphContainerId, graphTitle, graphDescription)">
         <div class="graph-wrapper">
             <div class="graph-header">
                 <h3>[[${graphTitle}]]</h3>
     
                 <div class="graph-button-container">
                     <span class="button-component zoom-reset">Сброс масштаба</span>
-                    <span class="button-component position-reset">Сброс позиции</span>
+                    <span class="button-component save-graph-as-svg">Сохранить SVG</span>
+                    <!-- <span class="button-component position-reset">Статика / Симуляция</span> -->
+                    <span class="button-component">
+                        <span>Сила</span>
+                        <select name="force-select" class="force-select">
+                            <option value="attractionForce">Притяжение</option>
+                            <option value="balanceForce" selected>Равновесие</option>
+                            <option value="retractionForce">Отталкивание</option>
+                            <option value="noForce">Статика</option>
+                        </select>
+                    </span>
                 </div>
             </div>
+            <p>[[${graphDescription}]]</p>
 
             <div th:id="${graphContainerId}" class="graph-container"></div>
         </div>

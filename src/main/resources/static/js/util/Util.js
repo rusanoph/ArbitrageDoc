@@ -48,4 +48,16 @@ export class Util {
 
         return element.matches && element.matches(selector) ? element : this.findParent(element.parentNode, selector);
     }
+
+    static wrapText(text, wrapNumber) {
+        if (text === undefined || text === null || text) {
+            return "";
+        } 
+
+        const regex = new RegExp(`.{${wrapNumber}}`, "g");
+
+        const testSplit = text.match(regex) === null ? [text] : text.match(regex);
+
+        return testSplit.join("\r\n");
+    }
 }
