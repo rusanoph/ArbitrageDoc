@@ -1,6 +1,7 @@
 package ru.idr.arbitragestatistics.api;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -8,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,6 +19,7 @@ import ru.idr.arbitragestatistics.helper.ArbitrageTemplateSeeker;
 import ru.idr.arbitragestatistics.helper.DocumentProcessor;
 import ru.idr.arbitragestatistics.helper.ServerFile;
 import ru.idr.arbitragestatistics.model.TitleData;
+import ru.idr.arbitragestatistics.model.datastructure.StaticGraphs;
 import ru.idr.arbitragestatistics.util.HTMLWrapper;
 
 @RestController
@@ -298,6 +301,16 @@ public class DocumentService {
         text = DocumentProcessor.removeLineSeparator(text);
 
         return ats.getAfterDecidedPart(text);
+    }
+
+    @GetMapping(value="/api/test/graph/{testGraphId}/vertex-index", produces="application/json")
+    public String getTestGraph1VertexIndex(@PathVariable Integer testGraphId) {
+        List<String> testGraphJsons = List.of(
+            StaticGraphs.getTestGraph1().vertexIndexToJson().toString(),
+            StaticGraphs.getTestGraph2().vertexIndexToJson().toString()
+        );
+
+        return testGraphJsons.get(testGraphId - 1);
     }
 
     //#endregion

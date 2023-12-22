@@ -157,13 +157,32 @@ function initAccordion() {
             
             let panel = accordion.nextElementSibling;
             if (panel.style.display === displayStyle) {
-                console.log(panel.style.display);
                 panel.style.display = "none";
+
+                getAllChildrenDeep(panel).forEach(child => child.style.display = "none");
+
             } else {
                 panel.style.display = displayStyle;
+
+                getAllChildrenDeep(panel).forEach(child => child.style.display = displayStyle);
+
             }
         });
     }
+}
+
+function getAllChildrenDeep(element) {
+    let children = [];
+
+    if (element.children !== null) {
+        for (let child of element.children) {
+            children.push(child)
+            
+            children.concat(this.getAllChildrenDeep(child));
+        }
+    }
+
+    return children;
 }
 
 let accordions = document.getElementsByClassName("accordion");
@@ -192,4 +211,19 @@ function renderPageData(tableBodyId, data, pageSize, currentPage) {
 }
 //#endregion
 
+//#region Modal
+function modalOpen(modalId, html) {
+    const modal = document.getElementById(modalId);
 
+    modal.style.display = "block";
+    
+    modal.getElementsByClassName('modal-body')[0].innerHTML = html;
+
+    window.onclick = function(event) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+            modal.style.cursor = "pointer";
+        }
+    }    
+}
+//#endregion

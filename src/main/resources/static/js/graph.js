@@ -1,15 +1,17 @@
-import { GraphView } from "./view/GraphView.js";
-
+import { GraphView } from "./view/graphview.js";
 
 const sideRatio = 16 / 9;
 const width = 1280;
 const height = width / sideRatio;
 
-// const testTreeGraphView = new GraphView("graph-test-tree", width, height, verticesTestTreeJson, edgesTestTreeJson);
-// testTreeGraphView.startSimulation();
+// const testGraph2GraphView = new GraphView("graph-test-tree", width, height, verticesTestGraph_2Json, edgesTestGraph_2Json);
+// testGraph2GraphView.startSimulation();
 
 // const testGraph1GraphView = new GraphView("graph-test-tree", width, height, verticesTestGraph_1Json, edgesTestGraph_1Json);
 // testGraph1GraphView.startSimulation();
+
+// const testTreeGraphView = new GraphView("graph-test-tree", width, height, verticesTestTreeJson, edgesTestTreeJson);
+// testTreeGraphView.startSimulation();
 
 const cdpTreeGraphView = new GraphView("graph-test-tree", width, height, verticesCdpTreeJson, edgesCdpTreeJson);
 cdpTreeGraphView.startSimulation();

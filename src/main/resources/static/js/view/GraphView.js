@@ -62,8 +62,25 @@ export class GraphView {
                 .on("zoom", this.handleZoom))
             .append("g");
 
+        this.svg.append("svg:defs").selectAll("marker")
+            .data(["end"])              
+        .enter().append("svg:marker")    
+            .attr("id", String)
+            .attr("viewBox", "0 -5 10 10")
+            .attr("refX", 18)
+            .attr("refY", 0)
+            .attr("markerWidth", 5)
+            .attr("markerHeight", 5)
+            .attr("orient", "auto")
+            .attr("fill", "#333")
+        .append("svg:path")
+            .attr("d", "M0,-5L10,0L0,5");
+
         this.simulation = d3.forceSimulation(this.nodes)
-            .force("link", d3.forceLink(this.links).id(d => d.id))
+            .force("link", d3.forceLink(this.links)
+                            .id(d => d.id)
+                            .distance(d => 50)
+            )
             .force("charge", this.forceAction)
             .force("center", d3.forceCenter(this.width / 2, this.height / 2));
 
@@ -71,7 +88,9 @@ export class GraphView {
             .data(this.links)
             .enter().append("line")
             .attr("stroke", "#333")
-            .attr("stroke-width", "2");
+            .attr("stroke-width", "2")
+            .attr("marker-end", "url(#end)");;
+        
 
         //#region Vertex initialization
         this.d3Nodes = this.svg.selectAll("circle")
@@ -86,7 +105,7 @@ export class GraphView {
             .text(d => `${d.id}`);
         
         //#region Node events
-        this.d3Nodes.on("contextmenu", this.vertexRightClick);
+        this.d3Nodes.on("contextmenu", this.vertexOpenModalRightClickClosure("graph-vertex-modal"));
 
         this.d3Nodes.on("mouseover", d => document.body.style.cursor = "pointer")
                     .on("mouseout", d => document.body.style.cursor = "default");
@@ -166,8 +185,38 @@ export class GraphView {
         return "transparent";
     }
 
-    vertexRightClick(d) {
-        alert(`Id: ${d.id};\nValue: ${d.value};\nDepth: ${d.depth}\nHasAction: ${d.hasAction};`);
+    vertexOpenModalRightClickClosure(modalId) {
+        return (d) => {
+            let modalHtml = `
+            <div class="key-value-header">
+                <div class="value">Атрибут узла</div>
+            </div>
+            <div class="list">
+                <div class="key-value-row">
+                    <div class="key">Id: </div>
+                    <div class="value copyable" onclick="copyToClipboard(this)">${d.id}</div>
+                </div>
+                <div class="key-value-row">
+                    <div class="key">Значение: </div>
+                    <div class="value copyable" onclick="copyToClipboard(this)">${d.value}</div>
+                </div>
+                <div class="key-value-row">
+                    <div class="key">Глубина: </div>
+                    <div class="value">${d.depth}</div>
+                </div>
+                <div class="key-value-row">
+                    <div class="key">Наличие действия на узле: </div>
+                    <div class="value">${d.hasAction}</div>
+                </div>
+            </div>
+            `;
+
+            modalOpen(modalId, modalHtml);
+            
+            // Hide right click context menu
+            event.preventDefault();
+            return false;
+        }
     }
 
     handleZoom() {

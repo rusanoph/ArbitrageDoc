@@ -12,9 +12,34 @@ import ru.idr.arbitragestatistics.util.IJsonSerializable;
 
 public class Graph<T> implements IJsonSerializable {
     private Map<Vertex<T>, List<Vertex<T>>> adjacentVertices = new HashMap<>();
+    // depth and vertex value map
+    private Map<Integer, Map<T, Vertex<T>>> verticesIndex = new HashMap<>();
+    private Integer currentDepth = 0;
+
+    public Graph<T> nextDepthLevel() {
+        this.currentDepth++;
+
+        return this;
+    }
+
+    private void setVertexIndex(Integer depth, Vertex<T> vertex) {
+
+        if (verticesIndex.containsKey(depth)) {
+            verticesIndex.get(depth).put(vertex.getValue(), vertex);
+        } else {
+            Map<T, Vertex<T>> verticesValueMap = new HashMap<>();
+            verticesValueMap.put(vertex.getValue(), vertex);
+
+            verticesIndex.put(depth, verticesValueMap);
+        }
+
+    }
 
     public Graph<T> addVertex(Vertex<T> vertex) {
+        vertex.setDepth(currentDepth);
         adjacentVertices.putIfAbsent(vertex, new ArrayList<>());
+
+        setVertexIndex(currentDepth, vertex);
 
         return this;
     }
@@ -24,6 +49,11 @@ public class Graph<T> implements IJsonSerializable {
         vertexTo.setDepth(vertexToDepth);
 
         adjacentVertices.get(vertexFrom).add(vertexTo);
+
+        if (verticesIndex.get(currentDepth).containsKey(vertexTo.getValue())) {
+            verticesIndex.get(currentDepth).remove(vertexTo.getValue());
+        }
+        setVertexIndex(vertexToDepth, vertexTo);
 
         return this;
     }
@@ -38,9 +68,34 @@ public class Graph<T> implements IJsonSerializable {
     public List<Vertex<T>> getAdjacentVertices(Vertex<T> vertex) {
         return adjacentVertices.get(vertex);
     }
+
+    public Vertex<T> getVertexByDepthValue(Integer depth, T value) {
+        return verticesIndex.get(depth).get(value);
+    }
     //#endregion
     
     //#region Json Serialization
+    public JSONArray vertexIndexToJson() {
+        JSONArray vertexIndexJson = new JSONArray();
+        
+        for (Integer depth : verticesIndex.keySet()) {
+            JSONObject depthLevelJson = new JSONObject();
+
+            depthLevelJson.put("depth", depth);
+            
+            JSONArray verticesAtDepthLevelJSON = new JSONArray();
+            for (Vertex<T> vertex : verticesIndex.get(depth).values()) {
+                verticesAtDepthLevelJSON.put(vertex.toJsonObject());
+            }
+
+            depthLevelJson.put("vertices", verticesAtDepthLevelJSON);
+
+            vertexIndexJson.put(verticesAtDepthLevelJSON);
+        }
+
+        
+        return vertexIndexJson;
+    }
 
     @Override
     public JSONArray verticesToJsonArray() {

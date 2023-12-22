@@ -606,7 +606,9 @@ select::-webkit-scrollbar {
     background-color: var(--main-color);
     color: #eee;
 }
+/* #endregion */
 
+/* #region Tab */
 .tab-link-row {
     display: flex;
     justify-content: start;
@@ -617,6 +619,36 @@ select::-webkit-scrollbar {
 .tab-content-row {
     width: 100%;
 }
+
+/* #endregion */
+
+/* #region Modal */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+
+    overflow: auto;
+    width: 80%;
+}
+
 
 /* #endregion */
 
@@ -885,6 +917,31 @@ select::-webkit-scrollbar {
 .gravity-force-ico::before {
     content: "";
     background-image: url("../img/gravity-force.svg");
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-repeat: no-repeat;
+    background-size: 24px;
+    padding: 0;
+    margin: 0 5px 0 5px;
+
+    position: relative;
+    bottom: -6px;
+}
+
+.copyable {
+    cursor: pointer;
+}
+
+.copyable:hover {
+    /* color: #FFD700; */
+    font-weight: bold;
+}
+
+.copyable::after {
+    filter: invert(0.1);
+    content: "";
+    background-image: url("../img/copy.svg");
     display: inline-block;
     width: 24px;
     height: 24px;

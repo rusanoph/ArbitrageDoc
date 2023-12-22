@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import ru.idr.arbitragestatistics.model.arbitrage.StaticGraphs;
-import ru.idr.arbitragestatistics.model.arbitrage.StaticTrees;
+import ru.idr.arbitragestatistics.model.datastructure.StaticGraphs;
+import ru.idr.arbitragestatistics.model.datastructure.StaticTrees;
 import ru.idr.arbitragestatistics.util.IJsonSerializable;
 import ru.idr.arbitragestatistics.util.datastructure.Tree;
 
@@ -42,8 +42,10 @@ public class GraphController {
         setGraphDataToModel(model, testGraph1, "verticesTestGraph_1", "edgesTestGraph_1");
         //#endregion
 
-        // model.addAttribute("cdpGraph", cdpGraphJSON);
-
+        //#region testGraph2
+        var testGraph2 = StaticGraphs.getTestGraph2();
+        setGraphDataToModel(model, testGraph2, "verticesTestGraph_2", "edgesTestGraph_2");
+        //#endregion
 
         return "graph.html";
     }

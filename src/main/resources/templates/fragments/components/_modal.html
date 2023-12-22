@@ -1,0 +1,26 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+</head>
+<body>
+
+    <th:block th:fragment="modal_fragment(id, contentId, headerText)">
+
+        <div th:id="${id}" class="modal">
+
+            <div class="modal-content">
+                <span class="close-button"></span>
+                <div class="modal-header">
+                    <h2 th:text="${headerText}"></h2>
+                </div>
+                <div th:id="${contentId}" class="modal-body"></div>
+            </div>
+
+        </div>
+
+    </th:block>
+
+</body>
+</html>

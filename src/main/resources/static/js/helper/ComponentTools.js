@@ -65,8 +65,6 @@ export class ComponentTools {
             accTab.style.display = "none";
         } else {
             element.style.display = "block";
-            accPanel.style.display = "block";
-            accTab.style.display = "block";
         }
     }
 }

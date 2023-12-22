@@ -1,4 +1,4 @@
-package ru.idr.arbitragestatistics.model.arbitrage;
+package ru.idr.arbitragestatistics.model.datastructure;
 
 import java.util.regex.Pattern;
 

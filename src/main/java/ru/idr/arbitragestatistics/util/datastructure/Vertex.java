@@ -75,7 +75,7 @@ public class Vertex<T> {
     }
     //#endregion
 
-    //#region Standard Actoins
+    //#region Static Standard Actoins
     public static String parseComplainant(String text) {
         String ogrn = RegExRepository.regexOgrn + "|" + RegExRepository.regexOgrnip;                
         String inn = RegExRepository.regexInnLegalEntity + "|" + RegExRepository.regexInnPerson;

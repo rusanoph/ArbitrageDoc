@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import ru.idr.arbitragestatistics.helper.regex.RegExRepository;
-import ru.idr.arbitragestatistics.model.arbitrage.StaticTrees;
+import ru.idr.arbitragestatistics.model.datastructure.StaticTrees;
 import ru.idr.arbitragestatistics.util.HTMLWrapper;
 import ru.idr.arbitragestatistics.util.datastructure.Tree;
 
@@ -55,10 +55,10 @@ public class ArbitrageTemplateSeeker {
     public String getHeaderPart(String text) {
         // String regexSolution = "";
         
-        String regexFound = wordToUniversalRegex("установил")+":?\\n";
-        String regexDetermined = wordToUniversalRegex("определил")+":?\\n";
-        String regexDecided = wordToUniversalRegex("постановил")+":?\\n";
-        String regexSolution = wordToUniversalRegex("решил")+":?\\n";
+        String regexFound = wordToUniversalRegex("установил")+"\\s*:?\\s*\\n";
+        String regexDetermined = wordToUniversalRegex("определил")+"\\s*:?\\s*\\n";
+        String regexDecided = wordToUniversalRegex("постановил")+"\\s*:?\\s*\\n";
+        String regexSolution = wordToUniversalRegex("решил")+"\\s*:?\\s*\\n";
 
         Matcher matcherFound = Pattern.compile(regexFound).matcher(text);
         Matcher matcherDetermined = Pattern.compile(regexDetermined).matcher(text);
