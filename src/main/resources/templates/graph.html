@@ -44,6 +44,14 @@
         let edgesTestGraph_2 = /*[[${edgesTestGraph_2}]]*/ "{}";
         let edgesTestGraph_2Json = JSON.parse(edgesTestGraph_2);
         //#endregion
+
+        // #region cdpGraph vertices and edges 
+        let verticesCdpGraph = /*[[${verticesCdpGraph}]]*/ "{}";
+        let verticesCdpGraphJson = JSON.parse(verticesCdpGraph);
+
+        let edgesCdpGraph = /*[[${edgesCdpGraph}]]*/ "{}";
+        let edgesCdpGraphJson = JSON.parse(edgesCdpGraph);
+        //#endregion
     </script>
 
     <header th:replace="~{/fragments/_header :: header}"></header>
@@ -56,7 +64,7 @@
             <div class="wrapper">
 
                 <th:block th:replace="~{/fragments/components/_graphview :: 
-                    graph-view('graph-test-tree', 'Дерево разбора истец и ответчик', '(ЛКМ - перетаскивание узлов; ПКМ - просмотр значений узла)')}">
+                    graph-view('graph-cdp', 'Граф разбора истец и ответчик', '(ЛКМ - перетаскивание узлов; ПКМ - просмотр значений узла)')}">
                 </th:block>
 
             </div>

@@ -148,7 +148,6 @@ function sortDivList(elementId, columnIndex, i=1) {
 //#endregion
 
 //#region Accordion
-
 function initAccordion() {
     const displayStyle = "block";
     for (let accordion of accordions) {

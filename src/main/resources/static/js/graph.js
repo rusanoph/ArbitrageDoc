@@ -4,16 +4,19 @@ const sideRatio = 16 / 9;
 const width = 1280;
 const height = width / sideRatio;
 
-// const testGraph2GraphView = new GraphView("graph-test-tree", width, height, verticesTestGraph_2Json, edgesTestGraph_2Json);
+// const testGraph2GraphView = new GraphView("graph-cdp", width, height, verticesTestGraph_2Json, edgesTestGraph_2Json);
 // testGraph2GraphView.startSimulation();
 
-// const testGraph1GraphView = new GraphView("graph-test-tree", width, height, verticesTestGraph_1Json, edgesTestGraph_1Json);
+// const testGraph1GraphView = new GraphView("graph-cdp", width, height, verticesTestGraph_1Json, edgesTestGraph_1Json);
 // testGraph1GraphView.startSimulation();
 
-// const testTreeGraphView = new GraphView("graph-test-tree", width, height, verticesTestTreeJson, edgesTestTreeJson);
+// const testTreeGraphView = new GraphView("graph-cdp", width, height, verticesTestTreeJson, edgesTestTreeJson);
 // testTreeGraphView.startSimulation();
 
-const cdpTreeGraphView = new GraphView("graph-test-tree", width, height, verticesCdpTreeJson, edgesCdpTreeJson);
+// const cdpTreeGraphView = new GraphView("graph-cdp", width, height, verticesCdpTreeJson, edgesCdpTreeJson);
+// cdpTreeGraphView.startSimulation();
+
+const cdpTreeGraphView = new GraphView("graph-cdp", width, height, verticesCdpGraphJson, edgesCdpGraphJson);
 cdpTreeGraphView.startSimulation();
 
 

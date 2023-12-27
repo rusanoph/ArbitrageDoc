@@ -44,8 +44,35 @@ public class Graph<T> implements IJsonSerializable {
         return this;
     }
 
+    public Graph<T> addOrientedEdge(T valueFrom, T valueTo) {
+        return this.addOrientedEdge(currentDepth - 1, valueFrom, currentDepth, valueTo);
+    }
+
+    public Graph<T> addOrientedEdge(Integer depthFrom, T valueFrom, Integer depthTo, T valueTo) {
+        Vertex<T> vertexFrom = this.getVertexByDepthValue(depthFrom, valueFrom);        
+        Vertex<T> vertexTo = this.getVertexByDepthValue(depthTo, valueTo);
+
+        return this.addOrientedEdge(vertexFrom, vertexTo);
+    }
+
     public Graph<T> addOrientedEdge(Vertex<T> vertexFrom, Vertex<T> vertexTo) {
-        int vertexToDepth = vertexFrom.getDepth() + 1;
+        if (vertexFrom == null || vertexTo == null) {
+            String vertexFromErrorMessage = String.format("vertexFrom: (null: %b)", vertexFrom == null);
+            String vertexToErrorMessage = String.format("vertexTo: (null: %b)", vertexTo == null);
+
+            if (vertexFrom != null) {
+                vertexFromErrorMessage += String.format(" | (d: %d, v: %s)", vertexFrom.getDepth(), vertexFrom.getValue());
+            }
+
+            if (vertexTo != null) {
+                vertexToErrorMessage += String.format(" | (d: %d, v: %s)", vertexTo.getDepth(), vertexTo.getValue());
+            }
+
+            String errorMessage = String.format("current Depth: %d; %s; %s", currentDepth, vertexFromErrorMessage, vertexToErrorMessage);
+            throw new IllegalArgumentException(errorMessage);
+        }
+
+        int vertexToDepth = currentDepth;
         vertexTo.setDepth(vertexToDepth);
 
         adjacentVertices.get(vertexFrom).add(vertexTo);

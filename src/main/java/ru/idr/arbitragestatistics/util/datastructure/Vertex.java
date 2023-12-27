@@ -71,7 +71,12 @@ public class Vertex<T> {
     }
 
     public String doAction(String text) {
-        return this.action.apply(text);
+        try {
+            return this.action.apply(text);
+        } catch (UnsupportedOperationException uoe) {
+            String errorMessage = String.format("Action on this vertex (d: %d, v: %s) doesn't implemented", this.depth, this.value);
+            throw new UnsupportedOperationException(errorMessage);
+        }
     }
     //#endregion
 
@@ -88,6 +93,11 @@ public class Vertex<T> {
         }
         
         return result;
+    }
+
+    public static String noAction(String noText) {
+        String errorMessage = String.format("Action doesn't implemented");
+        throw new UnsupportedOperationException();
     }
     //#endregion
     

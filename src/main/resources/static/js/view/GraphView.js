@@ -79,7 +79,7 @@ export class GraphView {
         this.simulation = d3.forceSimulation(this.nodes)
             .force("link", d3.forceLink(this.links)
                             .id(d => d.id)
-                            .distance(d => 50)
+                            .distance(d => 175)
             )
             .force("charge", this.forceAction)
             .force("center", d3.forceCenter(this.width / 2, this.height / 2));
@@ -121,7 +121,7 @@ export class GraphView {
         this.d3Text = this.svg.selectAll("text")
             .data(this.nodes)
             .enter().append("text")
-            .text(d => d.value)
+            .text(d => this.textMinifier(d))
             .attr("font-size", this.vertexTextFonSize)
             .attr("x", this.vertexTextMargin.x)
             .attr("y",this.vertexTextMargin.y);
@@ -178,6 +178,24 @@ export class GraphView {
     //#endregion
 
     //#region Graph Control
+    textMinifier(nodeData) {
+        return nodeData.value.length > 15 ? nodeData.value.slice(0, 15) + "..." : nodeData.value;
+    }
+
+    linkIn(nodeData) {
+        return this.links.filter(link => link.target === nodeData).length;
+    }
+
+    linkOut(nodeData) {
+        return this.links.filter(link => link.source === nodeData).length;
+    }
+
+    linkLength(nodeData) {
+        const nodeConnections = this.links.filter(link => link.source === nodeData || link.target === nodeData).length;
+
+        return nodeConnections;
+    }
+
     nodeClassifier(nodeData) {
         if (nodeData.value === "Initial") return "#FFD700";
         if (nodeData.hasAction) return "#4682B4";
@@ -207,6 +225,14 @@ export class GraphView {
                 <div class="key-value-row">
                     <div class="key">Наличие действия на узле: </div>
                     <div class="value">${d.hasAction}</div>
+                </div>
+                <div class="key-value-row">
+                    <div class="key">Входящих рёбер: </div>
+                    <div class="value">${this.linkIn(d)}</div>
+                </div>
+                <div class="key-value-row">
+                    <div class="key">Исходящих рёбер: </div>
+                    <div class="value">${this.linkOut(d)}</div>
                 </div>
             </div>
             `;
@@ -334,16 +360,16 @@ export class GraphView {
     }
 
     retractionForce(alpha) {
-        const k = alpha * 0.01;
+        const k = alpha * -0.04;
 
         for (let node of this.nodes) {
-            node.vx += node.x * k;
-            node.vy += node.y * k;
+            node.vx -= node.x * 2*k;
+            node.vy -= node.y * k;
         }
     }
 
     attractionForce(alpha) {
-        const k = alpha * (-0.01);
+        const k = alpha * (0.01);
 
         for (let node of this.nodes) {
             node.vx += node.x * k;

@@ -25,26 +25,29 @@ public class GraphController {
         .appendChild(StaticTrees.getCdpTree2())
         .appendChild(StaticTrees.getCdpTree3());
         cdpTree.recomputeDepthDFS();
-
         setGraphDataToModel(model, cdpTree, "verticesCdpTree", "edgesCdpTree");
         //#endregion
 
-
         //#region testTree1
         var testTree = StaticTrees.getTestTree1();
-
         setGraphDataToModel(model, testTree, "verticesTestTree", "edgesTestTree");
         //#endregion
 
         //#region testGraph1
-        var testGraph1 = StaticGraphs.getTestGraph1();
-
-        setGraphDataToModel(model, testGraph1, "verticesTestGraph_1", "edgesTestGraph_1");
+        // var testGraph1 = StaticGraphs.getTestGraph1();
+        // setGraphDataToModel(model, testGraph1, "verticesTestGraph_1", "edgesTestGraph_1");
         //#endregion
 
         //#region testGraph2
-        var testGraph2 = StaticGraphs.getTestGraph2();
-        setGraphDataToModel(model, testGraph2, "verticesTestGraph_2", "edgesTestGraph_2");
+        // var testGraph2 = StaticGraphs.getTestGraph2();
+        // setGraphDataToModel(model, testGraph2, "verticesTestGraph_2", "edgesTestGraph_2");
+        //#endregion
+
+        //#region cdpGraph
+        var cdpGraph = StaticGraphs.getCdpGraph();
+
+        setGraphDataToModel(model, cdpGraph, "verticesCdpGraph", "edgesCdpGraph");
+
         //#endregion
 
         return "graph.html";
