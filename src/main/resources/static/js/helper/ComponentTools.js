@@ -54,6 +54,16 @@ export class ComponentTools {
         complainantDefendantGraphElement.innerHTML = structureObj.complainantAndDefendantGraph;
     }
 
+    static async updateDocumentSentencies(documentSentenciesId, documentSentenciesObj) {
+        const documentSentenciesElement = document.getElementById(documentSentenciesId);
+        
+        if (documentSentenciesObj.error !== undefined) {
+            documentSentenciesElement.innerHTML = documentSentenciesObj.error;
+        } else {
+            documentSentenciesElement.innerHTML = documentSentenciesObj.sentencies.join("<br><br>");
+        }
+    }
+
     static showAccordionIfCondition(elementId, condition) {
         const element = document.getElementById(elementId);
         const accPanel = element.parentElement;

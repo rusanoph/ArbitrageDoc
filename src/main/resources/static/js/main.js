@@ -72,6 +72,7 @@ class MainPageDocument {
                 Util.saveValue(document.getElementById("document-path"));
                 Util.saveValue(document.getElementById("document-name"));
 
+                //#region File View Updates
                 ComponentTools.updateDocumentView("document-filename", "document-title", "document-text", currDir, file, this.isFormated, this.isLemma)
                 .then(() => {
                     if (this.fileViewClass.isRegEx) {
@@ -82,6 +83,11 @@ class MainPageDocument {
                 await DocumentService.getDocumentStructureParts(currDir, file)
                 .then((data) => {
                     this.fileViewClass.documentPartsObject = data;
+                });
+
+                await DocumentService.getDocumentSentencies(currDir, file)
+                .then((data) => {
+                    this.fileViewClass.documentSentencies = data;
                 });
 
                 let structureData = this.fileViewClass.getMainStructureData();
@@ -101,6 +107,14 @@ class MainPageDocument {
                     "document-complainant-defendant-graph-text", 
                     complainantAndDefendantData
                 );
+
+                
+                let documentSentencies = this.fileViewClass.getDocumentSentencies();
+                ComponentTools.updateDocumentSentencies(
+                    "document-sentencies-text",
+                    documentSentencies
+                );
+                //#endregion
 
                 let previouslySelected = document.querySelector('.selected');
                 if (previouslySelected) {

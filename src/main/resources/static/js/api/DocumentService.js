@@ -21,6 +21,24 @@ export class DocumentService {
         return data;
     } 
 
+    static async getDocumentSentencies(path, filename) {
+        let params = {
+            "documentPath": path,
+            "documentFileName": filename
+        }
+    
+        let query = Object.keys(params)
+            .map(k => `${encodeURIComponent(k)}=${encodeURIComponent(params[k])}`)
+            .join("&");
+    
+        let url = `/api/document/sentencies?${query}`;
+    
+        const response = await fetch(url);
+        let data = await response.json();
+
+        return data;
+    }
+
     static async getDocumentStructureParts(path, filename) {
         let params = {
             "documentPath": path,

@@ -68,6 +68,28 @@ public class DocumentService {
         return documentJson.toString();
     }
     
+    @GetMapping(value="/api/document/sentencies", produces="application/json")    
+    public String getDocumentText(@RequestParam("documentPath") String documentPath, @RequestParam("documentFileName") String documentFileName) {
+        JSONObject sentenciesJSON = new JSONObject();
+        sentenciesJSON.put("sentencies", new JSONArray());
+
+
+        try {
+            String targetFileText = DocumentProcessor.getText(documentPath, documentFileName);
+            List<String> sentencies = DocumentProcessor.extractSentences(targetFileText);
+
+            for (String sentence : sentencies) {
+                sentenciesJSON.getJSONArray("sentencies").put(sentence);
+            }
+        } catch (IOException ioEx) {
+            sentenciesJSON.put("error", "Документ не найден.");
+            ioEx.printStackTrace();
+        }
+
+        return sentenciesJSON.toString();
+    }
+    
+
     @GetMapping(value="/api/document/text/part", produces="application/json")    
     public String getDocumentStructureParts(@RequestParam("documentPath") String documentPath, @RequestParam("documentFileName") String documentFileName) {
 

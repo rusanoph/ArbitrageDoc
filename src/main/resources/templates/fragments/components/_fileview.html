@@ -112,6 +112,7 @@
             <div id="all-word-tab-link" class="tab-link" onclick="openTab('text-tab', this, 'var(--main-color-dark)')">Текст</div>
             <div id="lemma-tab-link" class="tab-link" onclick="openTab('text-structure-tab', this, 'var(--main-color)')">Структура</div>
             <div id="lemma-tab-link" class="tab-link" onclick="openTab('complainant-defendant-tab', this, 'green')">Истец и ответчик</div>
+            <div id="parser-tab-link" class="tab-link" onclick="openTab('parser-tab', this, 'green')">Разбор</div>
         </div>
 
         <!-- Tab Content -->
@@ -170,6 +171,22 @@
 
                 <div id="document-complainant-defendant-graph-tab" class="tab-content">
                     <pre id="document-complainant-defendant-graph-text" class="regex-processed">GRAPH</pre>
+                </div>
+            </div>
+
+            <!-- Parser -->
+            <div id="parser-tab" class="tab-content">
+                <div class="tab-link-row">
+                    <div class="tab-sub-link" onclick="openTab('document-sentencies-tab', this, 'var(--main-color)')">Предложения</div>
+                    <div class="tab-sub-link" onclick="openTab('document-n-gramm-tab', this, 'var(--main-color)')">n-Граммы</div>
+                </div>
+
+                <div id="document-sentencies-tab" class="tab-content">
+                    <pre id="document-sentencies-text" class="regex-processed">Предложения</pre>
+                </div>
+
+                <div id="document-n-gramm-tab" class="tab-content">
+                    <pre id="document-n-grapmm-text" class="regex-processed">n-Граммы</pre>
                 </div>
             </div>
         </div>

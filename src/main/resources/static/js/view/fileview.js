@@ -6,6 +6,7 @@ import { Util } from "../util/Util.js";
 export class FileView {
 
     documentPartsObject;
+    documentSentencies;
 
     isFormated = false;
     isLemma = false;
@@ -65,6 +66,16 @@ export class FileView {
                 "document-complainant-defendant-tree-text",
                 "document-complainant-defendant-graph-text", 
                 complainantAndDefendantData
+            );
+
+            await DocumentService.getDocumentSentencies(docPathInputValue, docFileNameInputValue)
+            .then((data) => {
+                this.documentSentencies = data;
+            });
+
+            ComponentTools.updateDocumentSentencies(
+                "document-sentencies-text",
+                this.documentSentencies
             );
         });
     }
@@ -248,6 +259,10 @@ export class FileView {
         }
 
         return complainantAndDefendant;
+    }
+
+    getDocumentSentencies() {
+        return this.documentSentencies;
     }
 }
 

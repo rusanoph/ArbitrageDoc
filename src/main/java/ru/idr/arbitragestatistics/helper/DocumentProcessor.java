@@ -369,6 +369,28 @@ public class DocumentProcessor {
 
     //#region Preprocessing
 
+    public static List<String> extractSentences(String text) {
+        // === unneded dots === Not Implemented yet
+        // address: проспект Академика Сахарова, д. 18, г. Москва
+        // url: http://asmo.arbitr.ru/
+        // date: 30.12.2021
+        // name: Бекетовой Е.А.
+        // abbreviation: Можайского г.о.; городского округа, т.е. по состоянию
+        // legal article: статьи 6.11; Согласно ч. 1 ст. 1.6 КоАП РФ
+
+        // sentence dot by word split => word.len > 2 & '.' at end & only one '.' 
+
+        List<String> sentencies = new ArrayList<>();
+
+        String[] textSplit = text.split("\\.");
+
+        for (String sentence : textSplit) {
+            sentencies.add(removeLineSeparator(sentence));
+        }
+
+        return sentencies;
+    }
+
     public static String removePageNumbersAndDocNumbers(String text) {
         return text.replaceAll("\\b\\d+_\\d+\\b|\\d+(\r\n|[\r\n])", "");
     }
