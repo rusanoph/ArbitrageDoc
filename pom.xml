@@ -17,7 +17,7 @@
 	<description>Project to process different sets of text documents</description>
 	
 	<properties>
-		<java.version>15</java.version>
+		<java.version>21</java.version>
 	</properties>
 
 	<!-- Jitpack -->
@@ -35,6 +35,21 @@
 			<artifactId>aot</artifactId>
 			<version>2022.11.28</version>
 		</dependency>
+
+		<!-- ANTLR 4 -->
+		<dependency>
+			<groupId>org.antlr</groupId>
+			<artifactId>antlr4</artifactId>
+			<version>4.13.1</version>
+		  </dependency>
+
+		<!-- Named Regexp -->
+		<dependency>
+			<groupId>com.github.tony19</groupId>
+			<artifactId>named-regexp</artifactId>
+			<version>0.2.8</version>
+		</dependency>
+
 
 		<!-- slf4j -->
 		<dependency>
