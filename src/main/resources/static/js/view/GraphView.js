@@ -216,7 +216,7 @@ export class GraphView {
                 </div>
                 <div class="key-value-row">
                     <div class="key">Значение: </div>
-                    <div class="value copyable" onclick="copyToClipboard(this)">${d.value}</div>
+                    <div class="value copyable" onclick="copyToClipboard(this)">${d.value.replaceAll("<", "&lt;").replaceAll(">", "&gt;")}</div>
                 </div>
                 <div class="key-value-row">
                     <div class="key">Глубина: </div>

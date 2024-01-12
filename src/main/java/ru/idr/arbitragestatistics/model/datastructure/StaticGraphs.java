@@ -2,12 +2,46 @@ package ru.idr.arbitragestatistics.model.datastructure;
 
 import java.util.regex.Pattern;
 
+import ru.idr.arbitragestatistics.helper.regex.RegExRepository;
 import ru.idr.arbitragestatistics.util.datastructure.Graph;
 import ru.idr.arbitragestatistics.util.datastructure.Vertex;
 
 public class StaticGraphs {
 
-    private static final String PARSE_ALL_BEFORE_ACTION = "(.*?)"; 
+    private static final String PARSE_ALL_BEFORE_ACTION = "(.*?)";
+    
+    private static final String PARSE_COMPLAINANT_TYPE = "(?<complainantType>.*?)";
+    private static final String PARSE_COMPLAINANT = "(?<complainant>.*?)";
+    private static final String PARSE_DEFENDANT = "(?<defendant>.*?)";
+
+    private static final String PARSE_COMPETITION_MANAGER = "(?<competitionManager>.*?)";
+    private static final String PARSE_FINANCIAL_MANAGER = "(?<financialManager>.*?)";
+
+    private static final String PARSE_KEYWORD = "(?<keyword>.*?)";
+    private static final String PARSE_PERSON_ID = "(?<personId>.*?)";
+    private static final String PARSE_PERSON_ADDRESS = "(?<personAddress>.*?)";
+    private static final String PARSE_COURT_CASE_SUM = "(?<courtCaseSum>"+RegExRepository.regexCourtCaseSum+")";
+ 
+    public static Graph<String> getCdpGraph_test() {
+
+        Graph<String> cdpGraph = new Graph<>();
+
+        Vertex<String> v1 = new Vertex<String>("рассмотрев");
+        
+        var v2 = new Vertex<String>("в");
+
+        var v3 = new Vertex<String>("открытом");
+        var v4 = new Vertex<String>("реестре");
+
+
+        cdpGraph.addOrientedEdge(v1, v2);
+
+        cdpGraph.addOrientedEdge(v1, v3)
+        .addOrientedEdge(v2, v4);
+
+
+        return cdpGraph;
+    }
 
     public static Graph<String> getCdpGraph() {
         // Replace all Braces with '\\'Brace to correct regex interpretation
@@ -30,9 +64,6 @@ public class StaticGraphs {
         .addVertex(new Vertex<String>("без"))
         .addOrientedEdge("рассмотрев", "без")
 
-        .addVertex(new Vertex<String>("заявление"))
-        .addOrientedEdge("рассмотрев", "заявление")
-
         .addVertex(new Vertex<String>("в"))
         .addOrientedEdge(1, "рассмотрев", 2, "в")
 
@@ -54,16 +85,13 @@ public class StaticGraphs {
         .addOrientedEdge("с", "поданным")
         .addOrientedEdge(3, "поданным", 2, "в") // Reverse Link (From high-level to low-level)
 
-        .addVertex(new Vertex<String>("взыскателя").setAction(Vertex::noAction))
-        .addOrientedEdge("заявление", "взыскателя")
-
         .addVertex(new Vertex<String>("открытом"))
         .addOrientedEdge(2, "в", 3, "открытом")
 
         .addVertex(new Vertex<String>("предварительном"))
         .addOrientedEdge("в", "предварительном")
 
-        .addVertex(new Vertex<String>("заявлением").setAction(Vertex::noAction))
+        .addVertex(new Vertex<String>("заявлением"))
         .addOrientedEdge(2, "с", 3, "заявлением")
 
         // Level 4
@@ -95,6 +123,7 @@ public class StaticGraphs {
         .addOrientedEdge("заседании", "дело")
 
         .addVertex(new Vertex<String>("заявление"))
+        .addOrientedEdge(1, "рассмотрев", 6, "заявление")
         .addOrientedEdge(5, "заседании", 6, "заявление")
 
         .addVertex(new Vertex<String>("материалы"))
@@ -106,8 +135,11 @@ public class StaticGraphs {
         .addVertex(new Vertex<String>("конкурсного управляющего").setAction(Vertex::noAction))
         .addOrientedEdge("заявление", "конкурсного управляющего")
 
-        .addVertex(new Vertex<String>("финансового управляющего").setAction(Vertex::noAction))
+        .addVertex(new Vertex<String>("финансового управляющего"))
         .addOrientedEdge(6, "заявление", 7, "финансового управляющего")
+
+        .addVertex(new Vertex<String>("взыскателя").setAction(Vertex::noAction))
+        .addOrientedEdge("заявление", "взыскателя")
 
         .addVertex(new Vertex<String>("дела"))
         .addOrientedEdge(3, "рамках", 7, "дела")
@@ -125,8 +157,8 @@ public class StaticGraphs {
 
         // Level 10
         .nextDepthLevel()
-        .addVertex(new Vertex<String>("Положения о порядке, сроках и об условиях продажи имущества должника"))
-        .addOrientedEdge("утверждении", "Положения о порядке, сроках и об условиях продажи имущества должника")
+        .addVertex(new Vertex<String>(wrapStaticTokenAsRegex("положения о порядке, сроках и об условиях продажи имущества должника")))
+        .addOrientedEdge("утверждении", wrapStaticTokenAsRegex("положения о порядке, сроках и об условиях продажи имущества должника"))
 
         // Level 11
         .nextDepthLevel()
@@ -135,7 +167,7 @@ public class StaticGraphs {
         .addOrientedEdge(1, "ознакомившись", 11, "по")
         .addOrientedEdge(6, "дело", 11, "по")
         .addOrientedEdge(7, "дела", 11, "по")
-        .addOrientedEdge("Положения о порядке, сроках и об условиях продажи имущества должника", "по")
+        .addOrientedEdge(wrapStaticTokenAsRegex("положения о порядке, сроках и об условиях продажи имущества должника"), "по")
         
         // Level 12
         .nextDepthLevel()
@@ -145,7 +177,7 @@ public class StaticGraphs {
 
         // Level 13
         .nextDepthLevel()
-        .addVertex(new Vertex<String>("заявлению").setAction(Vertex::noAction))
+        .addVertex(new Vertex<String>("заявлению"))
         .addOrientedEdge(11, "по", 13, "заявлению")
         .addOrientedEdge("исковому", "заявлению")
 
@@ -157,80 +189,141 @@ public class StaticGraphs {
 
         // Level 14
         .nextDepthLevel()
-        .addVertex(new Vertex<String>("о"))
-        .addOrientedEdge(7, "дела", 14, "о")
-        .addOrientedEdge("делу", "о")
+        .addVertex(new Vertex<String>("(о|к)"))
+        .addOrientedEdge(7, "дела", 14, "(о|к)")
+        .addOrientedEdge("делу", "(о|к)")
 
         // Level 15
         .nextDepthLevel()
         .addVertex(new Vertex<String>("несостоятельности (банкротстве)").setAction(Vertex::noAction))
-        .addOrientedEdge("о", "несостоятельности (банкротстве)")
+        .addOrientedEdge("(о|к)", "несостоятельности (банкротстве)")
 
         .addVertex(new Vertex<String>("банкротстве").setAction(Vertex::noAction))
-        .addOrientedEdge("о", "банкротстве")
+        .addOrientedEdge("(о|к)", "банкротстве")
 
-        .addVertex(new Vertex<String>("признании").setAction(Vertex::noAction))
-        .addOrientedEdge("о", "признании")
-        
-        .nextDepthLevel();
+        .addVertex(new Vertex<String>("признании"))
+        .addOrientedEdge("(о|к)", "признании")
+        ;
         //#endregion
-
-        //#region Action part (start from 16 level)
-
+        
+        //#region 
+        
         cdpGraph
         // Level 16
-        .addVertex(new Vertex<String>(PARSE_ALL_BEFORE_ACTION+wrapWordAsRegex("о")).setAction(Vertex::noAction))
-        .addOrientedEdge(6, "заявление", 16, PARSE_ALL_BEFORE_ACTION+wrapWordAsRegex("о"))
+        .nextDepthLevel()
+        .addVertex(new Vertex<String>(PARSE_COMPLAINANT_TYPE+wrapStaticTokenAsRegex("-")+PARSE_COMPLAINANT+wrapWordAsRegex("(о|к)")).setAction(Vertex::noAction))
+        .addOrientedEdge(3, "заявлением", 16, PARSE_COMPLAINANT_TYPE+wrapStaticTokenAsRegex("-")+PARSE_COMPLAINANT+wrapWordAsRegex("(о|к)"))
+        .addOrientedEdge(6, "заявление", 16, PARSE_COMPLAINANT_TYPE+wrapStaticTokenAsRegex("-")+PARSE_COMPLAINANT+wrapWordAsRegex("(о|к)"))
+        
+        .addVertex(new Vertex<String>(PARSE_COMPLAINANT+wrapWordAsRegex("(о|к)")).setAction(Vertex::noAction))
+        .addOrientedEdge(3, "заявлением", 16, PARSE_COMPLAINANT+wrapWordAsRegex("(о|к)"))
+        .addOrientedEdge(6, "заявление", 16, PARSE_COMPLAINANT+wrapWordAsRegex("(о|к)"))
+        .addOrientedEdge(13, "иску", 16, PARSE_COMPLAINANT+wrapWordAsRegex("(о|к)"))
+        .addOrientedEdge(13, "заявлению", 16, PARSE_COMPLAINANT+wrapWordAsRegex("(о|к)"))
+
         // Level 17
         .nextDepthLevel()
-        .addVertex(new Vertex<String>(PARSE_ALL_BEFORE_ACTION+wrapWordAsRegex("в")).setAction(Vertex::noAction))
-        .addOrientedEdge(PARSE_ALL_BEFORE_ACTION+wrapWordAsRegex("о"), PARSE_ALL_BEFORE_ACTION+wrapWordAsRegex("в"))
+        .addVertex(new Vertex<String>("ответчику"))
+        .addOrientedEdge(PARSE_COMPLAINANT+wrapWordAsRegex("(о|к)"), "ответчику")
+        
+
         // Level 18
         .nextDepthLevel()
-        .addVertex(new Vertex<String>("реестре"))
-        .addOrientedEdge(PARSE_ALL_BEFORE_ACTION+wrapWordAsRegex("в"), "реестре")
+        .addVertex(new Vertex<String>(PARSE_DEFENDANT+wrapWordAsRegex("третье лицо(,|:)?")))
+        .addOrientedEdge("ответчику", PARSE_DEFENDANT+wrapWordAsRegex("третье лицо(,|:)?"))
+        .addOrientedEdge(16, PARSE_COMPLAINANT+wrapWordAsRegex("(о|к)"), 18, PARSE_DEFENDANT+wrapWordAsRegex("третье лицо(,|:)?"))
+
+        .addVertex(new Vertex<String>(PARSE_KEYWORD+wrapWordAsRegex("(в|с)")).setAction(Vertex::noAction))
+        .addOrientedEdge(16, PARSE_COMPLAINANT_TYPE+wrapStaticTokenAsRegex("-")+PARSE_COMPLAINANT+wrapWordAsRegex("(о|к)"), 18, PARSE_KEYWORD+wrapWordAsRegex("(в|с)"))
+        .addOrientedEdge(16, PARSE_COMPLAINANT+wrapWordAsRegex("(о|к)"), 18, PARSE_KEYWORD+wrapWordAsRegex("(в|с)"))    
         
         // Level 19
         .nextDepthLevel()
-        .addVertex(new Vertex<String>("требований"))
-        .addOrientedEdge("реестре", "требований")
+        .addVertex(new Vertex<String>(wrapStaticTokenAsRegex("(не)? (заявляющее)? (самостоятельных)? (требований)? (относительно)? (предмета)? (спора)?")))
+        .addOrientedEdge(PARSE_DEFENDANT+wrapWordAsRegex("третье лицо(,|:)?"), wrapStaticTokenAsRegex("(не)? (заявляющее)? (самостоятельных)? (требований)? (относительно)? (предмета)? (спора)?"))
+
+        .addVertex(new Vertex<String>("реестре?"))
+        .addOrientedEdge(PARSE_KEYWORD+wrapWordAsRegex("(в|с)"), "реестре?")
+        
+        .addVertex(new Vertex<String>(PARSE_DEFENDANT+wrapWordAsRegex("финансовых санкций,?")))
+        .addOrientedEdge(PARSE_KEYWORD+wrapWordAsRegex("(в|с)"),  PARSE_DEFENDANT+wrapWordAsRegex("финансовых санкций,?"))
 
         // Level 20
         .nextDepthLevel()
-        .addVertex(new Vertex<String>("кредиторов"))
-        .addOrientedEdge("требований", "кредиторов")
+        .addVertex(new Vertex<String>(wrapStaticTokenAsRegex("(конкурсный)? управляющий")))
+        .addOrientedEdge(wrapStaticTokenAsRegex("(не)? (заявляющее)? (самостоятельных)? (требований)? (относительно)? (предмета)? (спора)?"), wrapStaticTokenAsRegex("(конкурсный)? управляющий"))
+
+        .addVertex(new Vertex<String>(wrapStaticTokenAsRegex("(финансовый)? управляющий")))
+        .addOrientedEdge(wrapStaticTokenAsRegex("(не)? (заявляющее)? (самостоятельных)? (требований)? (относительно)? (предмета)? (спора)?"), wrapStaticTokenAsRegex("(финансовый)? управляющий"))
+
+        .addVertex(new Vertex<String>("требований"))
+        .addOrientedEdge("реестре?", "требований")
 
         // Level 21
         .nextDepthLevel()
-        .addVertex(new Vertex<String>("по"))
-        .addOrientedEdge("кредиторов", "по")
+        .addVertex(new Vertex<String>(PARSE_COMPETITION_MANAGER+wrapWordAsRegex("о")))
+        .addOrientedEdge(wrapStaticTokenAsRegex("(конкурсный)? управляющий"), PARSE_COMPETITION_MANAGER+wrapWordAsRegex("о"))
+
+        .addVertex(new Vertex<String>(PARSE_FINANCIAL_MANAGER+wrapWordAsRegex("о")))
+        .addOrientedEdge(wrapStaticTokenAsRegex("(финансовый)? управляющий"), PARSE_FINANCIAL_MANAGER+wrapWordAsRegex("о"))
+
+        .addVertex(new Vertex<String>("кредиторов"))
+        .addOrientedEdge("требований", "кредиторов")
 
         // Level 22
         .nextDepthLevel()
-        .addVertex(new Vertex<String>("делу"))
-        .addOrientedEdge("по", "делу")
+        .addVertex(new Vertex<String>("взыскании"))
+        .addOrientedEdge(PARSE_FINANCIAL_MANAGER+wrapWordAsRegex("о"), "взыскании")
+        .addOrientedEdge(PARSE_COMPETITION_MANAGER+wrapWordAsRegex("о"), "взыскании")
+
+        .addVertex(new Vertex<String>("по"))
+        .addOrientedEdge("кредиторов", "по")
+
+        .addVertex(new Vertex<String>("в"))
+        .addOrientedEdge("кредиторов", "в")
 
         // Level 23
         .nextDepthLevel()
-        .addVertex(new Vertex<String>("о"))
-        .addOrientedEdge("делу", "о")
+        .addVertex(new Vertex<String>("задолженности"))
+        .addOrientedEdge("взыскании", "задолженности")
+
+        .addVertex(new Vertex<String>("делу"))
+        .addOrientedEdge("по", "делу")
+
+        .addVertex(new Vertex<String>("рамках"))
+        .addOrientedEdge("в", "рамках")
 
         // Level 24
         .nextDepthLevel()
-        .addVertex(new Vertex<String>("признании"))
-        .addOrientedEdge("о", "признании")
+        .addVertex(new Vertex<String>(wrapStaticTokenAsRegex("в размере")+PARSE_COURT_CASE_SUM))
+        .addOrientedEdge("задолженности", wrapStaticTokenAsRegex("в размере")+PARSE_COURT_CASE_SUM)
+
+        .addVertex(new Vertex<String>("дела"))
+        .addOrientedEdge("рамках", "дела")
 
         // Level 25
         .nextDepthLevel()
-        .addVertex(new Vertex<String>(PARSE_ALL_BEFORE_ACTION+wrapWordAsRegex("несостоятельным (банкротом)")).setAction(Vertex::noAction))
-        .addOrientedEdge("признании", PARSE_ALL_BEFORE_ACTION+wrapWordAsRegex("несостоятельным (банкротом)"))
+        .addVertex(new Vertex<String>("(о|к)"))
+        .addOrientedEdge(23, "делу", 25, "(о|к)")
+        .addOrientedEdge("дела", "(о|к)")
 
         // Level 26
         .nextDepthLevel()
-        .addVertex(new Vertex<String>("при участии в заседании"))
-        .addOrientedEdge(PARSE_ALL_BEFORE_ACTION+wrapWordAsRegex("несостоятельным (банкротом)"), "при участии в заседании")
+        .addVertex(new Vertex<String>("признании"))
+        .addOrientedEdge("(о|к)", "признании")
 
         // Level 27
+        .nextDepthLevel()
+        .addVertex(new Vertex<String>(PARSE_DEFENDANT+wrapWordAsRegex("(несостоятельн(ым|ой) \\(?(банкротом)?\\)?,?)")).setAction(Vertex::noAction))
+        .addOrientedEdge(15, "признании", 27, PARSE_DEFENDANT+wrapWordAsRegex("(несостоятельн(ым|ой) \\(?(банкротом)?\\)?,?)"))
+        .addOrientedEdge("признании", PARSE_DEFENDANT+wrapWordAsRegex("(несостоятельн(ым|ой) \\(?(банкротом)?\\)?,?)"))
+
+        // Level 28
+        .nextDepthLevel()
+        .addVertex(new Vertex<String>("при участии в заседании"))
+        .addOrientedEdge(PARSE_DEFENDANT+wrapWordAsRegex("(несостоятельн(ым|ой) \\(?(банкротом)?\\)?,?)"), "при участии в заседании")
+
+        // Level 29
         .nextDepthLevel()
         .addVertex(new Vertex<String>("согласно протоколу судебного заседания"))
         .addOrientedEdge("при участии в заседании", "согласно протоколу судебного заседания")
@@ -382,7 +475,13 @@ public class StaticGraphs {
     }
 
     private static String wrapWordAsRegex(String word) {
-        return String.format("(^|\\s+)%s(\\s+|$)", word);
+        word = word.replaceAll(" ", "\\\\s+");
+        return String.format("(^|\\s+)%s(\\s+|$)", word, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+    }
+
+    private static String wrapStaticTokenAsRegex(String staticToken) {
+        staticToken = staticToken.replaceAll(" ", "\\\\s+");
+        return String.format("(^|\\s*)%s(\\s*|$)", staticToken, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
     }
     //#endregion
 }

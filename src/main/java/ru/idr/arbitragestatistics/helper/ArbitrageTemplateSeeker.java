@@ -10,9 +10,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import ru.idr.arbitragestatistics.helper.regex.RegExRepository;
+import ru.idr.arbitragestatistics.model.datastructure.StaticGraphs;
 import ru.idr.arbitragestatistics.model.datastructure.StaticTrees;
 import ru.idr.arbitragestatistics.util.HTMLWrapper;
+import ru.idr.arbitragestatistics.util.datastructure.Graph;
 import ru.idr.arbitragestatistics.util.datastructure.Tree;
+import ru.idr.arbitragestatistics.util.datastructure.Vertex;
 
 @Component
 public class ArbitrageTemplateSeeker {
@@ -55,10 +58,10 @@ public class ArbitrageTemplateSeeker {
     public String getHeaderPart(String text) {
         // String regexSolution = "";
         
-        String regexFound = wordToUniversalRegex("установил")+"\\s*:?\\s*\\n";
-        String regexDetermined = wordToUniversalRegex("определил")+"\\s*:?\\s*\\n";
-        String regexDecided = wordToUniversalRegex("постановил")+"\\s*:?\\s*\\n";
-        String regexSolution = wordToUniversalRegex("решил")+"\\s*:?\\s*\\n";
+        String regexFound = wordToUniversalRegex("установил")+"\\s*:?\\s*\\n?";
+        String regexDetermined = wordToUniversalRegex("определил")+"\\s*:?\\s*\\n?";
+        String regexDecided = wordToUniversalRegex("постановил")+"\\s*:?\\s*\\n?";
+        String regexSolution = wordToUniversalRegex("решил")+"\\s*:?\\s*\\n?";
 
         Matcher matcherFound = Pattern.compile(regexFound).matcher(text);
         Matcher matcherDetermined = Pattern.compile(regexDetermined).matcher(text);
@@ -108,9 +111,60 @@ public class ArbitrageTemplateSeeker {
 
     //#region Text Special Structure Parsing
     public String getComplainantAndDefendantPartGraph(String text) {
-        return "Not implemented algorithm";
+        text = getHeaderPart(text);
+        text = DocumentProcessor.removeLineSeparator(text);
+
+        Graph<String> cdpGraph = StaticGraphs.getCdpGraph();
+
+        String result = "";
+
+        Vertex<String> currentVertex = cdpGraph.getVertexByDepthValue(0, "Initial");
+
+
+        while (cdpGraph.hasChildren(currentVertex)) {
+            List<Vertex<String>> adjacentVertices = cdpGraph.getAdjacentVertices(currentVertex);
+
+            boolean continueSearch = false;
+            for (Vertex<String> vertex : adjacentVertices) {
+                
+                System.out.println(vertex.getValue());
+                Matcher m = Pattern.compile(vertex.getValue(), Pattern.CASE_INSENSITIVE | Pattern.DOTALL | Pattern.MULTILINE).matcher(text.toLowerCase());
+
+                if (m.find()) {
+                    if (m.start() > 2 && vertex.getDepth() > 1) continue;
+
+                    text = text.substring(m.end()).trim();
+
+                    String tokenTags = "";
+                    String findText = DocumentProcessor.removeLineSeparator(m.group());
+                    if (m.groupCount() > 0) {
+                        if (!m.namedGroups().isEmpty()) {
+                            tokenTags = "; tags: "+String.join(", ", m.namedGroups().keySet());
+
+                            // findText = "";
+                            // for (String token : m.namedGroups().keySet()) {
+                            //     findText += "<span class='highlight'>" + m.group(token) + "</span> ";
+                            // }
+                        }
+                    }
+
+                    result += String.format("%s (d: %d%s) ⟶ \n", findText, vertex.getDepth(), tokenTags);
+                    currentVertex = vertex;
+                    continueSearch = true;
+                    break;
+                }
+
+            }
+
+            if (!continueSearch) break;
+        }
+
+        System.out.println(text);
+
+        return "Result: " + result;
     }
 
+    // Not used
     // Tree's children number grows too fast because of path repeations
     public String getComplainantAndDefendantPartTree(String text) {
         // cdp -> Complainant Defendant Part

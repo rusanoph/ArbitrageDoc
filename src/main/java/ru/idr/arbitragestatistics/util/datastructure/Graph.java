@@ -2,6 +2,7 @@ package ru.idr.arbitragestatistics.util.datastructure;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,9 +12,9 @@ import org.json.JSONObject;
 import ru.idr.arbitragestatistics.util.IJsonSerializable;
 
 public class Graph<T> implements IJsonSerializable {
-    private Map<Vertex<T>, List<Vertex<T>>> adjacentVertices = new HashMap<>();
+    private Map<Vertex<T>, List<Vertex<T>>> adjacentVertices = new LinkedHashMap<>();
     // depth and vertex value map
-    private Map<Integer, Map<T, Vertex<T>>> verticesIndex = new HashMap<>();
+    private Map<Integer, Map<T, Vertex<T>>> verticesIndex = new LinkedHashMap<>();
     private Integer currentDepth = 0;
 
     public Graph<T> nextDepthLevel() {
@@ -27,7 +28,7 @@ public class Graph<T> implements IJsonSerializable {
         if (verticesIndex.containsKey(depth)) {
             verticesIndex.get(depth).put(vertex.getValue(), vertex);
         } else {
-            Map<T, Vertex<T>> verticesValueMap = new HashMap<>();
+            Map<T, Vertex<T>> verticesValueMap = new LinkedHashMap<>();
             verticesValueMap.put(vertex.getValue(), vertex);
 
             verticesIndex.put(depth, verticesValueMap);
@@ -98,6 +99,10 @@ public class Graph<T> implements IJsonSerializable {
 
     public Vertex<T> getVertexByDepthValue(Integer depth, T value) {
         return verticesIndex.get(depth).get(value);
+    }
+
+    public boolean hasChildren(Vertex<String> vertex) {
+        return !this.adjacentVertices.get(vertex).isEmpty(); 
     }
     //#endregion
     

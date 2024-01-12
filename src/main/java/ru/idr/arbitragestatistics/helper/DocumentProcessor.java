@@ -382,11 +382,19 @@ public class DocumentProcessor {
 
         List<String> sentencies = new ArrayList<>();
 
-        String[] textSplit = text.split("\\.");
+        Matcher m = Pattern.compile("(\\s+([а-яА-Я]{2,}))\\.").matcher(text);
 
-        for (String sentence : textSplit) {
+        int previous = 0;
+        while (m.find()) {
+            if (m.group().matches("\\s*(оф|им|ст|ул|кв|тел|руб|коп|час|мин|каб|абз|наб|пер|стр|[Рр][Фф])\\.\\s*")) continue;
+
+            String sentence = text.substring(previous, m.end());
+            previous = m.end();
+
             sentencies.add(removeLineSeparator(sentence));
         }
+
+        if (previous != text.length() - 1) sentencies.add(removeLineSeparator(text.substring(previous)));
 
         return sentencies;
     }
@@ -421,7 +429,7 @@ public class DocumentProcessor {
 
     public static String removeLineSeparator(String text) {
         String separator = "\n|\r";
-        return text.replaceAll(separator, " ");
+        return text.replaceAll(separator, " ").trim();
     }
 
     public static String removeSpaceBetweenWords(String text) {

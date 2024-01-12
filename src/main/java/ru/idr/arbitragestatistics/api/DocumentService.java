@@ -1,9 +1,11 @@
 package ru.idr.arbitragestatistics.api;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -69,14 +71,21 @@ public class DocumentService {
     }
     
     @GetMapping(value="/api/document/sentencies", produces="application/json")    
-    public String getDocumentText(@RequestParam("documentPath") String documentPath, @RequestParam("documentFileName") String documentFileName) {
+    public String getDocumentSentencies(@RequestParam("documentPath") String documentPath, @RequestParam("documentFileName") String documentFileName) {
         JSONObject sentenciesJSON = new JSONObject();
         sentenciesJSON.put("sentencies", new JSONArray());
 
 
         try {
             String targetFileText = DocumentProcessor.getText(documentPath, documentFileName);
-            List<String> sentencies = DocumentProcessor.extractSentences(targetFileText);
+
+            List<String> header = DocumentProcessor.extractSentences(ats.getHeaderPart(targetFileText));
+            List<String> afterFound = DocumentProcessor.extractSentences(ats.getAfterFoundPart(targetFileText));
+            List<String> afterDetermined = DocumentProcessor.extractSentences(ats.getAfterDeterminedPart(targetFileText));
+            List<String> afterDecided = DocumentProcessor.extractSentences(ats.getAfterDecidedPart(targetFileText));
+            List<String> afterSolution = DocumentProcessor.extractSentences(ats.getAfterSolutionPart(targetFileText));
+
+            List<String> sentencies = Stream.of(header, afterFound, afterDetermined, afterDecided, afterSolution).flatMap(Collection::stream).toList();
 
             for (String sentence : sentencies) {
                 sentenciesJSON.getJSONArray("sentencies").put(sentence);

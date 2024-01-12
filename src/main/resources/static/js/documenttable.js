@@ -67,6 +67,8 @@ class DataTablePage {
                 tdFilename.innerHTML = `${file.dir}\\${file.file}`;
 
                 let court = await DocumentService.getDocumentCourt(file.dir, file.file);
+                
+                // Highlight unknown sources
                 if (court.includes("Суд не определен")) {
                     court = `<span class='highlight'>${court}</span>`
                 }
