@@ -23,6 +23,7 @@ import ru.idr.arbitragestatistics.helper.ServerFile;
 import ru.idr.arbitragestatistics.model.TitleData;
 import ru.idr.arbitragestatistics.model.datastructure.StaticGraphs;
 import ru.idr.arbitragestatistics.util.HTMLWrapper;
+import ru.idr.grammar.tool.FindContent;
 
 @RestController
 public class DocumentService {
@@ -35,7 +36,8 @@ public class DocumentService {
     public String getDocumentText(@RequestParam("documentPath") String documentPath, 
         @RequestParam("documentFileName") String documentFileName,
         @RequestParam("formated") Boolean formated,
-        @RequestParam("lemma") Boolean lemma) {
+        @RequestParam("lemma") Boolean lemma,
+        @RequestParam("parse") Boolean parse) {
 
         JSONObject documentJson = new JSONObject();
         documentJson.put("filename", documentFileName);
@@ -43,6 +45,7 @@ public class DocumentService {
         try {
             String targetFileText = DocumentProcessor.getText(documentPath, documentFileName);
             String arbitrageTitle = DocumentProcessor.getArbitrageTextTitle(targetFileText, " ");
+
 
             if (formated) {
                 // targetFileText = DocumentStatistic.removeLineSeparator(targetFileText);
@@ -52,6 +55,14 @@ public class DocumentService {
 
             if (lemma) {
                 targetFileText = DocumentProcessor.lemmatizeText(targetFileText, " ");
+            }
+
+            if (parse) {
+                // ArbitrageDataExtractorTool adet = new ArbitrageDataExtractorTool();
+                // targetFileText = adet.wrapTextWithHtml(targetFileText);
+
+                FindContent fc = new FindContent();
+                targetFileText = fc.find(targetFileText);
             }
 
             targetFileText = targetFileText.replaceAll("\t", "&#8195;");
@@ -69,7 +80,7 @@ public class DocumentService {
 
         return documentJson.toString();
     }
-    
+
     @GetMapping(value="/api/document/sentencies", produces="application/json")    
     public String getDocumentSentencies(@RequestParam("documentPath") String documentPath, @RequestParam("documentFileName") String documentFileName) {
         JSONObject sentenciesJSON = new JSONObject();
@@ -98,7 +109,6 @@ public class DocumentService {
         return sentenciesJSON.toString();
     }
     
-
     @GetMapping(value="/api/document/text/part", produces="application/json")    
     public String getDocumentStructureParts(@RequestParam("documentPath") String documentPath, @RequestParam("documentFileName") String documentFileName) {
 

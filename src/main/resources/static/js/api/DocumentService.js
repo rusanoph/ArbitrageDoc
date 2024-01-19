@@ -1,12 +1,13 @@
 
 export class DocumentService {
     
-    static async getDocumentText(path, filename, formated=false, lemma=false) {
+    static async getDocumentText(path, filename, formated=false, lemma=false, parse=false) {
         let params = {
             "documentPath": path,
             "documentFileName": filename,
             "formated": formated,
             "lemma": lemma,
+            "parse": parse
         }
     
         let query = Object.keys(params)

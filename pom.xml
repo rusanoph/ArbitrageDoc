@@ -41,7 +41,7 @@
 			<groupId>org.antlr</groupId>
 			<artifactId>antlr4</artifactId>
 			<version>4.13.1</version>
-		  </dependency>
+		</dependency>
 
 		<!-- Named Regexp -->
 		<dependency>

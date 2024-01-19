@@ -45,18 +45,18 @@ public class Graph<T> implements IJsonSerializable {
         return this;
     }
 
-    public Graph<T> addOrientedEdge(T valueFrom, T valueTo) {
-        return this.addOrientedEdge(currentDepth - 1, valueFrom, currentDepth, valueTo);
+    public Graph<T> addOrEdge(T valueFrom, T valueTo) {
+        return this.addOrEdge(currentDepth - 1, valueFrom, currentDepth, valueTo);
     }
 
-    public Graph<T> addOrientedEdge(Integer depthFrom, T valueFrom, Integer depthTo, T valueTo) {
+    public Graph<T> addOrEdge(Integer depthFrom, T valueFrom, Integer depthTo, T valueTo) {
         Vertex<T> vertexFrom = this.getVertexByDepthValue(depthFrom, valueFrom);        
         Vertex<T> vertexTo = this.getVertexByDepthValue(depthTo, valueTo);
 
-        return this.addOrientedEdge(vertexFrom, vertexTo);
+        return this.addOrEdge(vertexFrom, vertexTo);
     }
 
-    public Graph<T> addOrientedEdge(Vertex<T> vertexFrom, Vertex<T> vertexTo) {
+    public Graph<T> addOrEdge(Vertex<T> vertexFrom, Vertex<T> vertexTo) {
         if (vertexFrom == null || vertexTo == null) {
             String vertexFromErrorMessage = String.format("vertexFrom: (null: %b)", vertexFrom == null);
             String vertexToErrorMessage = String.format("vertexTo: (null: %b)", vertexTo == null);
@@ -105,6 +105,8 @@ public class Graph<T> implements IJsonSerializable {
         return !this.adjacentVertices.get(vertex).isEmpty(); 
     }
     //#endregion
+
+    
     
     //#region Json Serialization
     public JSONArray vertexIndexToJson() {

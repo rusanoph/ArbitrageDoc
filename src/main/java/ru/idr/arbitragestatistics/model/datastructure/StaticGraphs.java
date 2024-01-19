@@ -34,10 +34,10 @@ public class StaticGraphs {
         var v4 = new Vertex<String>("реестре");
 
 
-        cdpGraph.addOrientedEdge(v1, v2);
+        cdpGraph.addOrEdge(v1, v2);
 
-        cdpGraph.addOrientedEdge(v1, v3)
-        .addOrientedEdge(v2, v4);
+        cdpGraph.addOrEdge(v1, v3)
+        .addOrEdge(v2, v4);
 
 
         return cdpGraph;
@@ -54,155 +54,155 @@ public class StaticGraphs {
         // Level 1
         .nextDepthLevel()  
         .addVertex(new Vertex<String>("рассмотрев"))
-        .addOrientedEdge(0, "Initial", 1, "рассмотрев")
+        .addOrEdge(0, "Initial", 1, "рассмотрев")
 
         .addVertex(new Vertex<String>("ознакомившись"))
-        .addOrientedEdge(0, "Initial", 1, "ознакомившись")
+        .addOrEdge(0, "Initial", 1, "ознакомившись")
 
         // Level 2
         .nextDepthLevel() 
         .addVertex(new Vertex<String>("без"))
-        .addOrientedEdge("рассмотрев", "без")
+        .addOrEdge("рассмотрев", "без")
 
         .addVertex(new Vertex<String>("в"))
-        .addOrientedEdge(1, "рассмотрев", 2, "в")
+        .addOrEdge(1, "рассмотрев", 2, "в")
 
         .addVertex(new Vertex<String>("с"))
-        .addOrientedEdge(1, "ознакомившись", 2, "с")
+        .addOrEdge(1, "ознакомившись", 2, "с")
 
         // Level 3
         .nextDepthLevel() 
         .addVertex(new Vertex<String>("вызова"))
-        .addOrientedEdge("без", "вызова")
+        .addOrEdge("без", "вызова")
 
         .addVertex(new Vertex<String>("ходатайством"))
-        .addOrientedEdge("с", "ходатайством")
+        .addOrEdge("с", "ходатайством")
 
         .addVertex(new Vertex<String>("рамках"))
-        .addOrientedEdge("в", "рамках")
+        .addOrEdge("в", "рамках")
 
         .addVertex(new Vertex<String>("поданным"))
-        .addOrientedEdge("с", "поданным")
-        .addOrientedEdge(3, "поданным", 2, "в") // Reverse Link (From high-level to low-level)
+        .addOrEdge("с", "поданным")
+        .addOrEdge(3, "поданным", 2, "в") // Reverse Link (From high-level to low-level)
 
         .addVertex(new Vertex<String>("открытом"))
-        .addOrientedEdge(2, "в", 3, "открытом")
+        .addOrEdge(2, "в", 3, "открытом")
 
         .addVertex(new Vertex<String>("предварительном"))
-        .addOrientedEdge("в", "предварительном")
+        .addOrEdge("в", "предварительном")
 
         .addVertex(new Vertex<String>("заявлением"))
-        .addOrientedEdge(2, "с", 3, "заявлением")
+        .addOrEdge(2, "с", 3, "заявлением")
 
         // Level 4
         .nextDepthLevel() 
         .addVertex(new Vertex<String>("сторон"))
-        .addOrientedEdge("вызова", "сторон")
+        .addOrEdge("вызова", "сторон")
 
         .addVertex(new Vertex<String>("финансового управляющего"))
-        .addOrientedEdge("ходатайством", "финансового управляющего")
+        .addOrEdge("ходатайством", "финансового управляющего")
 
         .addVertex(new Vertex<String>("судебном"))
-        .addOrientedEdge("предварительном", "судебном")
-        .addOrientedEdge(3, "открытом", 4, "судебном")
-        .addOrientedEdge(2, "в", 4, "судебном")
+        .addOrEdge("предварительном", "судебном")
+        .addOrEdge(3, "открытом", 4, "судебном")
+        .addOrEdge(2, "в", 4, "судебном")
 
         // Level 5
         .nextDepthLevel() 
         .addVertex(new Vertex<String>("заседании"))
-        .addOrientedEdge(4, "судебном", 5, "заседании")
+        .addOrEdge(4, "судебном", 5, "заседании")
 
 
         // Level 6
         .nextDepthLevel() 
         .addVertex(new Vertex<String>("в"))
-        .addOrientedEdge("заседании", "в")
-        .addOrientedEdge(6, "в", 3,  "рамках") // Reverse Link (From high-level to low-level)
+        .addOrEdge("заседании", "в")
+        .addOrEdge(6, "в", 3,  "рамках") // Reverse Link (From high-level to low-level)
 
         .addVertex(new Vertex<String>("дело"))
-        .addOrientedEdge("заседании", "дело")
+        .addOrEdge("заседании", "дело")
 
         .addVertex(new Vertex<String>("заявление"))
-        .addOrientedEdge(1, "рассмотрев", 6, "заявление")
-        .addOrientedEdge(5, "заседании", 6, "заявление")
+        .addOrEdge(1, "рассмотрев", 6, "заявление")
+        .addOrEdge(5, "заседании", 6, "заявление")
 
         .addVertex(new Vertex<String>("материалы"))
-        .addOrientedEdge(4, "сторон", 6, "материалы")
-        .addOrientedEdge("заседании", "материалы")
+        .addOrEdge(4, "сторон", 6, "материалы")
+        .addOrEdge("заседании", "материалы")
 
         // Level 7
         .nextDepthLevel() 
         .addVertex(new Vertex<String>("конкурсного управляющего").setAction(Vertex::noAction))
-        .addOrientedEdge("заявление", "конкурсного управляющего")
+        .addOrEdge("заявление", "конкурсного управляющего")
 
         .addVertex(new Vertex<String>("финансового управляющего"))
-        .addOrientedEdge(6, "заявление", 7, "финансового управляющего")
+        .addOrEdge(6, "заявление", 7, "финансового управляющего")
 
         .addVertex(new Vertex<String>("взыскателя").setAction(Vertex::noAction))
-        .addOrientedEdge("заявление", "взыскателя")
+        .addOrEdge("заявление", "взыскателя")
 
         .addVertex(new Vertex<String>("дела"))
-        .addOrientedEdge(3, "рамках", 7, "дела")
-        .addOrientedEdge("материалы", "дела")
+        .addOrEdge(3, "рамках", 7, "дела")
+        .addOrEdge("материалы", "дела")
 
         // Level 8
         .nextDepthLevel() 
         .addVertex(new Vertex<String>("об"))
-        .addOrientedEdge(7, "финансового управляющего", 8, "об")
+        .addOrEdge(7, "финансового управляющего", 8, "об")
 
         // Level 9
         .nextDepthLevel()
         .addVertex(new Vertex<String>("утверждении"))
-        .addOrientedEdge("об", "утверждении")
+        .addOrEdge("об", "утверждении")
 
         // Level 10
         .nextDepthLevel()
         .addVertex(new Vertex<String>(wrapStaticTokenAsRegex("положения о порядке, сроках и об условиях продажи имущества должника")))
-        .addOrientedEdge("утверждении", wrapStaticTokenAsRegex("положения о порядке, сроках и об условиях продажи имущества должника"))
+        .addOrEdge("утверждении", wrapStaticTokenAsRegex("положения о порядке, сроках и об условиях продажи имущества должника"))
 
         // Level 11
         .nextDepthLevel()
         .addVertex(new Vertex<String>("по"))
-        .addOrientedEdge(1, "рассмотрев", 11, "по")
-        .addOrientedEdge(1, "ознакомившись", 11, "по")
-        .addOrientedEdge(6, "дело", 11, "по")
-        .addOrientedEdge(7, "дела", 11, "по")
-        .addOrientedEdge(wrapStaticTokenAsRegex("положения о порядке, сроках и об условиях продажи имущества должника"), "по")
+        .addOrEdge(1, "рассмотрев", 11, "по")
+        .addOrEdge(1, "ознакомившись", 11, "по")
+        .addOrEdge(6, "дело", 11, "по")
+        .addOrEdge(7, "дела", 11, "по")
+        .addOrEdge(wrapStaticTokenAsRegex("положения о порядке, сроках и об условиях продажи имущества должника"), "по")
         
         // Level 12
         .nextDepthLevel()
         .addVertex(new Vertex<String>("исковому"))
-        .addOrientedEdge("по", "исковому")
+        .addOrEdge("по", "исковому")
 
 
         // Level 13
         .nextDepthLevel()
         .addVertex(new Vertex<String>("заявлению"))
-        .addOrientedEdge(11, "по", 13, "заявлению")
-        .addOrientedEdge("исковому", "заявлению")
+        .addOrEdge(11, "по", 13, "заявлению")
+        .addOrEdge("исковому", "заявлению")
 
         .addVertex(new Vertex<String>("иску").setAction(Vertex::noAction))
-        .addOrientedEdge(11, "по", 13, "иску")
+        .addOrEdge(11, "по", 13, "иску")
 
         .addVertex(new Vertex<String>("делу"))
-        .addOrientedEdge(11, "по", 13, "делу")
+        .addOrEdge(11, "по", 13, "делу")
 
         // Level 14
         .nextDepthLevel()
         .addVertex(new Vertex<String>("(о|к)"))
-        .addOrientedEdge(7, "дела", 14, "(о|к)")
-        .addOrientedEdge("делу", "(о|к)")
+        .addOrEdge(7, "дела", 14, "(о|к)")
+        .addOrEdge("делу", "(о|к)")
 
         // Level 15
         .nextDepthLevel()
         .addVertex(new Vertex<String>("несостоятельности (банкротстве)").setAction(Vertex::noAction))
-        .addOrientedEdge("(о|к)", "несостоятельности (банкротстве)")
+        .addOrEdge("(о|к)", "несостоятельности (банкротстве)")
 
         .addVertex(new Vertex<String>("банкротстве").setAction(Vertex::noAction))
-        .addOrientedEdge("(о|к)", "банкротстве")
+        .addOrEdge("(о|к)", "банкротстве")
 
         .addVertex(new Vertex<String>("признании"))
-        .addOrientedEdge("(о|к)", "признании")
+        .addOrEdge("(о|к)", "признании")
         ;
         //#endregion
         
@@ -212,122 +212,121 @@ public class StaticGraphs {
         // Level 16
         .nextDepthLevel()
         .addVertex(new Vertex<String>(PARSE_COMPLAINANT_TYPE+wrapStaticTokenAsRegex("-")+PARSE_COMPLAINANT+wrapWordAsRegex("(о|к)")).setAction(Vertex::noAction))
-        .addOrientedEdge(3, "заявлением", 16, PARSE_COMPLAINANT_TYPE+wrapStaticTokenAsRegex("-")+PARSE_COMPLAINANT+wrapWordAsRegex("(о|к)"))
-        .addOrientedEdge(6, "заявление", 16, PARSE_COMPLAINANT_TYPE+wrapStaticTokenAsRegex("-")+PARSE_COMPLAINANT+wrapWordAsRegex("(о|к)"))
+        .addOrEdge(3, "заявлением", 16, PARSE_COMPLAINANT_TYPE+wrapStaticTokenAsRegex("-")+PARSE_COMPLAINANT+wrapWordAsRegex("(о|к)"))
+        .addOrEdge(6, "заявление", 16, PARSE_COMPLAINANT_TYPE+wrapStaticTokenAsRegex("-")+PARSE_COMPLAINANT+wrapWordAsRegex("(о|к)"))
         
         .addVertex(new Vertex<String>(PARSE_COMPLAINANT+wrapWordAsRegex("(о|к)")).setAction(Vertex::noAction))
-        .addOrientedEdge(3, "заявлением", 16, PARSE_COMPLAINANT+wrapWordAsRegex("(о|к)"))
-        .addOrientedEdge(6, "заявление", 16, PARSE_COMPLAINANT+wrapWordAsRegex("(о|к)"))
-        .addOrientedEdge(13, "иску", 16, PARSE_COMPLAINANT+wrapWordAsRegex("(о|к)"))
-        .addOrientedEdge(13, "заявлению", 16, PARSE_COMPLAINANT+wrapWordAsRegex("(о|к)"))
+        .addOrEdge(3, "заявлением", 16, PARSE_COMPLAINANT+wrapWordAsRegex("(о|к)"))
+        .addOrEdge(6, "заявление", 16, PARSE_COMPLAINANT+wrapWordAsRegex("(о|к)"))
+        .addOrEdge(13, "иску", 16, PARSE_COMPLAINANT+wrapWordAsRegex("(о|к)"))
+        .addOrEdge(13, "заявлению", 16, PARSE_COMPLAINANT+wrapWordAsRegex("(о|к)"))
 
         // Level 17
         .nextDepthLevel()
         .addVertex(new Vertex<String>("ответчику"))
-        .addOrientedEdge(PARSE_COMPLAINANT+wrapWordAsRegex("(о|к)"), "ответчику")
+        .addOrEdge(PARSE_COMPLAINANT+wrapWordAsRegex("(о|к)"), "ответчику")
         
 
         // Level 18
         .nextDepthLevel()
         .addVertex(new Vertex<String>(PARSE_DEFENDANT+wrapWordAsRegex("третье лицо(,|:)?")))
-        .addOrientedEdge("ответчику", PARSE_DEFENDANT+wrapWordAsRegex("третье лицо(,|:)?"))
-        .addOrientedEdge(16, PARSE_COMPLAINANT+wrapWordAsRegex("(о|к)"), 18, PARSE_DEFENDANT+wrapWordAsRegex("третье лицо(,|:)?"))
+        .addOrEdge("ответчику", PARSE_DEFENDANT+wrapWordAsRegex("третье лицо(,|:)?"))
+        .addOrEdge(16, PARSE_COMPLAINANT+wrapWordAsRegex("(о|к)"), 18, PARSE_DEFENDANT+wrapWordAsRegex("третье лицо(,|:)?"))
 
         .addVertex(new Vertex<String>(PARSE_KEYWORD+wrapWordAsRegex("(в|с)")).setAction(Vertex::noAction))
-        .addOrientedEdge(16, PARSE_COMPLAINANT_TYPE+wrapStaticTokenAsRegex("-")+PARSE_COMPLAINANT+wrapWordAsRegex("(о|к)"), 18, PARSE_KEYWORD+wrapWordAsRegex("(в|с)"))
-        .addOrientedEdge(16, PARSE_COMPLAINANT+wrapWordAsRegex("(о|к)"), 18, PARSE_KEYWORD+wrapWordAsRegex("(в|с)"))    
+        .addOrEdge(16, PARSE_COMPLAINANT_TYPE+wrapStaticTokenAsRegex("-")+PARSE_COMPLAINANT+wrapWordAsRegex("(о|к)"), 18, PARSE_KEYWORD+wrapWordAsRegex("(в|с)"))
+        .addOrEdge(16, PARSE_COMPLAINANT+wrapWordAsRegex("(о|к)"), 18, PARSE_KEYWORD+wrapWordAsRegex("(в|с)"))    
         
         // Level 19
         .nextDepthLevel()
         .addVertex(new Vertex<String>(wrapStaticTokenAsRegex("(не)? (заявляющее)? (самостоятельных)? (требований)? (относительно)? (предмета)? (спора)?")))
-        .addOrientedEdge(PARSE_DEFENDANT+wrapWordAsRegex("третье лицо(,|:)?"), wrapStaticTokenAsRegex("(не)? (заявляющее)? (самостоятельных)? (требований)? (относительно)? (предмета)? (спора)?"))
+        .addOrEdge(PARSE_DEFENDANT+wrapWordAsRegex("третье лицо(,|:)?"), wrapStaticTokenAsRegex("(не)? (заявляющее)? (самостоятельных)? (требований)? (относительно)? (предмета)? (спора)?"))
 
         .addVertex(new Vertex<String>("реестре?"))
-        .addOrientedEdge(PARSE_KEYWORD+wrapWordAsRegex("(в|с)"), "реестре?")
+        .addOrEdge(PARSE_KEYWORD+wrapWordAsRegex("(в|с)"), "реестре?")
         
         .addVertex(new Vertex<String>(PARSE_DEFENDANT+wrapWordAsRegex("финансовых санкций,?")))
-        .addOrientedEdge(PARSE_KEYWORD+wrapWordAsRegex("(в|с)"),  PARSE_DEFENDANT+wrapWordAsRegex("финансовых санкций,?"))
+        .addOrEdge(PARSE_KEYWORD+wrapWordAsRegex("(в|с)"),  PARSE_DEFENDANT+wrapWordAsRegex("финансовых санкций,?"))
 
         // Level 20
         .nextDepthLevel()
         .addVertex(new Vertex<String>(wrapStaticTokenAsRegex("(конкурсный)? управляющий")))
-        .addOrientedEdge(wrapStaticTokenAsRegex("(не)? (заявляющее)? (самостоятельных)? (требований)? (относительно)? (предмета)? (спора)?"), wrapStaticTokenAsRegex("(конкурсный)? управляющий"))
+        .addOrEdge(wrapStaticTokenAsRegex("(не)? (заявляющее)? (самостоятельных)? (требований)? (относительно)? (предмета)? (спора)?"), wrapStaticTokenAsRegex("(конкурсный)? управляющий"))
 
         .addVertex(new Vertex<String>(wrapStaticTokenAsRegex("(финансовый)? управляющий")))
-        .addOrientedEdge(wrapStaticTokenAsRegex("(не)? (заявляющее)? (самостоятельных)? (требований)? (относительно)? (предмета)? (спора)?"), wrapStaticTokenAsRegex("(финансовый)? управляющий"))
+        .addOrEdge(wrapStaticTokenAsRegex("(не)? (заявляющее)? (самостоятельных)? (требований)? (относительно)? (предмета)? (спора)?"), wrapStaticTokenAsRegex("(финансовый)? управляющий"))
 
         .addVertex(new Vertex<String>("требований"))
-        .addOrientedEdge("реестре?", "требований")
+        .addOrEdge("реестре?", "требований")
 
         // Level 21
         .nextDepthLevel()
         .addVertex(new Vertex<String>(PARSE_COMPETITION_MANAGER+wrapWordAsRegex("о")))
-        .addOrientedEdge(wrapStaticTokenAsRegex("(конкурсный)? управляющий"), PARSE_COMPETITION_MANAGER+wrapWordAsRegex("о"))
+        .addOrEdge(wrapStaticTokenAsRegex("(конкурсный)? управляющий"), PARSE_COMPETITION_MANAGER+wrapWordAsRegex("о"))
 
         .addVertex(new Vertex<String>(PARSE_FINANCIAL_MANAGER+wrapWordAsRegex("о")))
-        .addOrientedEdge(wrapStaticTokenAsRegex("(финансовый)? управляющий"), PARSE_FINANCIAL_MANAGER+wrapWordAsRegex("о"))
+        .addOrEdge(wrapStaticTokenAsRegex("(финансовый)? управляющий"), PARSE_FINANCIAL_MANAGER+wrapWordAsRegex("о"))
 
         .addVertex(new Vertex<String>("кредиторов"))
-        .addOrientedEdge("требований", "кредиторов")
+        .addOrEdge("требований", "кредиторов")
 
         // Level 22
         .nextDepthLevel()
         .addVertex(new Vertex<String>("взыскании"))
-        .addOrientedEdge(PARSE_FINANCIAL_MANAGER+wrapWordAsRegex("о"), "взыскании")
-        .addOrientedEdge(PARSE_COMPETITION_MANAGER+wrapWordAsRegex("о"), "взыскании")
+        .addOrEdge(PARSE_FINANCIAL_MANAGER+wrapWordAsRegex("о"), "взыскании")
+        .addOrEdge(PARSE_COMPETITION_MANAGER+wrapWordAsRegex("о"), "взыскании")
 
         .addVertex(new Vertex<String>("по"))
-        .addOrientedEdge("кредиторов", "по")
+        .addOrEdge("кредиторов", "по")
 
         .addVertex(new Vertex<String>("в"))
-        .addOrientedEdge("кредиторов", "в")
+        .addOrEdge("кредиторов", "в")
 
         // Level 23
         .nextDepthLevel()
         .addVertex(new Vertex<String>("задолженности"))
-        .addOrientedEdge("взыскании", "задолженности")
+        .addOrEdge("взыскании", "задолженности")
 
         .addVertex(new Vertex<String>("делу"))
-        .addOrientedEdge("по", "делу")
+        .addOrEdge("по", "делу")
 
         .addVertex(new Vertex<String>("рамках"))
-        .addOrientedEdge("в", "рамках")
+        .addOrEdge("в", "рамках")
 
         // Level 24
         .nextDepthLevel()
         .addVertex(new Vertex<String>(wrapStaticTokenAsRegex("в размере")+PARSE_COURT_CASE_SUM))
-        .addOrientedEdge("задолженности", wrapStaticTokenAsRegex("в размере")+PARSE_COURT_CASE_SUM)
+        .addOrEdge("задолженности", wrapStaticTokenAsRegex("в размере")+PARSE_COURT_CASE_SUM)
 
         .addVertex(new Vertex<String>("дела"))
-        .addOrientedEdge("рамках", "дела")
+        .addOrEdge("рамках", "дела")
 
         // Level 25
         .nextDepthLevel()
         .addVertex(new Vertex<String>("(о|к)"))
-        .addOrientedEdge(23, "делу", 25, "(о|к)")
-        .addOrientedEdge("дела", "(о|к)")
+        .addOrEdge(23, "делу", 25, "(о|к)")
+        .addOrEdge("дела", "(о|к)")
 
         // Level 26
         .nextDepthLevel()
         .addVertex(new Vertex<String>("признании"))
-        .addOrientedEdge("(о|к)", "признании")
+        .addOrEdge("(о|к)", "признании")
 
         // Level 27
         .nextDepthLevel()
         .addVertex(new Vertex<String>(PARSE_DEFENDANT+wrapWordAsRegex("(несостоятельн(ым|ой) \\(?(банкротом)?\\)?,?)")).setAction(Vertex::noAction))
-        .addOrientedEdge(15, "признании", 27, PARSE_DEFENDANT+wrapWordAsRegex("(несостоятельн(ым|ой) \\(?(банкротом)?\\)?,?)"))
-        .addOrientedEdge("признании", PARSE_DEFENDANT+wrapWordAsRegex("(несостоятельн(ым|ой) \\(?(банкротом)?\\)?,?)"))
+        .addOrEdge(15, "признании", 27, PARSE_DEFENDANT+wrapWordAsRegex("(несостоятельн(ым|ой) \\(?(банкротом)?\\)?,?)"))
+        .addOrEdge("признании", PARSE_DEFENDANT+wrapWordAsRegex("(несостоятельн(ым|ой) \\(?(банкротом)?\\)?,?)"))
 
         // Level 28
         .nextDepthLevel()
         .addVertex(new Vertex<String>("при участии в заседании"))
-        .addOrientedEdge(PARSE_DEFENDANT+wrapWordAsRegex("(несостоятельн(ым|ой) \\(?(банкротом)?\\)?,?)"), "при участии в заседании")
+        .addOrEdge(PARSE_DEFENDANT+wrapWordAsRegex("(несостоятельн(ым|ой) \\(?(банкротом)?\\)?,?)"), "при участии в заседании")
 
         // Level 29
         .nextDepthLevel()
         .addVertex(new Vertex<String>("согласно протоколу судебного заседания"))
-        .addOrientedEdge("при участии в заседании", "согласно протоколу судебного заседания")
-
+        .addOrEdge("при участии в заседании", "согласно протоколу судебного заседания")
         ;
 
         //#endregion
@@ -341,26 +340,26 @@ public class StaticGraphs {
         cdpGraph
         .addVertex(new Vertex<String>("Initial"))
         .nextDepthLevel()  // Level 0
-            .addVertex(new Vertex<String>("рассмотрев")).addOrientedEdge(cdpGraph.getVertexByDepthValue(0, "Initial"), cdpGraph.getVertexByDepthValue(1, "рассмотрев"))
-            .addVertex(new Vertex<String>("ознакомившись")).addOrientedEdge(cdpGraph.getVertexByDepthValue(0, "Initial"), cdpGraph.getVertexByDepthValue(1, "ознакомившись"))
+            .addVertex(new Vertex<String>("рассмотрев")).addOrEdge(cdpGraph.getVertexByDepthValue(0, "Initial"), cdpGraph.getVertexByDepthValue(1, "рассмотрев"))
+            .addVertex(new Vertex<String>("ознакомившись")).addOrEdge(cdpGraph.getVertexByDepthValue(0, "Initial"), cdpGraph.getVertexByDepthValue(1, "ознакомившись"))
             .nextDepthLevel() // Level 1
-                .addVertex(new Vertex<String>("в")).addOrientedEdge(cdpGraph.getVertexByDepthValue(1, "рассмотрев"), cdpGraph.getVertexByDepthValue(2, "в"))
-                .addVertex(new Vertex<String>("с")).addOrientedEdge(cdpGraph.getVertexByDepthValue(1, "ознакомившись"), cdpGraph.getVertexByDepthValue(2, "с"))
+                .addVertex(new Vertex<String>("в")).addOrEdge(cdpGraph.getVertexByDepthValue(1, "рассмотрев"), cdpGraph.getVertexByDepthValue(2, "в"))
+                .addVertex(new Vertex<String>("с")).addOrEdge(cdpGraph.getVertexByDepthValue(1, "ознакомившись"), cdpGraph.getVertexByDepthValue(2, "с"))
                 .nextDepthLevel() // Level 2
-                    .addVertex(new Vertex<String>("открытом")).addOrientedEdge(cdpGraph.getVertexByDepthValue(2, "в"), cdpGraph.getVertexByDepthValue(3, "открытом"))
-                    .addVertex(new Vertex<String>("заявлением")).addOrientedEdge(cdpGraph.getVertexByDepthValue(2, "с"), cdpGraph.getVertexByDepthValue(3, "заявлением"))
+                    .addVertex(new Vertex<String>("открытом")).addOrEdge(cdpGraph.getVertexByDepthValue(2, "в"), cdpGraph.getVertexByDepthValue(3, "открытом"))
+                    .addVertex(new Vertex<String>("заявлением")).addOrEdge(cdpGraph.getVertexByDepthValue(2, "с"), cdpGraph.getVertexByDepthValue(3, "заявлением"))
                     .nextDepthLevel() // Level 3
-                        .addVertex(new Vertex<String>("судебном")).addOrientedEdge(cdpGraph.getVertexByDepthValue(3, "открытом"), cdpGraph.getVertexByDepthValue(4, "судебном"))
-                            .addOrientedEdge(cdpGraph.getVertexByDepthValue(2, "в"), cdpGraph.getVertexByDepthValue(4, "судебном"))
+                        .addVertex(new Vertex<String>("судебном")).addOrEdge(cdpGraph.getVertexByDepthValue(3, "открытом"), cdpGraph.getVertexByDepthValue(4, "судебном"))
+                            .addOrEdge(cdpGraph.getVertexByDepthValue(2, "в"), cdpGraph.getVertexByDepthValue(4, "судебном"))
                         .nextDepthLevel() // Level 4
-                            .addVertex(new Vertex<String>("заседании")).addOrientedEdge(cdpGraph.getVertexByDepthValue(4, "судебном"), cdpGraph.getVertexByDepthValue(5, "заседании"))
+                            .addVertex(new Vertex<String>("заседании")).addOrEdge(cdpGraph.getVertexByDepthValue(4, "судебном"), cdpGraph.getVertexByDepthValue(5, "заседании"))
                             .nextDepthLevel() // Level 5
                                 // Action here
-                                .addVertex(new Vertex<String>("заявление")).addOrientedEdge(cdpGraph.getVertexByDepthValue(5, "заседании"), cdpGraph.getVertexByDepthValue(6, "заявление"))
+                                .addVertex(new Vertex<String>("заявление")).addOrEdge(cdpGraph.getVertexByDepthValue(5, "заседании"), cdpGraph.getVertexByDepthValue(6, "заявление"))
                                 .nextDepthLevel() // Level 6
-                                    .addVertex(new Vertex<String>("финансового управляющего")).addOrientedEdge(cdpGraph.getVertexByDepthValue(6, "заявление"), cdpGraph.getVertexByDepthValue(7, "финансового управляющего"))
+                                    .addVertex(new Vertex<String>("финансового управляющего")).addOrEdge(cdpGraph.getVertexByDepthValue(6, "заявление"), cdpGraph.getVertexByDepthValue(7, "финансового управляющего"))
                                     .nextDepthLevel()
-                                        .addVertex(new Vertex<String>("об")).addOrientedEdge(cdpGraph.getVertexByDepthValue(7, "финансового управляющего"), cdpGraph.getVertexByDepthValue(8, "об"))
+                                        .addVertex(new Vertex<String>("об")).addOrEdge(cdpGraph.getVertexByDepthValue(7, "финансового управляющего"), cdpGraph.getVertexByDepthValue(8, "об"))
         ;
 
         for (var v : cdpGraph.getVerticesSet()) {
@@ -387,15 +386,15 @@ public class StaticGraphs {
 
         testGraph1
         .addVertex(A1)
-            .addVertex(B1).addOrientedEdge(A1, B1)
-                .addVertex(C1).addOrientedEdge(B1, C1)
-                    .addVertex(D1).addOrientedEdge(C1, D1)
-                        .addVertex(E1).addOrientedEdge(D1, E1)
-            .addVertex(B2).addOrientedEdge(A1, B2)
-                .addVertex(C2).addOrientedEdge(B2, C2)
-                .addVertex(C3).addOrientedEdge(B2, C3)
-                    .addVertex(D2).addOrientedEdge(C3, D2)
-                .addVertex(C4).addOrientedEdge(B2, C4)
+            .addVertex(B1).addOrEdge(A1, B1)
+                .addVertex(C1).addOrEdge(B1, C1)
+                    .addVertex(D1).addOrEdge(C1, D1)
+                        .addVertex(E1).addOrEdge(D1, E1)
+            .addVertex(B2).addOrEdge(A1, B2)
+                .addVertex(C2).addOrEdge(B2, C2)
+                .addVertex(C3).addOrEdge(B2, C3)
+                    .addVertex(D2).addOrEdge(C3, D2)
+                .addVertex(C4).addOrEdge(B2, C4)
         ;
         
 
@@ -409,37 +408,37 @@ public class StaticGraphs {
         .addVertex(new Vertex<String>("Initial"))
         .nextDepthLevel()
             .addVertex(new Vertex<String>("A1"))
-            .addOrientedEdge(
+            .addOrEdge(
                 testGraph2.getVertexByDepthValue(0, "Initial"), 
                 testGraph2.getVertexByDepthValue(1, "A1")
             )
             .nextDepthLevel()
                 .addVertex(new Vertex<String>("B1"))
-                .addOrientedEdge(
+                .addOrEdge(
                     testGraph2.getVertexByDepthValue(1, "A1"), 
                     testGraph2.getVertexByDepthValue(2, "B1")
                 )
                 .addVertex(new Vertex<String>("B2"))
-                .addOrientedEdge(
+                .addOrEdge(
                     testGraph2.getVertexByDepthValue(1, "A1"),
                     testGraph2.getVertexByDepthValue(2, "B2")
                 )
                 .nextDepthLevel()
                     .addVertex(new Vertex<String>("C1"))
-                    .addOrientedEdge(
+                    .addOrEdge(
                         testGraph2.getVertexByDepthValue(2, "B1"), 
                         testGraph2.getVertexByDepthValue(3, "C1")    
                     )
-                    .addOrientedEdge(
+                    .addOrEdge(
                         testGraph2.getVertexByDepthValue(2, "B2"), 
                         testGraph2.getVertexByDepthValue(3, "C1")    
                     )
                     .addVertex(new Vertex<String>("C2"))
-                    .addOrientedEdge(
+                    .addOrEdge(
                         testGraph2.getVertexByDepthValue(2, "B1"), 
                         testGraph2.getVertexByDepthValue(3, "C2")    
                     )
-                    .addOrientedEdge(
+                    .addOrEdge(
                         testGraph2.getVertexByDepthValue(2, "B2"), 
                         testGraph2.getVertexByDepthValue(3, "C2")    
                     )
@@ -447,19 +446,19 @@ public class StaticGraphs {
                         .addVertex(new Vertex<String>("D1"))
                         .addVertex(new Vertex<String>("D2"))
                         .addVertex(new Vertex<String>("D3"))
-                        .addOrientedEdge(
+                        .addOrEdge(
                             testGraph2.getVertexByDepthValue(3, "C1"), 
                             testGraph2.getVertexByDepthValue(4, "D1")    
                         )
-                        .addOrientedEdge(
+                        .addOrEdge(
                             testGraph2.getVertexByDepthValue(3, "C1"), 
                             testGraph2.getVertexByDepthValue(4, "D2")    
                         )
-                        .addOrientedEdge(
+                        .addOrEdge(
                             testGraph2.getVertexByDepthValue(3, "C1"), 
                             testGraph2.getVertexByDepthValue(4, "D3")    
                         )
-                        .addOrientedEdge(
+                        .addOrEdge(
                             testGraph2.getVertexByDepthValue(3, "C2"), 
                             testGraph2.getVertexByDepthValue(4, "D2")    
                         )

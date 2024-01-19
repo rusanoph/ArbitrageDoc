@@ -52,6 +52,7 @@ public class Person {
     public ArbitrageSide getArbitrageSide() {
         return arbitrageSide;
     }
+    
     public void setArbitrageSide(ArbitrageSide arbitrageSide) {
         this.arbitrageSide = arbitrageSide;
     }

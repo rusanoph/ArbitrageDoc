@@ -382,11 +382,11 @@ public class DocumentProcessor {
 
         List<String> sentencies = new ArrayList<>();
 
-        Matcher m = Pattern.compile("(\\s+([а-яА-Я]{2,}))\\.").matcher(text);
+        Matcher m = Pattern.compile("((\\s+([а-яА-Я]{2,}))|[)])\\.").matcher(text);
 
         int previous = 0;
         while (m.find()) {
-            if (m.group().matches("\\s*(оф|им|ст|ул|кв|тел|руб|коп|час|мин|каб|абз|наб|пер|стр|[Рр][Фф])\\.\\s*")) continue;
+            if (m.group().matches("\\s*(оф|им|ст|ул|кв|инк|мкр|пос|обл|комн|тел|руб|коп|час|мин|каб|абз|наб|пер|стр|[Рр][Фф])\\.\\s*")) continue;
 
             String sentence = text.substring(previous, m.end());
             previous = m.end();

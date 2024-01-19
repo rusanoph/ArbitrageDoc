@@ -2,9 +2,9 @@ import { DocumentService } from "./../api/DocumentService.js";
 
 export class ComponentTools {    
 
-    static async updateDocumentView(docFileNameId, docTitleId, docTextId, documentPath, documentFileName, isFormated, isLemma) {
+    static async updateDocumentView(docFileNameId, docTitleId, docTextId, documentPath, documentFileName, isFormated, isLemma, isParsed) {
 
-        await DocumentService.getDocumentText(documentPath, documentFileName, isFormated, isLemma)
+        await DocumentService.getDocumentText(documentPath, documentFileName, isFormated, isLemma, isParsed)
         .then((data) => {
             const docFileName = document.getElementById(docFileNameId);
             const docTitle = document.getElementById(docTitleId);

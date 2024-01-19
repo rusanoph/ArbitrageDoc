@@ -842,6 +842,13 @@ select::-webkit-scrollbar {
     height: fit-content;
 }
 
+.accent:hover, .sub-accent:hover {
+    margin: 2px;
+    padding: 2px;
+    border: 1px solid #333;
+    cursor: pointer;
+}
+
 .nowrap-text {
     text-wrap: nowrap;
 }
