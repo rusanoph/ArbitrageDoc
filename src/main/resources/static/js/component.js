@@ -226,3 +226,23 @@ function modalOpen(modalId, html) {
     }    
 }
 //#endregion
+
+//#region ToolTip
+
+
+function showTooltip(event, text) {
+    const tooltip = document.getElementById('tooltip');
+    tooltip.style.display = "block";
+
+    tooltip.innerHTML = text;
+
+    tooltip.style.left = (event.clientX + 50) + "px";
+    tooltip.style.top = (event.clientY - 75) + "px";
+}
+
+function hideTooltip() {
+    const tooltip = document.getElementById('tooltip');
+    tooltip.style.display = 'none';
+}
+
+//#endregion

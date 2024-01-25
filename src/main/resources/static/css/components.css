@@ -777,54 +777,47 @@ select::-webkit-scrollbar {
 
 /* #endregion */
 
+/* #region Tooltip */
+#tooltip {
+    position: fixed;
+    display: none;
+    background-color: #333;
+    top: 0;
+    left: 0;
+    color: #fff;
+    padding: 5px;
+    border-radius: 3px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+
+    cursor: pointer;
+}
+/* #endregion */
+
 /* #region Text token highlight */
 
-.complainant,
-.defendant,
-.keyword,
-.person-id,
-.person-address,
-.court-case-sum {
-    padding: 2px;
-    border: 1px solid #333;
+.token {
+    padding: 2px 5px;
+    transition: all 0.05s ease-in-out;
 }
 
-.complainant {
-    background-color: #FFD1DC;
+.token:hover {
+    opacity: 0.9;
+    cursor: pointer;
 }
 
-.defendant {
-    background-color: #ADD8E6;
-}
-
-.keyword {
-    background-color: #FFD700;
-}
-
-.person-id {
-    background-color: #FFECB3;
-}
-
-.person-address {
-    background-color: #87CEFA;
-}
-
-.court-case-sum {
-    background-color: #98FB98;
-}
-
-/* --- Used --- */
-/* #FFD1DC (розовый) */
-/* #ADD8E6 (светло-голубой) */
+.token-colors-sequence {
+/* --- Token color palette --- */
+/* ================== #FFD1DC (розовый) */ 
+/* ================== #ADD8E6 (светло-голубой) */
 /* #FFD700 (жёлтый) */
 /* #FFECB3 (светло-жёлтый) */
 /* #87CEFA (светло-голубой) */
-/* #98FB98 (светло-зелёный) */
-
-/* --- Not used --- */
-/* #F0E68C (хаки) */
-/* #FFDAB9 (персиковый) */
+/* color: #b8e7c9; (светло-зелёный) */
+/* ================== #F0E68C (хаки) */
+/* ================== #FFDAB9 (персиковый) */
 /* #FFB6C1 (светло-розовый) */
+}
+
 /* #endregion */
 
 /* #region  Other */

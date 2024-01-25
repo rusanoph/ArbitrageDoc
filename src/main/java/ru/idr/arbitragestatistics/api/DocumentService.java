@@ -58,17 +58,25 @@ public class DocumentService {
             }
 
             if (parse) {
-                // ArbitrageDataExtractorTool adet = new ArbitrageDataExtractorTool();
-                // targetFileText = adet.wrapTextWithHtml(targetFileText);
-
+                
                 FindContent fc = new FindContent();
-                targetFileText = fc.find(targetFileText);
+                // targetFileText = fc.find(targetFileText);
+                List<String> header = DocumentProcessor.extractSentences(ats.getHeaderPart(targetFileText));
+                List<String> afterFound = DocumentProcessor.extractSentences(ats.getAfterFoundPart(targetFileText));
+                List<String> afterDetermined = DocumentProcessor.extractSentences(ats.getAfterDeterminedPart(targetFileText));
+                List<String> afterDecided = DocumentProcessor.extractSentences(ats.getAfterDecidedPart(targetFileText));
+                List<String> afterSolution = DocumentProcessor.extractSentences(ats.getAfterSolutionPart(targetFileText));
+
+                List<String> sentencies = Stream.of(header, afterFound, afterDetermined, afterDecided, afterSolution).flatMap(Collection::stream).toList();
+
+                String newText = "";
+                for (String sentence : sentencies) {
+                    newText += "&#9744; " + fc.find(sentence) + "<br><br>";
+                }
+                targetFileText = newText;
+                // targetFileText = String.join("<br><br>&#9744; ", fc.findBySentence(targetFileText));
+
             }
-
-            targetFileText = targetFileText.replaceAll("\t", "&#8195;");
-            targetFileText = targetFileText.replaceAll("\\*\\*(.*?)\\*\\*", HTMLWrapper.tag("span", "$1", "sub-accent"));            
-            targetFileText = targetFileText.replaceAll("(\\*)", HTMLWrapper.tag("span", "$1", "sub-accent"));
-
 
             documentJson.put("title", arbitrageTitle);
             documentJson.put("text", targetFileText);

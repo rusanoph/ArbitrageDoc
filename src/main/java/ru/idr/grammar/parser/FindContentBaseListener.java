@@ -29,6 +29,54 @@ public class FindContentBaseListener implements FindContentListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterLexem(FindContentParser.LexemContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLexem(FindContentParser.LexemContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterToken(FindContentParser.TokenContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitToken(FindContentParser.TokenContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBracketedText(FindContentParser.BracketedTextContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBracketedText(FindContentParser.BracketedTextContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLaw(FindContentParser.LawContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLaw(FindContentParser.LawContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterCompanyName(FindContentParser.CompanyNameContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -41,25 +89,25 @@ public class FindContentBaseListener implements FindContentListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterInterestingPart(FindContentParser.InterestingPartContext ctx) { }
+	@Override public void enterMoneysum(FindContentParser.MoneysumContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitInterestingPart(FindContentParser.InterestingPartContext ctx) { }
+	@Override public void exitMoneysum(FindContentParser.MoneysumContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterContent(FindContentParser.ContentContext ctx) { }
+	@Override public void enterDate(FindContentParser.DateContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitContent(FindContentParser.ContentContext ctx) { }
+	@Override public void exitDate(FindContentParser.DateContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

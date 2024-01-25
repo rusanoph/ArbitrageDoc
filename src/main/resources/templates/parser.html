@@ -44,8 +44,14 @@
                             <div th:replace="~{/fragments/components/_fileview :: file-view-tool}"></div>
                             <div th:replace="~{/fragments/components/_fileview :: file-view-title}"></div>
 
-                            <pre id="document-text" class="regex-processed"></pre>
+                            <div class="tooltip-text">
+                                <pre id="document-text" class="regex-processed">
+                                </pre>
+                                <div id="tooltip" onclick="hideTooltip()"></div>
+                            </div>
                         </div>
+
+                        
                     </div>
                 </div>
             </div>

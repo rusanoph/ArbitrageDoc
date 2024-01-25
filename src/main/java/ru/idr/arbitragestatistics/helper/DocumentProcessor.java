@@ -386,7 +386,7 @@ public class DocumentProcessor {
 
         int previous = 0;
         while (m.find()) {
-            if (m.group().matches("\\s*(оф|им|ст|ул|кв|инк|мкр|пос|обл|комн|тел|руб|коп|час|мин|каб|абз|наб|пер|стр|[Рр][Фф])\\.\\s*")) continue;
+            if (m.group().matches("\\s*(оф|им|ст|ул|кв|инк|мкр|пос|рег|обл|комн|тел|руб|коп|час|мин|каб|абз|наб|пер|стр|[Рр][Фф])\\.\\s*")) continue;
 
             String sentence = text.substring(previous, m.end());
             previous = m.end();
