@@ -45,8 +45,12 @@ public class Graph<T> implements IJsonSerializable {
         return this;
     }
 
-    public Graph<T> addOrEdge(T valueFrom, T valueTo) {
-        return this.addOrEdge(currentDepth - 1, valueFrom, currentDepth, valueTo);
+    @SafeVarargs
+    public final Graph<T> addOrEdge(T valueFrom, T... valuesTo) {
+        for (T valueTo : valuesTo) 
+            this.addOrEdge(currentDepth - 1, valueFrom, currentDepth, valueTo);
+        
+        return this;
     }
 
     public Graph<T> addOrEdge(Integer depthFrom, T valueFrom, Integer depthTo, T valueTo) {
@@ -56,17 +60,28 @@ public class Graph<T> implements IJsonSerializable {
         return this.addOrEdge(vertexFrom, vertexTo);
     }
 
-    public Graph<T> addOrEdge(Vertex<T> vertexFrom, Vertex<T> vertexTo) {
-        if (vertexFrom == null || vertexTo == null) {
+    @SafeVarargs
+    public final Graph<T> addOrEdge(Vertex<T> vertexFrom, Vertex<T>... verteciesTo) {
+        boolean verteciesToContainsNull = false;
+        int nullVertexIndex = -1;
+        for (int i = 0; i < verteciesTo.length; i++) {
+            if (verteciesTo[i] == null) {
+                verteciesToContainsNull = true;
+                nullVertexIndex = i;
+                break;
+            }
+        } 
+
+        if (vertexFrom == null || verteciesToContainsNull) {
             String vertexFromErrorMessage = String.format("vertexFrom: (null: %b)", vertexFrom == null);
-            String vertexToErrorMessage = String.format("vertexTo: (null: %b)", vertexTo == null);
+            String vertexToErrorMessage = String.format("vertexTo: (null: %b)", verteciesTo[nullVertexIndex] == null);
 
             if (vertexFrom != null) {
                 vertexFromErrorMessage += String.format(" | (d: %d, v: %s)", vertexFrom.getDepth(), vertexFrom.getValue());
             }
 
-            if (vertexTo != null) {
-                vertexToErrorMessage += String.format(" | (d: %d, v: %s)", vertexTo.getDepth(), vertexTo.getValue());
+            if (verteciesTo[0] != null) {
+                vertexToErrorMessage += String.format(" | (d: %d, v: %s)", verteciesTo[0].getDepth(), verteciesTo[0].getValue());
             }
 
             String errorMessage = String.format("current Depth: %d; %s; %s", currentDepth, vertexFromErrorMessage, vertexToErrorMessage);
@@ -74,14 +89,16 @@ public class Graph<T> implements IJsonSerializable {
         }
 
         int vertexToDepth = currentDepth;
-        vertexTo.setDepth(vertexToDepth);
 
-        adjacentVertices.get(vertexFrom).add(vertexTo);
-
-        if (verticesIndex.get(currentDepth).containsKey(vertexTo.getValue())) {
-            verticesIndex.get(currentDepth).remove(vertexTo.getValue());
+        for (var vertexTo : verteciesTo) {
+            vertexTo.setDepth(vertexToDepth);
+            adjacentVertices.get(vertexFrom).add(vertexTo);
+            
+            if (verticesIndex.get(currentDepth).containsKey(vertexTo.getValue())) {
+                verticesIndex.get(currentDepth).remove(vertexTo.getValue());
+            }
+            setVertexIndex(vertexToDepth, vertexTo);
         }
-        setVertexIndex(vertexToDepth, vertexTo);
 
         return this;
     }

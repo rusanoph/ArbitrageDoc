@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Component;
 
+import ru.idr.arbitragestatistics.helper.regex.RegExRepository;
 import ru.idr.arbitragestatistics.model.datastructure.StaticGraphs;
 import ru.idr.arbitragestatistics.util.datastructure.Graph;
 import ru.idr.arbitragestatistics.util.datastructure.Vertex;
@@ -117,15 +118,26 @@ public class ArbitrageTemplateSeeker {
         while (cdpGraph.hasChildren(currentVertex)) {
             List<Vertex<String>> adjacentVertices = cdpGraph.getAdjacentVertices(currentVertex);
 
+            int minMatchIndex = Integer.MAX_VALUE;
+
             boolean continueSearch = false;
             for (Vertex<String> vertex : adjacentVertices) {
                 
                 System.out.println(vertex.getValue());
-                
-                Matcher m = Pattern.compile(vertex.getValue(), Pattern.CASE_INSENSITIVE | Pattern.DOTALL | Pattern.MULTILINE).matcher(text.toLowerCase());
+
+                String regex = vertex.getValue().length() > 1 ? vertex.getValue() : RegExRepository.wrapWordAsRegex(vertex.getValue());
+                Matcher m = Pattern.compile(regex, Pattern.CASE_INSENSITIVE | Pattern.DOTALL | Pattern.MULTILINE).matcher(text.toLowerCase());
 
                 if (m.find()) {
                     if (m.start() > 2 && vertex.getDepth() > 1) continue;
+
+                    if (minMatchIndex > m.start()) {
+                        minMatchIndex = m.start();
+
+                        currentVertex = vertex;
+                        continueSearch = true;
+
+                    } else continue;
 
                     text = text.substring(m.end()).trim();
 
@@ -133,19 +145,19 @@ public class ArbitrageTemplateSeeker {
                     String findText = DocumentProcessor.removeLineSeparator(m.group());
                     if (m.groupCount() > 0) {
                         if (!m.namedGroups().isEmpty()) {
-                            tokenTags = "; tags: "+String.join(", ", m.namedGroups().keySet());
+                            tokenTags = "Tags: " + String.join(", ", m.namedGroups().keySet());
 
-                            // findText = "";
-                            // for (String token : m.namedGroups().keySet()) {
-                            //     findText += "<span class='highlight'>" + m.group(token) + "</span> ";
-                            // }
+                            for (String token : m.namedGroups().keySet()) {
+                                String tokenType = "";
+                                findText = findText.replace(m.group(token) , "<span class='token "+tokenType+"'>" + m.group(token) + "</span> ");
+                            }
                         }
                     }
 
-                    result += String.format("%s (d: %d%s) ⟶ \n", findText, vertex.getDepth(), tokenTags);
-                    currentVertex = vertex;
-                    continueSearch = true;
-                    break;
+                    result += String.format("%s (i: %d-%d; %s) ⟶ \n", findText, m.start(), m.end(), tokenTags);
+                    // result += String.format("%s %s ⟶ \n", findText, tokenTags);
+                    
+                    
                 }
 
             }

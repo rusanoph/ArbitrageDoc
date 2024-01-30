@@ -797,6 +797,7 @@ select::-webkit-scrollbar {
 
 .token {
     padding: 2px 5px;
+    border: 1px solid #333;
     transition: all 0.05s ease-in-out;
 }
 
@@ -805,16 +806,37 @@ select::-webkit-scrollbar {
     cursor: pointer;
 }
 
+.complainant {
+    background: #FFD1DC;
+}
+
+.defendant {
+    background: #ADD8E6;
+}
+
+.thirdParty {
+    background: #b8e7c9;
+}
+
+.courtCaseSum {
+    background: #F0E68C;
+}
+
+.keyword {
+    background: #FFD700;
+}
+
+
 .token-colors-sequence {
 /* --- Token color palette --- */
-/* ================== #FFD1DC (розовый) */ 
-/* ================== #ADD8E6 (светло-голубой) */
-/* #FFD700 (жёлтый) */
+/* ==== #FFD1DC (розовый) */ 
+/* ==== #ADD8E6 (светло-голубой) */
+/* ==== #FFD700 (жёлтый) */
 /* #FFECB3 (светло-жёлтый) */
 /* #87CEFA (светло-голубой) */
-/* color: #b8e7c9; (светло-зелёный) */
-/* ================== #F0E68C (хаки) */
-/* ================== #FFDAB9 (персиковый) */
+/* #b8e7c9; (светло-зелёный) */
+/* ==== #F0E68C (хаки) */
+/* #FFDAB9 (персиковый) */
 /* #FFB6C1 (светло-розовый) */
 }
 

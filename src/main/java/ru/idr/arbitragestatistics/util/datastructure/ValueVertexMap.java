@@ -2,6 +2,8 @@ package ru.idr.arbitragestatistics.util.datastructure;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
 public class ValueVertexMap<T> {
 
@@ -21,8 +23,17 @@ public class ValueVertexMap<T> {
         return this;
     }
 
-    public Map<T, Vertex<T>> getMap() {
-        return valueMap;
+    public Vertex<T> get(T value) {
+        if (!this.valueMap.containsKey(value)) {
+            String errorMessage = "There is no element '" + value + "' in ValueVertexMap";
+            throw new NoSuchElementException(errorMessage);
+        }
+
+        return this.valueMap.get(value);
+    }
+
+    public Set<T> keySet() {
+        return valueMap.keySet();
     }
     
 }
