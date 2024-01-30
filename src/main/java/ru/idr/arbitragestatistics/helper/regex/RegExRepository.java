@@ -1,5 +1,7 @@
 package ru.idr.arbitragestatistics.helper.regex;
 
+import java.util.regex.Pattern;
+
 public class RegExRepository {
 
     //#region Identifiers
@@ -45,5 +47,21 @@ public class RegExRepository {
     public static String abbreviation = "";
     public static String numberDotDelimiter = "";
 
+    //#endregion
+
+    //#region === Regex Helpers ===
+    public static Pattern regexFromString(String string) {
+        return Pattern.compile(string, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+    }
+
+    public static String wrapWordAsRegex(String word) {
+        word = word.replaceAll(" ", "\\\\s+");
+        return String.format("(^|\\s+)%s(\\s+|$)", word, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+    }
+
+    public static String wrapStaticTokenAsRegex(String staticToken) {
+        staticToken = staticToken.replaceAll(" ", "\\\\s+");
+        return String.format("(^|\\s*)%s(\\s*|$)", staticToken, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+    }
     //#endregion
 }

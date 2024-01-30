@@ -6,6 +6,52 @@ import ru.idr.arbitragestatistics.helper.regex.RegExRepository;
 import ru.idr.arbitragestatistics.util.datastructure.Tree;
 
 public class StaticTrees {
+    
+    public static Tree<String> getHeaderParseTree() {
+        Tree<String> cdpTree = new Tree<String>(null);
+
+        cdpTree
+        .appendChild("рассмотрев")
+            .appendChild("в")
+                .appendChild("открытом")
+                    .appendChild("судебном")
+                        .appendChild("заседании")
+                            .appendChild("заявление")
+                                .appendChild(".*?" + RegExRepository.wrapWordAsRegex("о")).setAction(null)
+                                    .appendChild("замене кредитора").setAction(null)
+                                        .appendChild("в")  
+                                            .appendChild("реестре")
+                                                .appendChild("требований")
+                                                    .appendChild("кредиторов")
+                                                        .appendChild("по")
+                                                            .appendChild("делу")
+                                                                .appendChild("о")
+                                                                    .appendChild("признании")
+                                                                        .appendChild(".*?" + RegExRepository.wrapWordAsRegex("несостоятельным (банкротом),?")).setAction(null)
+                                                                            .appendChild("при участии в заседании:?")
+                                                                                .appendChild("согласно протоколу судебного заседания,?")
+        .appendChild("ознакомившись")
+            .appendChild("с")
+                .appendChild("заявлением")
+                    .appendChild(".*?" + RegExRepository.wrapWordAsRegex("о")).setAction(null)
+                        .appendChild("включении")
+                            .appendChild("в")
+                                .appendChild("реестр")
+                                    .appendChild("требований")
+                                        .appendChild("кредиторов")
+                                            .appendChild("в")
+                                                .appendChild("рамках")
+                                                    .appendChild("дела")
+                                                        .appendChild("о")
+                                                            .appendChild("признании")
+                                                                .appendChild(".*?" + RegExRepository.wrapWordAsRegex("несостоятельным (банкротом),?")).setAction(null)
+        ;
+        
+
+        cdpTree.recomputeDepthDFS();
+        return cdpTree;
+    }
+
     //#region Test Tree
 
     public static Tree<String> getTestTree1() {
@@ -37,48 +83,48 @@ public class StaticTrees {
     //#region "ознакомившись"
     public static Tree<Pattern> getCdpTree1() {
         Tree<Pattern> cdpTree_1 = 
-        (new Tree<Pattern>(regexFromString("ознакомившись")))
+        (new Tree<Pattern>(RegExRepository.regexFromString("ознакомившись")))
         .appendChild(
-            (new Tree<Pattern>(regexFromString("в\\s+")))
+            (new Tree<Pattern>(RegExRepository.regexFromString("в\\s+")))
             .appendChild(
-                (new Tree<Pattern>(regexFromString("рамках")))
+                (new Tree<Pattern>(RegExRepository.regexFromString("рамках")))
                 .appendChild(
-                    (new Tree<Pattern>(regexFromString("дела " + RegExRepository.regexCourtCase)))
+                    (new Tree<Pattern>(RegExRepository.regexFromString("дела " + RegExRepository.regexCourtCase)))
                     .appendChild(
-                        (new Tree<Pattern>(regexFromString("о")))
+                        (new Tree<Pattern>(RegExRepository.regexFromString("о")))
                         .appendChild(
                             // Leaf
-                            (new Tree<Pattern>(regexFromString("несостоятельности \\(?банкротстве\\)?"))).setAction(Tree::parseComplainant)
+                            (new Tree<Pattern>(RegExRepository.regexFromString("несостоятельности \\(?банкротстве\\)?"))).setAction(Tree::parseComplainant)
                         )
                     )
                 )
             )
         )
         .appendChild(
-            (new Tree<Pattern>(regexFromString("с\\s+|co\\s+")))
+            (new Tree<Pattern>(RegExRepository.regexFromString("с\\s+|co\\s+")))
             .appendChild(
                 // Leaf
-                (new Tree<Pattern>(regexFromString("жалобой"))).setAction(Tree::parseComplainant)
+                (new Tree<Pattern>(RegExRepository.regexFromString("жалобой"))).setAction(Tree::parseComplainant)
             )
             .appendChild(
                 // Leaf
-                (new Tree<Pattern>(regexFromString("заявлением")))
+                (new Tree<Pattern>(RegExRepository.regexFromString("заявлением")))
                 .setAction(Tree::parseComplainant)
             )
             .appendChild(
-                (new Tree<Pattern>(regexFromString("исковым")))
+                (new Tree<Pattern>(RegExRepository.regexFromString("исковым")))
                 .appendChild(
                     // Leaf
-                    (new Tree<Pattern>(regexFromString("заявлением"))).setAction(Tree::parseComplainant)
+                    (new Tree<Pattern>(RegExRepository.regexFromString("заявлением"))).setAction(Tree::parseComplainant)
                 )
             )
             .appendChild(
-                (new Tree<Pattern>(regexFromString("встречным")))
+                (new Tree<Pattern>(RegExRepository.regexFromString("встречным")))
                 .appendChild(
-                    (new Tree<Pattern>(regexFromString("исковым")))
+                    (new Tree<Pattern>(RegExRepository.regexFromString("исковым")))
                     .appendChild(
                         // Leaf
-                        (new Tree<Pattern>(regexFromString("заявлением"))).setAction(Tree::parseComplainant)
+                        (new Tree<Pattern>(RegExRepository.regexFromString("заявлением"))).setAction(Tree::parseComplainant)
                     )
                 )
             )
@@ -93,18 +139,18 @@ public class StaticTrees {
     //#region "возобновлено"
     public static Tree<Pattern> getCdpTree2() {
         Tree<Pattern> cdpTree_2 = 
-        (new Tree<Pattern>(regexFromString("возобновлено")))
+        (new Tree<Pattern>(RegExRepository.regexFromString("возобновлено")))
         .appendChild(
-            (new Tree<Pattern>(regexFromString("производство")))
+            (new Tree<Pattern>(RegExRepository.regexFromString("производство")))
             .appendChild(
-                (new Tree<Pattern>(regexFromString("по")))
+                (new Tree<Pattern>(RegExRepository.regexFromString("по")))
                 .appendChild(
-                    (new Tree<Pattern>(regexFromString("делу")))
+                    (new Tree<Pattern>(RegExRepository.regexFromString("делу")))
                     .appendChild(
-                        (new Tree<Pattern>(regexFromString("по")))
+                        (new Tree<Pattern>(RegExRepository.regexFromString("по")))
                         .appendChild(
                             // Leaf
-                            (new Tree<Pattern>(regexFromString("иску"))).setAction(Tree::parseComplainant)
+                            (new Tree<Pattern>(RegExRepository.regexFromString("иску"))).setAction(Tree::parseComplainant)
                         )
                     )
                 )
@@ -121,50 +167,50 @@ public class StaticTrees {
     //#region "рассмотрев|рассматривает|рассмотрел"
     public static Tree<Pattern> getCdpTree3() {
         Tree<Pattern> cdpTree_3 = 
-        (new Tree<Pattern>(regexFromString("рассмотрев|рассматривает|рассмотрел")))
+        (new Tree<Pattern>(RegExRepository.regexFromString("рассмотрев|рассматривает|рассмотрел")))
         .appendChild(
-            (new Tree<Pattern>(regexFromString("вопрос")))
+            (new Tree<Pattern>(RegExRepository.regexFromString("вопрос")))
             .appendChild(
-                (new Tree<Pattern>(regexFromString("о\\s+")))
+                (new Tree<Pattern>(RegExRepository.regexFromString("о\\s+")))
                 .appendChild(
-                    (new Tree<Pattern>(regexFromString("принятии")))
+                    (new Tree<Pattern>(RegExRepository.regexFromString("принятии")))
                     .appendChild(
                         // Leaf
-                        (new Tree<Pattern>(regexFromString("заявления"))).setAction(Tree::parseComplainant)
+                        (new Tree<Pattern>(RegExRepository.regexFromString("заявления"))).setAction(Tree::parseComplainant)
                     )
                 )
             )
         )
         .appendChild(
-            (new Tree<Pattern>(regexFromString("в\\s+")))
+            (new Tree<Pattern>(RegExRepository.regexFromString("в\\s+")))
             .appendChild(
-                (new Tree<Pattern>(regexFromString("открытом")))
+                (new Tree<Pattern>(RegExRepository.regexFromString("открытом")))
                 .appendChild(
-                    (new Tree<Pattern>(regexFromString("судебном")))
+                    (new Tree<Pattern>(RegExRepository.regexFromString("судебном")))
                     .appendChild(
-                        (new Tree<Pattern>(regexFromString("заседании")))
+                        (new Tree<Pattern>(RegExRepository.regexFromString("заседании")))
                         .appendChild(
                             // Leaf
-                            (new Tree<Pattern>(regexFromString("заявление"))).setAction(Tree::parseComplainant)
+                            (new Tree<Pattern>(RegExRepository.regexFromString("заявление"))).setAction(Tree::parseComplainant)
                         )
                     )
                 )
             )
             .appendChild(
-                (new Tree<Pattern>(regexFromString("судебном")))
+                (new Tree<Pattern>(RegExRepository.regexFromString("судебном")))
                 .appendChild(
-                    (new Tree<Pattern>(regexFromString("заседании")))
+                    (new Tree<Pattern>(RegExRepository.regexFromString("заседании")))
                     .appendChild(
-                        (new Tree<Pattern>(regexFromString("в\\s+")))
+                        (new Tree<Pattern>(RegExRepository.regexFromString("в\\s+")))
                         .appendChild(
-                            (new Tree<Pattern>(regexFromString("рамках")))
+                            (new Tree<Pattern>(RegExRepository.regexFromString("рамках")))
                             .appendChild(
-                                (new Tree<Pattern>(regexFromString("дела")))
+                                (new Tree<Pattern>(RegExRepository.regexFromString("дела")))
                                 .appendChild(
-                                    (new Tree<Pattern>(regexFromString("о")))
+                                    (new Tree<Pattern>(RegExRepository.regexFromString("о")))
                                     .appendChild(
                                         // Leaf
-                                        (new Tree<Pattern>(regexFromString("несостоятельности \\(?банкротстве\\)?"))).setAction(Tree::parseComplainant)
+                                        (new Tree<Pattern>(RegExRepository.regexFromString("несостоятельности \\(?банкротстве\\)?"))).setAction(Tree::parseComplainant)
                                     )
                                 )
                             )
@@ -172,38 +218,38 @@ public class StaticTrees {
                     )
                     .appendChild(
                         // Leaf
-                        (new Tree<Pattern>(regexFromString("заявление")))
+                        (new Tree<Pattern>(RegExRepository.regexFromString("заявление")))
                     )
                     .appendChild(
-                        (new Tree<Pattern>(regexFromString("исковое")))
+                        (new Tree<Pattern>(RegExRepository.regexFromString("исковое")))
                         .appendChild(
                             // Leaf
-                            (new Tree<Pattern>(regexFromString("заявление")))
+                            (new Tree<Pattern>(RegExRepository.regexFromString("заявление")))
                         )
                     )
                     .appendChild(
-                        (new Tree<Pattern>(regexFromString("ходатайство")))
+                        (new Tree<Pattern>(RegExRepository.regexFromString("ходатайство")))
                         .appendChild(
-                            (new Tree<Pattern>(regexFromString("временного|конкурсного|финансового")))
+                            (new Tree<Pattern>(RegExRepository.regexFromString("временного|конкурсного|финансового")))
                             .appendChild(
                                 // Leaf
-                                (new Tree<Pattern>(regexFromString("управляющего"))).setAction(Tree::parseComplainant)
+                                (new Tree<Pattern>(RegExRepository.regexFromString("управляющего"))).setAction(Tree::parseComplainant)
                             )
                         )
                     )
                 )
             )
             .appendChild(
-                (new Tree<Pattern>(regexFromString("порядке")))
+                (new Tree<Pattern>(RegExRepository.regexFromString("порядке")))
                 .appendChild(
-                    (new Tree<Pattern>(regexFromString("упрощенного")))
+                    (new Tree<Pattern>(RegExRepository.regexFromString("упрощенного")))
                     .appendChild(
-                        (new Tree<Pattern>(regexFromString("производства")))
+                        (new Tree<Pattern>(RegExRepository.regexFromString("производства")))
                         .appendChild(
-                            (new Tree<Pattern>(regexFromString("по")))
+                            (new Tree<Pattern>(RegExRepository.regexFromString("по")))
                             .appendChild(
                                 // Leaf
-                                (new Tree<Pattern>(regexFromString("иску"))).setAction(Tree::parseComplainant)
+                                (new Tree<Pattern>(RegExRepository.regexFromString("иску"))).setAction(Tree::parseComplainant)
                             )
                         )
                     )
@@ -217,7 +263,4 @@ public class StaticTrees {
     }
     //#endregion
 
-    private static Pattern regexFromString(String string) {
-        return Pattern.compile(string, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
-    }
 }

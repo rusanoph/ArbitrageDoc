@@ -164,16 +164,17 @@ public class ArbitrageTemplateSeeker {
         return "Result: " + result;
     }
 
-    // Not used
-    // Tree's children number grows too fast because of path repeations
+    @Deprecated
     public String getComplainantAndDefendantPartTree(String text) {
         // cdp -> Complainant Defendant Part
-        Tree<Pattern> cdpTree = (new Tree<Pattern>(null))
-        .appendChild(StaticTrees.getCdpTree1())     // ознакомившись
-        .appendChild(StaticTrees.getCdpTree2())     // возобновлено 
-        .appendChild(StaticTrees.getCdpTree3())     // рассмотрев | рассматривает | рассмотрел
-        ;
-        cdpTree.recomputeDepthDFS();
+        // Tree<Pattern> cdpTree = (new Tree<Pattern>(null))
+        // .appendChild(StaticTrees.getCdpTree1())     // ознакомившись
+        // .appendChild(StaticTrees.getCdpTree2())     // возобновлено 
+        // .appendChild(StaticTrees.getCdpTree3())     // рассмотрев | рассматривает | рассмотрел
+        // ;
+        // cdpTree.recomputeDepthDFS();
+        
+        Tree<String> cdpTree = StaticTrees.getHeaderParseTree();
 
         List<String> textSplit = List.of(text.split("\\s+"));
         text = String.join(" " , textSplit).toLowerCase();
@@ -183,12 +184,15 @@ public class ArbitrageTemplateSeeker {
             boolean continueSearch = false;
 
             for (var childCdpTree : cdpTree.getChildren()) {
-                Matcher m = childCdpTree.getValue().matcher(text);
+                System.out.println(childCdpTree.getValue());
+
+                Pattern p = Pattern.compile(RegExRepository.wrapWordAsRegex(childCdpTree.getValue()));
+                Matcher m = p.matcher(text);
 
                 if (m.find() && (cdpTree.getDepth() == 0 || m.start() == 0)) {
                     int sliceIndex = m.end();
                     text = text.substring(sliceIndex).trim();
-                    path += "(" + childCdpTree.getValue().pattern() + "; depth=" + childCdpTree.getDepth() +") ⟶ ";
+                    path += "(" + p.pattern() + "; depth=" + childCdpTree.getDepth() +") ⟶ ";
 
                     cdpTree = childCdpTree;
 
@@ -215,8 +219,7 @@ public class ArbitrageTemplateSeeker {
         return String.format("Tree path: %s\n%s\n\n\n%s", HTMLWrapper.tag("span", path, "sub-accent"), text, treeToPrint.toString());
     }
 
-
-    // Incomplete search algorithm
+    @Deprecated
     public String getComplainantAndDefendantPartRegex(String text) {
         String result = "Истец и ответчик не определены";
 

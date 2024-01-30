@@ -29,7 +29,7 @@ public class Tree<T> implements IJsonSerializable {
     }
     //#endregion
 
-     //#region Getter / Setter
+    //#region Getter / Setter
     public int getDepth() {
         return depth;
     }
@@ -73,6 +73,12 @@ public class Tree<T> implements IJsonSerializable {
         // System.out.println("child=" + child.getVertexId() + "; value=" + child.getValue()+"; d="+child.getDepth());
         
         return this;
+    }
+
+    public Tree<T> appendChild(T value) {
+        Tree<T> child = new Tree<T>(value);
+
+        return appendChild(child);
     }
 
     public void recomputeDepthDFS() {
