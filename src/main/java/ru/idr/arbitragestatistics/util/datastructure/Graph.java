@@ -1,7 +1,6 @@
 package ru.idr.arbitragestatistics.util.datastructure;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,13 +16,8 @@ public class Graph<T> implements IJsonSerializable {
     private Map<Integer, Map<T, Vertex<T>>> verticesIndex = new LinkedHashMap<>();
     private Integer currentDepth = 0;
 
-    public Graph<T> nextDepthLevel() {
-        this.currentDepth++;
-
-        return this;
-    }
-
     private void setVertexIndex(Integer depth, Vertex<T> vertex) {
+
 
         if (verticesIndex.containsKey(depth)) {
             verticesIndex.get(depth).put(vertex.getValue(), vertex);
@@ -34,6 +28,12 @@ public class Graph<T> implements IJsonSerializable {
             verticesIndex.put(depth, verticesValueMap);
         }
 
+    }
+    
+    public Graph<T> nextDepthLevel() {
+        this.currentDepth++;
+
+        return this;
     }
 
     public Graph<T> addVertex(Vertex<T> vertex) {
@@ -85,8 +85,6 @@ public class Graph<T> implements IJsonSerializable {
 
         return this;
     }
-
-    // public Graph<T> addGraph(Graph<T> graph);
 
     //#region Getters
     public List<Vertex<T>> getVerticesSet() {

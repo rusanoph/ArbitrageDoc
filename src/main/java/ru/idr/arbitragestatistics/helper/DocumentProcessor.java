@@ -19,7 +19,6 @@ import com.github.demidko.aot.WordformMeaning;
 
 import ru.idr.arbitragestatistics.helper.regex.RegExRepository;
 import ru.idr.arbitragestatistics.model.TitleData;
-import ru.idr.arbitragestatistics.model.arbitrage.Person;
 
 public class DocumentProcessor {
 
@@ -46,47 +45,7 @@ public class DocumentProcessor {
 
     //#endregion
 
-    //#region Complainant & Defendant
-
-    public static Person getComplainant(String text) {
-
-        Person person = new Person();
-
-        return person;
-    }
-
-    public static Person getDefendant(String text) {
-
-        Person person = new Person();
-
-        return person;
-    }
-
-    //#endregion
-
-    //#region Court Case Solution
-
-    // . . . 
-
-    //#endregion
-
     //#region Data
-
-    public static Iterable<String> getMoneySum(String text) {
-
-        List<String> moneySum = new ArrayList<>();
-
-        final String regexString = RegExRepository.regexMoneySumFull + "|" + RegExRepository.regexMoneySumComma + "|" + RegExRepository.regexMoneySumComment;
-
-        Matcher matcher = Pattern.compile(regexString, Pattern.MULTILINE).matcher(text);
-
-        while (matcher.find()) {
-            moneySum.add(matcher.group().replaceAll("\\s+", " "));
-        }
-
-        return moneySum;
-    }
-
     public static Iterable<String> getMoneySumHyphen(String text) {
         List<String> moneySum = new ArrayList<>();
 
@@ -209,22 +168,6 @@ public class DocumentProcessor {
         String patternTitleEndString = String.join("|", regexpEndRules) + "";
         Pattern patternTitleEnd = Pattern.compile(patternTitleEndString, Pattern.CASE_INSENSITIVE);
 
-        // String[] regexpInnerBeforeEndRules = {
-        //     "\\s?по\\s"
-        // };
-
-        // String patternTitleInnerBeforeEndString = String.join("?|", regexpInnerBeforeEndRules) + "?";
-        // Pattern patternTitleInnerBeforeEnd = Pattern.compile(patternTitleInnerBeforeEndString, Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
-
-        // String[] regexpInnerAfterEndRules = {
-        //     "\\s?к\\s|\\sк\\s?",
-        //     "ст\\.",
-        //     // ""
-        // };
-
-        // String patternTitleInnerAfterEndString = String.join("?|", regexpInnerAfterEndRules) + "?";
-        // Pattern patternTitleInnerAfterEnd = Pattern.compile(patternTitleInnerAfterEndString, Pattern.CASE_INSENSITIVE);
-
         // Find index of last word in title
         Integer titleIndexEnd = -1;
         for (int i = titleIndexStart + 1; i < textLength - 1; i++) {
@@ -235,17 +178,6 @@ public class DocumentProcessor {
             Matcher currentWord = patternTitleEnd.matcher(lemmatizeTextSplit[i].trim().toLowerCase());
 
             if (currentWord.find()) {
-                // Matcher wordBefore = patternTitleInnerBeforeEnd.matcher(lemmatizeTextSplit[i - 1].trim());
-                // if (wordBefore.find()) {
-                //     continue;
-                // }
-                
-                // Matcher wordAfter = patternTitleEnd.matcher(lemmatizeTextSplit[i + 1].trim());
-                // if (wordAfter.find()) {
-                //     titleIndexEnd = i - 1;
-                //     break;
-                // }
-
                 if (titleIndexEnd == -1 || titleIndexEnd > i) {
                     titleIndexEnd = i;
                 }
@@ -397,10 +329,6 @@ public class DocumentProcessor {
         if (previous != text.length() - 1) sentencies.add(removeLineSeparator(text.substring(previous)));
 
         return sentencies;
-    }
-
-    public static String removePageNumbersAndDocNumbers(String text) {
-        return text.replaceAll("\\b\\d+_\\d+\\b|\\d+(\r\n|[\r\n])", "");
     }
 
     public static String lemmatizeText(String text, String splitSymbol) {

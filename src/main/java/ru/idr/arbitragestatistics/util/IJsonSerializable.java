@@ -4,7 +4,7 @@ import org.json.JSONArray;
 
 public interface IJsonSerializable {
     
-    //#region D3 Graph Serialization
+    //#region Graph Serialization
 
     public JSONArray verticesToJsonArray();
 

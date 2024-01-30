@@ -102,9 +102,7 @@ class MainPageDocument {
 
                 let complainantAndDefendantData = this.fileViewClass.getComplainantAndDefendantData();
                 ComponentTools.updateComplainantAndDefendantView(
-                    "document-complainant-defendant-regex-text",
-                    "document-complainant-defendant-tree-text",
-                    "document-complainant-defendant-graph-text", 
+                    "complainant-defendant-graph-text", 
                     complainantAndDefendantData
                 );
 

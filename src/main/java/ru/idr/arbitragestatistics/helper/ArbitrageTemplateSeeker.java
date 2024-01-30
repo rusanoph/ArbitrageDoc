@@ -5,21 +5,14 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import ru.idr.arbitragestatistics.helper.regex.RegExRepository;
 import ru.idr.arbitragestatistics.model.datastructure.StaticGraphs;
-import ru.idr.arbitragestatistics.model.datastructure.StaticTrees;
-import ru.idr.arbitragestatistics.util.HTMLWrapper;
 import ru.idr.arbitragestatistics.util.datastructure.Graph;
-import ru.idr.arbitragestatistics.util.datastructure.Tree;
 import ru.idr.arbitragestatistics.util.datastructure.Vertex;
 
 @Component
 public class ArbitrageTemplateSeeker {
-    private final Logger logger = LoggerFactory.getLogger(ArbitrageTemplateSeeker.class);
     // [Уу]\s*[Сс]\s*[Тт]\s*[Аа]\s*[Нн]\s*[Оо]\s*[Вв]\s*[Ии]\s*[Лл]\s*:?|[Оо]\s*[Пп]\s*[Рр]\s*[Ее]\s*[Дд]\s*[Ее]\s*[Лл]\s*[Ии]\s*[Лл]\s*:?|[Пп]\s*[Оо]\s*[Сс]\s*[Тт]\s*[Аа]\s*[Нн]\s*[Оо]\s*[Вв]\s*[Ии]\s*[Лл]\s*:?|[Рр]\s*[Ее]\s*[Шш]\s*[Ии]\s*[Лл]\s*:?
 
     private List<String> textPartsRegex = new ArrayList<>();
@@ -128,6 +121,7 @@ public class ArbitrageTemplateSeeker {
             for (Vertex<String> vertex : adjacentVertices) {
                 
                 System.out.println(vertex.getValue());
+                
                 Matcher m = Pattern.compile(vertex.getValue(), Pattern.CASE_INSENSITIVE | Pattern.DOTALL | Pattern.MULTILINE).matcher(text.toLowerCase());
 
                 if (m.find()) {
@@ -159,118 +153,9 @@ public class ArbitrageTemplateSeeker {
             if (!continueSearch) break;
         }
 
-        System.out.println(text);
-
-        return "Result: " + result;
+        return "Result:\n " + result;
     }
 
-    @Deprecated
-    public String getComplainantAndDefendantPartTree(String text) {
-        // cdp -> Complainant Defendant Part
-        // Tree<Pattern> cdpTree = (new Tree<Pattern>(null))
-        // .appendChild(StaticTrees.getCdpTree1())     // ознакомившись
-        // .appendChild(StaticTrees.getCdpTree2())     // возобновлено 
-        // .appendChild(StaticTrees.getCdpTree3())     // рассмотрев | рассматривает | рассмотрел
-        // ;
-        // cdpTree.recomputeDepthDFS();
-        
-        Tree<String> cdpTree = StaticTrees.getHeaderParseTree();
-
-        List<String> textSplit = List.of(text.split("\\s+"));
-        text = String.join(" " , textSplit).toLowerCase();
-
-        String path = "";
-        while (cdpTree.getChildren().size() != 0) {
-            boolean continueSearch = false;
-
-            for (var childCdpTree : cdpTree.getChildren()) {
-                System.out.println(childCdpTree.getValue());
-
-                Pattern p = Pattern.compile(RegExRepository.wrapWordAsRegex(childCdpTree.getValue()));
-                Matcher m = p.matcher(text);
-
-                if (m.find() && (cdpTree.getDepth() == 0 || m.start() == 0)) {
-                    int sliceIndex = m.end();
-                    text = text.substring(sliceIndex).trim();
-                    path += "(" + p.pattern() + "; depth=" + childCdpTree.getDepth() +") ⟶ ";
-
-                    cdpTree = childCdpTree;
-
-                    continueSearch = true;
-                    break;
-                }
-            }
-
-            if (!continueSearch) {
-                break;
-            }
-        }
-
-        if (cdpTree.hasAction()) {
-            text = cdpTree.doAction(text);
-        }
-
-        var treeToPrint = (new Tree<Pattern>(Pattern.compile("start")))
-        .appendChild(StaticTrees.getCdpTree1())
-        .appendChild(StaticTrees.getCdpTree1())
-        .appendChild(StaticTrees.getCdpTree1());
-        treeToPrint.recomputeDepthDFS();
-
-        return String.format("Tree path: %s\n%s\n\n\n%s", HTMLWrapper.tag("span", path, "sub-accent"), text, treeToPrint.toString());
-    }
-
-    @Deprecated
-    public String getComplainantAndDefendantPartRegex(String text) {
-        String result = "Истец и ответчик не определены";
-
-        Pattern pattern = Pattern.compile(RegExRepository.regexComplainantAndDefendat_v2, Pattern.DOTALL | Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
-        Matcher matcher = pattern.matcher(text.toLowerCase());
-
-        if (matcher.find()) {
-            String complainant = matcher.group(1);
-            String defendant = matcher.group(2);
-
-            String complainantOgrn = "Не определен";
-            String defendantOgrn = "Не определен";
-
-
-            // logger.debug("\nmatch Истец и Ответчик: {}", matcher.group(0));
-
-            Matcher complainantOgrnMatcher = Pattern.compile(RegExRepository.regexOgrn + "|" + RegExRepository.regexOgrnip).matcher(complainant);
-            Matcher defendantOgrnMatcher = Pattern.compile(RegExRepository.regexOgrn + "|" + RegExRepository.regexOgrnip).matcher(defendant);
-
-
-            if (complainantOgrnMatcher.find()) {
-                complainantOgrn = complainantOgrnMatcher.group(0);
-                // logger.debug("\n\nОГРН Истца: {}", complainantOgrn);
-            }
-
-            if (defendantOgrnMatcher.find()) {
-                defendantOgrn = defendantOgrnMatcher.group(0);
-                // logger.debug("\n\nОГРН ответчика: {}", defendantOgrn);
-            }
-
-            // result = result.replaceAll(, result)
-            // result = result.replaceAll(RegExRepository.regexComplainanDefendatStart, "");
-            // result = result.replaceAll(RegExRepository.regexComplainanDefendatEnd, "");
-
-            // var resultSplit = result.split("");
-
-            result = String.format("%s %s<br><br>%s %s<br><br>%s %s<br><br>%s %s<br><br>%s %s<br><br>",
-                wrapAccent("Найдено:"), matcher.group(0),
-                wrapAccent("Истец"), complainant,
-                wrapAccent("ОГРН истца"), complainantOgrn,
-                wrapAccent("Ответчик"), defendant,
-                wrapAccent("ОГРН ответчика"), defendantOgrn
-            );
-        }
-
-        return result;
-    }
-
-    private String wrapAccent(String str) {
-        return String.format("<span class='accent'>%s</span>", str);
-    }
 
     //#endregion
 

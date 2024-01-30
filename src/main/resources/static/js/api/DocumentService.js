@@ -1,13 +1,12 @@
 
 export class DocumentService {
     
-    static async getDocumentText(path, filename, formated=false, lemma=false, parse=false) {
+    static async getDocumentText(path, filename, formated=false, lemma=false) {
         let params = {
             "documentPath": path,
             "documentFileName": filename,
             "formated": formated,
             "lemma": lemma,
-            "parse": parse
         }
     
         let query = Object.keys(params)
@@ -76,57 +75,9 @@ export class DocumentService {
         return data;
     }
 
-    static async postDocumentMoneySum(text) {
-        let url = `/api/document/text/data/moneysum`;
-
-        const response = await fetch(url, {
-            method: 'POST',
-            body: text,
-        });
-        let data = await response.json();
-
-        return data;
-    }
-
     static async postDocumentMoneySumHyphen(text) {
         let url = `/api/document/text/data/moneysum/hyphen`;
 
-        const response = await fetch(url, {
-            method: 'POST',
-            body: text,
-        });
-        let data = await response.json();
-
-        return data;
-    }
-
-    static async postDocumentWordStatistic(text) {
-        let url = `/api/document/text/statistic`;
-    
-        const response = await fetch(url, {
-            method: 'POST',
-            body: text,
-        });
-        let data = await response.json();
-
-        return data;
-    }
-
-    static async postDocumentTextLemmaValid(text) {
-        let url = `/api/document/text/lemma/valid`;
-    
-        const response = await fetch(url, {
-            method: 'POST',
-            body: text,
-        });
-        let data = await response.json();
-
-        return data;
-    }
-
-    static async postDocumentTextLemmaInvalid(text) {
-        let url = `/api/document/text/lemma/invalid`;
-    
         const response = await fetch(url, {
             method: 'POST',
             body: text,

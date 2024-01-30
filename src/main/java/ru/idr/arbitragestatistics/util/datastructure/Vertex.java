@@ -43,15 +43,11 @@ public class Vertex<T> {
     public T getValue() {
         return value;
     }
-    public Vertex<T> setValue(T value) {
-        this.value = value;
-
-        return this;
-    }
 
     public int getDepth() {
         return this.depth;
     }
+
     public Vertex<T> setDepth(int depth) {
         this.depth = depth;
 
@@ -97,7 +93,7 @@ public class Vertex<T> {
 
     public static String noAction(String noText) {
         String errorMessage = String.format("Action doesn't implemented");
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(errorMessage);
     }
     //#endregion
     

@@ -1,7 +1,6 @@
 package ru.idr.arbitragestatistics.model.datastructure;
 
 import java.util.Map;
-import java.util.regex.Pattern;
 
 import ru.idr.arbitragestatistics.helper.regex.RegExRepository;
 import ru.idr.arbitragestatistics.util.datastructure.Graph;
@@ -25,29 +24,6 @@ public class StaticGraphs {
     private static final String PARSE_PERSON_ADDRESS = "(?<personAddress>.*?)";
     private static final String PARSE_COURT_CASE_SUM = "(?<courtCaseSum>"+RegExRepository.regexCourtCaseSum+")";
  
-
-
-    public static Graph<String> getCdpGraph_test() {
-
-        Graph<String> cdpGraph = new Graph<>();
-
-        Vertex<String> v1 = new Vertex<String>("рассмотрев");
-        
-        var v2 = new Vertex<String>("в");
-
-        var v3 = new Vertex<String>("открытом");
-        var v4 = new Vertex<String>("реестре");
-
-
-        cdpGraph.addOrEdge(v1, v2);
-
-        cdpGraph.addOrEdge(v1, v3)
-        .addOrEdge(v2, v4);
-
-
-        return cdpGraph;
-    }
-
 
     private static Map<String, Vertex<String>> getWordMap() {
         var wordMap = new ValueVertexMap<String>();
@@ -728,141 +704,5 @@ public class StaticGraphs {
         //#endregion
 
         return cdpGraph;
-    }
-
-    public static Graph<String> getCdpGraph_v1() {
-        Graph<String> cdpGraph = new Graph<>();
-
-        cdpGraph
-        .addVertex(new Vertex<String>("Initial"))
-        .nextDepthLevel()  // Level 0
-            .addVertex(new Vertex<String>("рассмотрев")).addOrEdge(cdpGraph.getVertexByDepthValue(0, "Initial"), cdpGraph.getVertexByDepthValue(1, "рассмотрев"))
-            .addVertex(new Vertex<String>("ознакомившись")).addOrEdge(cdpGraph.getVertexByDepthValue(0, "Initial"), cdpGraph.getVertexByDepthValue(1, "ознакомившись"))
-            .nextDepthLevel() // Level 1
-                .addVertex(new Vertex<String>("в")).addOrEdge(cdpGraph.getVertexByDepthValue(1, "рассмотрев"), cdpGraph.getVertexByDepthValue(2, "в"))
-                .addVertex(new Vertex<String>("с")).addOrEdge(cdpGraph.getVertexByDepthValue(1, "ознакомившись"), cdpGraph.getVertexByDepthValue(2, "с"))
-                .nextDepthLevel() // Level 2
-                    .addVertex(new Vertex<String>("открытом")).addOrEdge(cdpGraph.getVertexByDepthValue(2, "в"), cdpGraph.getVertexByDepthValue(3, "открытом"))
-                    .addVertex(new Vertex<String>("заявлением")).addOrEdge(cdpGraph.getVertexByDepthValue(2, "с"), cdpGraph.getVertexByDepthValue(3, "заявлением"))
-                    .nextDepthLevel() // Level 3
-                        .addVertex(new Vertex<String>("судебном")).addOrEdge(cdpGraph.getVertexByDepthValue(3, "открытом"), cdpGraph.getVertexByDepthValue(4, "судебном"))
-                            .addOrEdge(cdpGraph.getVertexByDepthValue(2, "в"), cdpGraph.getVertexByDepthValue(4, "судебном"))
-                        .nextDepthLevel() // Level 4
-                            .addVertex(new Vertex<String>("заседании")).addOrEdge(cdpGraph.getVertexByDepthValue(4, "судебном"), cdpGraph.getVertexByDepthValue(5, "заседании"))
-                            .nextDepthLevel() // Level 5
-                                // Action here
-                                .addVertex(new Vertex<String>("заявление")).addOrEdge(cdpGraph.getVertexByDepthValue(5, "заседании"), cdpGraph.getVertexByDepthValue(6, "заявление"))
-                                .nextDepthLevel() // Level 6
-                                    .addVertex(new Vertex<String>("финансового управляющего")).addOrEdge(cdpGraph.getVertexByDepthValue(6, "заявление"), cdpGraph.getVertexByDepthValue(7, "финансового управляющего"))
-                                    .nextDepthLevel()
-                                        .addVertex(new Vertex<String>("об")).addOrEdge(cdpGraph.getVertexByDepthValue(7, "финансового управляющего"), cdpGraph.getVertexByDepthValue(8, "об"))
-        ;
-
-        for (var v : cdpGraph.getVerticesSet()) {
-            System.out.println(String.format("(d: %d, v: %s)", v.getDepth(), v.getValue()));
-        }
-
-        return cdpGraph;
-    }
- 
-    public static Graph<Pattern> getTestGraph1() {
-
-        Graph<Pattern> testGraph1 = new Graph<>();
-
-        Vertex<Pattern> A1 = new Vertex<Pattern>(RegExRepository.regexFromString("рассмотрев|рассматривает|рассмотрел"));
-            Vertex<Pattern> B1 = new Vertex<Pattern>(RegExRepository.regexFromString("вопрос\\s+"));
-                Vertex<Pattern> C1 = new Vertex<Pattern>(RegExRepository.regexFromString("о\\s+"));
-                    Vertex<Pattern> D1 = new Vertex<Pattern>(RegExRepository.regexFromString("принятии\\s+"));                    
-                        Vertex<Pattern> E1 = new Vertex<Pattern>(RegExRepository.regexFromString("заявления\\s+"));
-            Vertex<Pattern> B2 = new Vertex<Pattern>(RegExRepository.regexFromString("в\\s+"));
-                Vertex<Pattern> C2 = new Vertex<Pattern>(RegExRepository.regexFromString("открытом\\s+"));
-                Vertex<Pattern> C3 = new Vertex<Pattern>(RegExRepository.regexFromString("судебном\\s+"));
-                    Vertex<Pattern> D2 = new Vertex<Pattern>(RegExRepository.regexFromString("заседании\\s+"));
-                Vertex<Pattern> C4 = new Vertex<Pattern>(RegExRepository.regexFromString("порядке\\s+"));
-
-        testGraph1
-        .addVertex(A1)
-            .addVertex(B1).addOrEdge(A1, B1)
-                .addVertex(C1).addOrEdge(B1, C1)
-                    .addVertex(D1).addOrEdge(C1, D1)
-                        .addVertex(E1).addOrEdge(D1, E1)
-            .addVertex(B2).addOrEdge(A1, B2)
-                .addVertex(C2).addOrEdge(B2, C2)
-                .addVertex(C3).addOrEdge(B2, C3)
-                    .addVertex(D2).addOrEdge(C3, D2)
-                .addVertex(C4).addOrEdge(B2, C4)
-        ;
-        
-
-        return testGraph1;
-    } 
-
-    public static Graph<String> getTestGraph2() {
-        Graph<String> testGraph2 = new Graph<>();
-
-        testGraph2
-        .addVertex(new Vertex<String>("Initial"))
-        .nextDepthLevel()
-            .addVertex(new Vertex<String>("A1"))
-            .addOrEdge(
-                testGraph2.getVertexByDepthValue(0, "Initial"), 
-                testGraph2.getVertexByDepthValue(1, "A1")
-            )
-            .nextDepthLevel()
-                .addVertex(new Vertex<String>("B1"))
-                .addOrEdge(
-                    testGraph2.getVertexByDepthValue(1, "A1"), 
-                    testGraph2.getVertexByDepthValue(2, "B1")
-                )
-                .addVertex(new Vertex<String>("B2"))
-                .addOrEdge(
-                    testGraph2.getVertexByDepthValue(1, "A1"),
-                    testGraph2.getVertexByDepthValue(2, "B2")
-                )
-                .nextDepthLevel()
-                    .addVertex(new Vertex<String>("C1"))
-                    .addOrEdge(
-                        testGraph2.getVertexByDepthValue(2, "B1"), 
-                        testGraph2.getVertexByDepthValue(3, "C1")    
-                    )
-                    .addOrEdge(
-                        testGraph2.getVertexByDepthValue(2, "B2"), 
-                        testGraph2.getVertexByDepthValue(3, "C1")    
-                    )
-                    .addVertex(new Vertex<String>("C2"))
-                    .addOrEdge(
-                        testGraph2.getVertexByDepthValue(2, "B1"), 
-                        testGraph2.getVertexByDepthValue(3, "C2")    
-                    )
-                    .addOrEdge(
-                        testGraph2.getVertexByDepthValue(2, "B2"), 
-                        testGraph2.getVertexByDepthValue(3, "C2")    
-                    )
-                    .nextDepthLevel()
-                        .addVertex(new Vertex<String>("D1"))
-                        .addVertex(new Vertex<String>("D2"))
-                        .addVertex(new Vertex<String>("D3"))
-                        .addOrEdge(
-                            testGraph2.getVertexByDepthValue(3, "C1"), 
-                            testGraph2.getVertexByDepthValue(4, "D1")    
-                        )
-                        .addOrEdge(
-                            testGraph2.getVertexByDepthValue(3, "C1"), 
-                            testGraph2.getVertexByDepthValue(4, "D2")    
-                        )
-                        .addOrEdge(
-                            testGraph2.getVertexByDepthValue(3, "C1"), 
-                            testGraph2.getVertexByDepthValue(4, "D3")    
-                        )
-                        .addOrEdge(
-                            testGraph2.getVertexByDepthValue(3, "C2"), 
-                            testGraph2.getVertexByDepthValue(4, "D2")    
-                        )
-        ;
-
-        return testGraph2;
-    }
-
-
-    
+    }    
 }

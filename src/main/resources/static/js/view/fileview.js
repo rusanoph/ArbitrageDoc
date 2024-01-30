@@ -11,7 +11,6 @@ export class FileView {
     isFormated = false;
     isLemma = false;
     isRegEx = false;
-    isParsed = false;
 
     constructor() {
         document.getElementById("regex-input").value = Util.getSavedValue("regex-input");
@@ -39,7 +38,7 @@ export class FileView {
             this.documentPath = docPathInputValue;
             this.documentFileName = docFileNameInputValue;
 
-            ComponentTools.updateDocumentView("document-filename", "document-title", "document-text", docPathInputValue, docFileNameInputValue, this.isFormated, this.isLemma, this.isParsed)
+            ComponentTools.updateDocumentView("document-filename", "document-title", "document-text", docPathInputValue, docFileNameInputValue, this.isFormated, this.isLemma)
             .then(() => {
                 if (this.isRegEx) {
                     document.getElementById("regex-input").dispatchEvent(new Event('click'));
@@ -63,8 +62,6 @@ export class FileView {
 
             let complainantAndDefendantData = this.getComplainantAndDefendantData();
             ComponentTools.updateComplainantAndDefendantView(
-                "document-complainant-defendant-regex-text",
-                "document-complainant-defendant-tree-text",
                 "document-complainant-defendant-graph-text", 
                 complainantAndDefendantData
             );
@@ -87,7 +84,7 @@ export class FileView {
         formatTool.addEventListener('click', async () => {
             this.isFormated = !this.isFormated;
 
-            ComponentTools.updateDocumentView("document-filename", "document-title", "document-text", this.documentPath, this.documentFileName, this.isFormated, this.isLemma, this.isParsed);
+            ComponentTools.updateDocumentView("document-filename", "document-title", "document-text", this.documentPath, this.documentFileName, this.isFormated, this.isLemma);
 
             formatTool.classList.toggle("active-tool");
         });
@@ -99,7 +96,7 @@ export class FileView {
         lemmatizationTool.addEventListener('click', async () => {
             this.isLemma = !this.isLemma;
             
-            ComponentTools.updateDocumentView("document-filename", "document-title", "document-text", this.documentPath, this.documentFileName, this.isFormated, this.isLemma, this.isParsed);
+            ComponentTools.updateDocumentView("document-filename", "document-title", "document-text", this.documentPath, this.documentFileName, this.isFormated, this.isLemma);
 
             lemmatizationTool.classList.toggle("active-tool");
         });
@@ -172,17 +169,11 @@ export class FileView {
                 let regex;
                 try {
                     regex = new RegExp(`(${regexInputValue})`, flags);
-                    // regex = //
                     regexIsValid.innerText = "";
                 } catch(e) {
                     regexIsValid.innerText = "Не верный синтаксис регулярного выражения";
                     return;
                 }
-                
-                // console.log("Count regex matches text");
-                // const countRegExMatches = (str) => ((str || '').match(regex) || []).length;
-                // let patternCount = countRegExMatches(document.getElementById("document-text").innerText);
-                // document.getElementById("regex-count").innerText = `Найдено: ${patternCount}`;
 
                 console.log(regex);
 
@@ -252,10 +243,7 @@ export class FileView {
     }
 
     getComplainantAndDefendantData() {
-
         let complainantAndDefendant = {
-            complainantAndDefendantRegex: this.documentPartsObject.complainantAndDefendantRegex,
-            complainantAndDefendantTree: this.documentPartsObject.complainantAndDefendantTree,
             complainantAndDefendantGraph: this.documentPartsObject.complainantAndDefendantGraph,
         }
 

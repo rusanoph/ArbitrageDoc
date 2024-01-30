@@ -43,13 +43,7 @@ export class ComponentTools {
         solutionElement.innerHTML = structureObj.solution;
     }
 
-    static async updateComplainantAndDefendantView(complainantDefendantRegexId, complainantDefendantTreeId, complainantDefendantGraphId, structureObj) {
-        const complainantDefendantRegexElement = document.getElementById(complainantDefendantRegexId);
-        complainantDefendantRegexElement.innerHTML = structureObj.complainantAndDefendantRegex;
-
-        const complainantDefendantTreeElement = document.getElementById(complainantDefendantTreeId);
-        complainantDefendantTreeElement.innerHTML = structureObj.complainantAndDefendantTree;
-
+    static async updateComplainantAndDefendantView(complainantDefendantGraphId, structureObj) {
         const complainantDefendantGraphElement = document.getElementById(complainantDefendantGraphId);
         complainantDefendantGraphElement.innerHTML = structureObj.complainantAndDefendantGraph;
     }
