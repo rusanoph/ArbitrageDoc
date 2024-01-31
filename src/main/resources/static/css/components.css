@@ -806,23 +806,27 @@ select::-webkit-scrollbar {
     cursor: pointer;
 }
 
-.complainant {
+.Complainant {
     background: #FFD1DC;
 }
 
-.defendant {
+.Defendant {
     background: #ADD8E6;
 }
 
-.thirdParty {
+.ThirdParty {
     background: #b8e7c9;
 }
 
-.courtCaseSum {
+.FinancialManager {
+    background: #FFDAB9;
+}
+
+.CourtCaseSum {
     background: #F0E68C;
 }
 
-.keyword {
+.Keyword {
     background: #FFD700;
 }
 

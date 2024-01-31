@@ -42,6 +42,17 @@ public class RegExBuilder {
         return this;
     }
 
+    public RegExBuilder notEnds() {
+        text = "(?!(" + text + "))";
+        return this;
+    }
+
+    public RegExBuilder notEnds(String endRegex) {
+        text += "(?!(" + endRegex + "))";
+
+        return this;
+    }
+
     public RegExBuilder asWord() {
         text = String.format("(^|\\s+)%s(\\s+|$)", text);
 

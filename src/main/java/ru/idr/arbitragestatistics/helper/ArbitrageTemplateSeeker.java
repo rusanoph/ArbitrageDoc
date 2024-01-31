@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 import org.springframework.stereotype.Component;
 
 import ru.idr.arbitragestatistics.helper.regex.RegExRepository;
+import ru.idr.arbitragestatistics.model.arbitrage.ArbitrageToken;
 import ru.idr.arbitragestatistics.model.datastructure.StaticGraphs;
 import ru.idr.arbitragestatistics.util.datastructure.Graph;
 import ru.idr.arbitragestatistics.util.datastructure.Vertex;
@@ -104,6 +105,14 @@ public class ArbitrageTemplateSeeker {
     //#endregion
 
     //#region Text Special Structure Parsing
+    public String colorizeTokens(String text, Matcher m) {
+        for (String token : m.namedGroups().keySet()) {
+            text = String.format("<span class='token %s'>%s</span> ", token, m.group(token));
+        }
+
+        return text; 
+    }
+
     public String getComplainantAndDefendantPartGraph(String text) {
         text = getHeaderPart(text);
         text = DocumentProcessor.removeLineSeparator(text);
@@ -115,54 +124,90 @@ public class ArbitrageTemplateSeeker {
         Vertex<String> currentVertex = cdpGraph.getVertexByDepthValue(0, "Initial");
 
 
+        boolean hasComplainant = false;
+        boolean hasDefendant = false;
         while (cdpGraph.hasChildren(currentVertex)) {
             List<Vertex<String>> adjacentVertices = cdpGraph.getAdjacentVertices(currentVertex);
 
-            int minMatchIndex = Integer.MAX_VALUE;
+
+            // Needs to create something like Current Token Class
+            String findText = "";
+            String tokenTags = "";
+            int minMatchIndexStart = Integer.MAX_VALUE;
+            int minMatchIndexEnd = Integer.MAX_VALUE;
 
             boolean continueSearch = false;
+            
+            System.out.println();
             for (Vertex<String> vertex : adjacentVertices) {
                 
-                System.out.println(vertex.getValue());
-
-                String regex = vertex.getValue().length() > 1 ? vertex.getValue() : RegExRepository.wrapWordAsRegex(vertex.getValue());
+                String regex = vertex.getValue().length() > 2 ? vertex.getValue() : RegExRepository.wrapWordAsRegex(vertex.getValue());
                 Matcher m = Pattern.compile(regex, Pattern.CASE_INSENSITIVE | Pattern.DOTALL | Pattern.MULTILINE).matcher(text.toLowerCase());
-
+                
+                System.out.println("Try regex: '" + regex + "'");
                 if (m.find()) {
-                    if (m.start() > 2 && vertex.getDepth() > 1) continue;
+                    System.out.println(
+                        String.format("'%s' (i: %d-%d)", regex, m.start(), m.end())
+                    );
 
-                    if (minMatchIndex > m.start()) {
-                        minMatchIndex = m.start();
+                    System.out.println(text.substring(0, Math.min(100, text.length())));
+
+                    // minHasNamedGroups = !minHasNamedGroups && m.namedGroups().isEmpty();
+                    
+                    if (minMatchIndexStart > m.start()) {
+                        if (m.namedGroups().keySet().contains(ArbitrageToken.Complainant.getLabel()) && hasComplainant) {
+                            System.out.println("Has comp");
+                            continue;
+                        }
+
+                        if (m.namedGroups().keySet().contains(ArbitrageToken.Defendant.getLabel()) && hasDefendant) {
+                            System.out.println("Has def");
+                            continue;
+                        }
+
+                        if (!m.namedGroups().isEmpty() && (!hasComplainant || !hasDefendant)) {
+                            for (String token : m.namedGroups().keySet()) {
+                                ArbitrageToken t = ArbitrageToken.valueOf(token);
+                                
+                                if (t == ArbitrageToken.Complainant) {
+                                    if (!hasComplainant) hasComplainant = true; 
+                                } else if (t == ArbitrageToken.Defendant) {
+                                    if (!hasDefendant) hasDefendant = true;
+                                }
+                            }
+                        }
+
+                        minMatchIndexStart = m.start();
+                        minMatchIndexEnd = m.end();
 
                         currentVertex = vertex;
+
                         continueSearch = true;
 
                     } else continue;
 
-                    text = text.substring(m.end()).trim();
-
-                    String tokenTags = "";
-                    String findText = DocumentProcessor.removeLineSeparator(m.group());
+                    findText = DocumentProcessor.removeLineSeparator(m.group());
                     if (m.groupCount() > 0) {
                         if (!m.namedGroups().isEmpty()) {
                             tokenTags = "Tags: " + String.join(", ", m.namedGroups().keySet());
 
-                            for (String token : m.namedGroups().keySet()) {
-                                String tokenType = "";
-                                findText = findText.replace(m.group(token) , "<span class='token "+tokenType+"'>" + m.group(token) + "</span> ");
-                            }
+                            findText = colorizeTokens(findText, m);
                         }
                     }
 
-                    result += String.format("%s (i: %d-%d; %s) ⟶ \n", findText, m.start(), m.end(), tokenTags);
-                    // result += String.format("%s %s ⟶ \n", findText, tokenTags);
-                    
-                    
                 }
-
             }
-
+            
             if (!continueSearch) break;
+            
+            String startsWithSpecialOrSpace = "^[:\\s,;!.-]+";
+            text = text
+                .substring(
+                    Math.min(minMatchIndexEnd, text.length())
+                ).replaceFirst(startsWithSpecialOrSpace, "");
+
+            result += String.format("%s (i: %d-%d; %s) ⟶ \n", findText, minMatchIndexStart, minMatchIndexEnd, tokenTags);
+            // result += String.format("%s %s ⟶ \n", findText, tokenTags);
         }
 
         return "Result:\n " + result;
