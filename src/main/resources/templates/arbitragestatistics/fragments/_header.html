@@ -5,7 +5,7 @@
 </head>
 <body>
     <header th:fragment="header">
-        <link rel="stylesheet" th:href="@{/css/header.css}"/>
+        <link rel="stylesheet" th:href="@{/arbitragestatistics/css/header.css}"/>
         <div th:class="'container'">
             <div th:class="'wrapper'">
 
@@ -24,6 +24,10 @@
 
                         <a href="/documenttable">
                             <div th:class="(${activePage == 'documenttable'} ? 'button-component-active' : '') + ' button-component'">Таблица документов</div>
+                        </a>
+
+                        <a href="/datamarkingeditor">
+                            <div id="ico-dme" th:class="(${activePage == 'datamarkingeditor'} ? 'button-component-active' : '') + ' button-component'">DME</div>
                         </a>
                     </div>
                 </div>

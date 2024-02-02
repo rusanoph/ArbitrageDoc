@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DME | Data Marking Editor</title>
+
+    <link rel="stylesheet" href="/datamarkingeditor/css/zero-style.css">
+    <link rel="stylesheet" href="/datamarkingeditor/css/component.css">
+    <link rel="stylesheet" href="/datamarkingeditor/css/style.css">
+
+    <link rel="stylesheet" href="/datamarkingeditor/css/token-color.css">
+</head>
+<body>
+
+    <div class="text-wrap-app">
+        <div class="container">
+            <div class="wrapper">
+                <div class="header">
+                    <h1>DME <h2>(Data Marking Editor)</h2></h1>
+
+                </div>
+                <div class="file-info">
+                    <span>Filename: <span id="filename"></span></span>
+                    <span>Title: <span id="filetitle"></span></span>
+                </div>
+                
+                <div class="tool">
+                    <div class="tokens">Standard Tokens: 
+                        <select id="standard-tokens-select">
+                            <option value="Word">Слово</option>
+                            <option value="Complainant">Истец</option>
+                            <option value="Defendant">Ответчик</option>
+                            <option value="ThirdParty">Третье лицо</option>
+                            <option value="CourtCaseSum">Денежная сумма</option>
+                            <option value="CompetitionManager">Конкурсный управляющий</option>
+                            <option value="FinancialManager">Финансовый управляющий</option>
+                            <option value="Keyword">Ключевое слово</option>
+                            <option value="Other" selected>Другое... </option>
+                        </select>
+                    </div>
+
+                    <div class="wrap-input">
+                        <div class="wrap-start">
+                            <div class="form-row">
+                                <input id="starts-with-wrap" name="startsWithWrap" type="text" placeholder="">
+                                <label for="startsWithWrap">starts</label>
+                            </div>
+                        </div>
+                        <div class="wrap-end">
+                            <div class="form-row">
+                                <input id="ends-with-wrap" name="endsWithWrap" type="text" placeholder="">
+                                <label for="endsWithWrap">end</label>
+                            </div>
+                        </div>
+                        
+                        <div id="wrap-button" class="button ico-code">Wrap</div>
+                    </div>
+
+                    <div class="tool-row">
+                        <div class="wrap-indexes">
+                            <span>Start index: <span id="start-index">0</span></span>
+                            <span>End index:  <span id="end-index">0</span></span>
+                        </div>
+
+                        <div id="view-button" class="button ico-view">View</div>
+                        <div id="edit-button" class="button ico-edit" style="display: none;">Edit</div>
+                    </div>
+                </div>
+
+                <div class="workspace">
+                    <div class="control">
+                        <div class="inner-panel">
+                            <h2>Documents: <span id="doc-list-count">0</span></h2>
+                        </div>
+
+                        <ul id="file-catalog" class="inner-panel"></ul>
+
+                        <div class="undo-redo-manager">
+                            <div class="undo-redo-row">
+                                <div id="undo-button" class="button ico-undo">Undo</div>
+                                <div id="redo-button" class="button ico-redo">Redo</div>
+                            </div>
+                            <div class="undo-redo-row">
+                                <div id="event-list"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text">
+                        <pre class="textarea panel" id="text-data-marking-view" style="display: none; resize: none;"></pre>
+                        <textarea class="textarea" name="text" id="text-data-marking" onchange='this.style.height = "";this.style.height = this.scrollHeight + "px"'>
+Арбитражный суд Краснодарского края в составе судьи Назыкова А.Л.,
+рассмотрев заявление взыскателя - Государственного унитарного предприятия Республики Крым
+«Крымэкоресурсы» (295001, Республика Крым г. Симферополь, ул. Крымская, 4а,
+ОГРН1149102010166; ИНН 9102007587; КПП: 910201001 РНКБ БАНК (ПАО) БИК 043510607
+к/с 30101810335100000607 р/с 40602810140130000016)
+
+к должнику – индивидуальному предпринимателю Мнацаканову Дмитрию Валерьевичу
+(юридический и почтовый адрес: 352504, Краснодарский край, г. Лабинск, ул. Казачья, д.26, кв.2
+ИНН 231400844189 - ОГРН308231427000023)
+
+о выдаче судебного приказа,
+                        </textarea>
+                    </div>
+                </div>
+
+                <div class="footer">
+                    © 2024 DME | Data Marking Editor
+                </div>
+            </div>
+        </div>
+            
+    </div>
+
+    <script src="/datamarkingeditor/js/script.js" type="module"></script>
+</body>
+</html>

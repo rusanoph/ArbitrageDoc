@@ -16,7 +16,7 @@ public class MainController {
         
 
         model.addAttribute("activePage", "main");
-        return "main.html";
+        return "arbitragestatistics/main.html";
     }
 
 }

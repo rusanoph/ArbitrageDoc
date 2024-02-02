@@ -14,7 +14,7 @@ public class TableController {
     public String pageMethod(Model model, HttpServletRequest request, HttpServletResponse response) {
 
         model.addAttribute("activePage", "documenttable");
-        return "documenttable.html";
+        return "arbitragestatistics/documenttable.html";
     }
 
 }

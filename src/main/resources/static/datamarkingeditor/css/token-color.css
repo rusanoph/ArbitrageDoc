@@ -1,0 +1,32 @@
+
+word {
+    border: 1px solid #333;
+}
+
+complainant, defendant, thirdparty, financialmanager, courtcasesum, keyword {
+    border: 1px solid transparent;
+}
+
+complainant {
+    background: #FFD1DC;
+}
+
+defendant {
+    background: #ADD8E6;
+}
+
+thirdparty {
+    background: #b8e7c9;
+}
+
+financialmanager {
+    background: #FFDAB9;
+}
+
+courtcasesum {
+    background: #F0E68C;
+}
+
+keyword {
+    background: #FFD700;
+}

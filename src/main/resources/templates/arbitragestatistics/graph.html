@@ -6,10 +6,10 @@
     <title>Граф разбора</title>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="/arbitragestatistics/css/components.css">
     
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" th:href="@{/css/graph.css}"/>
+    <link rel="stylesheet" href="/arbitragestatistics/css/main.css">
+    <link rel="stylesheet" href="/arbitragestatistics/css/graph.css"/>
 </head>
 <body>
     <script th:inline="javascript">
@@ -22,7 +22,7 @@
         //#endregion
     </script>
 
-    <header th:replace="~{/fragments/_header :: header}"></header>
+    <header th:replace="~{/arbitragestatistics/fragments/_header :: header}"></header>
 
     <div id="backToBottom"></div>
 
@@ -31,7 +31,7 @@
         <div class="container">
             <div class="wrapper">
 
-                <th:block th:replace="~{/fragments/components/_graphview :: 
+                <th:block th:replace="~{/arbitragestatistics/fragments/components/_graphview :: 
                     graph-view('graph-cdp', 'Граф разбора истец и ответчик', '(ЛКМ - перетаскивание узлов; ПКМ - просмотр значений узла)')}">
                 </th:block>
 
@@ -40,7 +40,7 @@
     </main>
 
 
-    <footer th:replace="~{/fragments/_footer :: footer}"></footer>
+    <footer th:replace="~{/arbitragestatistics/fragments/_footer :: footer}"></footer>
 
     <div id="backToTop"></div>
 
@@ -48,8 +48,8 @@
     <script src="https://d3js.org/d3.v5.min.js"></script>
 
     <!-- JS -->
-    <script src="/js/component.js"></script>
-    <script src="/js/main.js" type="module"></script>
-    <script type="module" src="/js/graph.js"></script>
+    <script src="/arbitragestatistics/js/component.js"></script>
+    <script src="/arbitragestatistics/js/main.js" type="module"></script>
+    <script type="module" src="/arbitragestatistics/js/graph.js"></script>
 </body>
 </html>

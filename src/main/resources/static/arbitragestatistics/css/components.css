@@ -1029,6 +1029,33 @@ select::-webkit-scrollbar {
     position: relative;
     bottom: -6px;
 }
+
+#ico-dme {
+    display: flex;
+    align-items: center;
+}
+
+#ico-dme::before {
+    filter: invert(1) contrast(100);
+    content: "";
+    background-image: url("../img/marking.svg");
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-repeat: no-repeat;
+    background-size: 24px;
+    padding: 0;
+    margin: 0 5px 0 0;
+
+    position: relative;
+    /* bottom: -6px; */
+}
+
+#ico-dme:hover::before {
+    /* filter: invert(1) contrast(100); */
+    filter: none;
+    
+}
 /* #endregion */
 
 

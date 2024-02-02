@@ -22,7 +22,7 @@ public class GraphController {
 
         //#endregion
 
-        return "graph.html";
+        return "arbitragestatistics/graph.html";
     }
 
     private <T> void setGraphDataToModel(Model model, IJsonSerializable tree, String vertexAttr, String edgeAttr) {

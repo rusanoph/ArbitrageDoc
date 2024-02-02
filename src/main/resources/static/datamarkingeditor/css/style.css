@@ -1,0 +1,313 @@
+
+/* #region App General Styles */
+.text-wrap-app {
+    display: flex;
+    justify-content: center;
+    
+    padding: 20px 0;
+
+    width: 100%;
+    /* height: 100%; */
+    /* min-height: 100vh; */
+
+    overflow: auto;
+
+    background: linear-gradient(45deg, #faa2a2 0%, #17c1e7 70%, #fff 100%);
+    background-attachment: scroll;
+    /* background: #fefefe; */
+}
+
+.container {
+    width: 90%;
+    max-width: 1400px;
+
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background: #fefefe;
+
+    border-radius: 5px;
+    box-shadow: 5px 5px 25px -10px #777;
+
+    padding: 20px 60px;
+
+    margin: 20px 0;
+}
+
+
+
+/* #endregion */
+
+/* #region Header */
+.header {
+    width: 100%;
+
+    border-bottom: 1px solid #aaa;
+
+    padding: 20px 0 5px;
+    margin: 0 0 30px 0;
+}
+
+
+h1, h2, h3 {
+    display: inline;
+}
+
+h1 {
+    font-size: 1.5rem;
+}
+
+h2 {
+    font-size: 1.2rem;
+}
+/* #endregion */
+
+/* #region Tool */
+.tool {
+    width: 100%;
+
+    font-size: 1.1rem;
+
+    margin: 0 0 20px;
+}
+
+.tool-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.tokens {
+    margin: 0 0 20px 0;
+}
+
+select {
+    display: inline-block;
+    border-bottom: 1px solid #aaa;
+    box-shadow: 5px 5px 5px -10px #aaa;
+}
+
+.wrap-input {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.wrap-indexes {
+    width: 33%;
+    max-width: 350px;
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+    font-size: 1.1rem;
+}
+
+.wrap-indexes > span {
+    display: flex;
+    justify-content: space-between;
+}
+
+.file-info {
+    display: flex;
+    flex-direction: column;
+
+    font-size: 1.2rem;
+
+    width: 100%;
+    gap: 10px;
+
+    padding: 0 25px 5px;
+    margin: 0 0 10px;
+}
+
+.file-info > span {
+    width: fit-content;
+    display: block;
+    border-bottom: 1px solid #aaa;
+}
+/* #endregion */
+
+/* #region Workspace & Control */
+.workspace {
+    display: flex;
+    gap: 10px;
+    
+    width: 100%;
+}
+
+.control {
+    display: flex;
+    flex-direction: column;
+    flex: 2;
+    width: 100%;
+    /* height: auto; */
+
+    /* position: relative; */
+}
+/* #endregion */
+
+/* #region Text Area */
+.text {
+    flex: 5;
+
+    background: transparent;
+    box-shadow: inset 5px 5px 25px -10px #aaa;
+    width: 100%;
+
+    border-radius: 5px;
+
+    padding: 20px;
+    margin: 0 0 50px 0;
+}
+
+.textarea {
+    width: 100%;
+    resize: vertical;
+
+    min-height: 350px;
+    /* height: fit-content; */
+
+    font-size: 1.2rem;
+    line-height: 1.8rem;
+
+    overflow: auto;
+}
+
+pre {
+    text-wrap: wrap;
+    font-family: serif;
+}
+/* #endregion */
+
+/* #region File Catalog */
+#file-catalog.inner-panel {
+    flex: 2;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    max-height: 430px;
+
+    overflow: auto;
+}
+
+#file-catalog.inner-panel ul {
+    padding: 0 0 0 20px;
+    list-style-type: none;
+}
+
+#file-catalog.inner-panel li {
+    margin: 0 0 5px 0;
+
+    cursor: pointer;
+}
+
+.caret {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.caret::before {
+    content: "";
+    background-image: url("../img/folder.svg");
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+    background-size: 16px;
+}
+
+.caret-down::before {
+    content: "";
+    background-image: url("../img/folder-open.svg");
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+    background-size: 16px;
+}
+
+.nested-tree {
+    display: none;
+}
+
+.active-tree {
+    display: block;
+}
+
+.selected {
+    color: #fff;
+    background: linear-gradient(45deg, #faa2a2 0%, #17c1e7 100%);
+}
+/* #endregion */
+
+/* #region Undo Redo Manager */
+.undo-redo-manager {
+    flex: 1;
+    background: transparent;
+    box-shadow: inset 5px 5px 25px -10px #aaa;
+    width: 100%;
+
+    max-height: 400px;
+    overflow: auto;
+
+    border-radius: 5px;
+
+    padding: 10px 30px;
+    margin: 0 0 50px 0;
+}
+
+.undo-redo-row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+    margin: 0 0 20px 0;
+}
+
+.undo-redo-row:last-child {
+    margin: 0;
+}
+
+#event-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.event {
+    display: flex;
+    justify-content: space-between;
+    background: transparent;
+    box-shadow: 5px 5px 25px -10px #aaa;
+    width: 100%;
+
+    padding: 10px 30px;
+    margin: 0 0 15px 0;
+
+    cursor: pointer;
+}
+
+.current-event {
+    border: 1px solid #aaa;
+    border-radius: 5px;
+}
+/* #endregion */
+
+/* #region footer */
+.footer {
+    width: 100%;
+
+    border-top: 1px solid #aaa;
+
+    padding: 5px 0 10px;
+}
+/* #endregion */
+
+
