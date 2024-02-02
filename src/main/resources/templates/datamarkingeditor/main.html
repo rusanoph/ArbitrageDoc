@@ -20,9 +20,19 @@
                     <h1>DME <h2>(Data Marking Editor)</h2></h1>
 
                 </div>
-                <div class="file-info">
-                    <span>Filename: <span id="filename"></span></span>
-                    <span>Title: <span id="filetitle"></span></span>
+                <div class="row-sb">
+                    <div class="file-info">
+                        <span>Filename: <span id="filename"></span></span>
+                        <span>Title: <span id="filetitle"></span></span>
+                    </div>
+
+                    <div id="save-as-button" class="button ico-save" style="text-wrap: nowrap;">
+                        Save as:  
+                        <select name="saveAsSelect" id="save-as-select">
+                            <option value="marked">Marked</option>
+                            <option value="json">Json</option>
+                        </select>
+                    </div>
                 </div>
                 
                 <div class="tool">
@@ -90,17 +100,7 @@
                     <div class="text">
                         <pre class="textarea panel" id="text-data-marking-view" style="display: none; resize: none;"></pre>
                         <textarea class="textarea" name="text" id="text-data-marking" onchange='this.style.height = "";this.style.height = this.scrollHeight + "px"'>
-Арбитражный суд Краснодарского края в составе судьи Назыкова А.Л.,
-рассмотрев заявление взыскателя - Государственного унитарного предприятия Республики Крым
-«Крымэкоресурсы» (295001, Республика Крым г. Симферополь, ул. Крымская, 4а,
-ОГРН1149102010166; ИНН 9102007587; КПП: 910201001 РНКБ БАНК (ПАО) БИК 043510607
-к/с 30101810335100000607 р/с 40602810140130000016)
 
-к должнику – индивидуальному предпринимателю Мнацаканову Дмитрию Валерьевичу
-(юридический и почтовый адрес: 352504, Краснодарский край, г. Лабинск, ул. Казачья, д.26, кв.2
-ИНН 231400844189 - ОГРН308231427000023)
-
-о выдаче судебного приказа,
                         </textarea>
                     </div>
                 </div>

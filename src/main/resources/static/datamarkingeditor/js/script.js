@@ -1,4 +1,5 @@
 import { DocumentService } from "../../arbitragestatistics/js/api/DocumentService.js";
+import { DMEService } from "./api/DMEService.js";
 
 //#region Helper
 function wrapText(txt, startIndex, endIndex, startWrap, endWrap) {
@@ -142,6 +143,16 @@ function FileListElement(fileName, currDir=null) {
 
 
 //#region Event Listener Handlers
+function saveAsButtonClickEvent() {
+    const saveType = document.getElementById("save-as-select").value;
+
+    const dataToSave = textarea.value;
+
+    // Something like this
+    let saveDialog = DMEService.save(dataToSave, saveType);
+    saveDialog();
+}
+
 function textareaMouseupEvent() {
     startIndex = textarea.selectionStart;
     endIndex = textarea.selectionEnd;  
@@ -317,6 +328,8 @@ function saveStackStateToLocal() {
 let filepath = null;
 let filename = null;
 
+const saveAsButton = document.getElementById("save-as-button");
+
 let textarea = document.getElementById("text-data-marking");
 let textareaView = document.getElementById("text-data-marking-view");
 textareaView.innerHTML = textarea.value;
@@ -356,6 +369,8 @@ if (localStorage.getItem("stateStack")) {
 //#endregion
 
 //#region Evet Listeners
+saveAsButton.addEventListener('click', saveAsButtonClickEvent);
+
 textarea.addEventListener('mouseup', textareaMouseupEvent);
 textarea.addEventListener('keyup', textareaMouseupEvent);
 

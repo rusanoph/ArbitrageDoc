@@ -93,7 +93,27 @@
 }
 /* #endregion */
 
+/* #region Row  */
+
+.row-sb {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
 /* #region Icon */
+
+.ico-save::before {
+    content: "";
+    background-image: url("../img/save.svg");
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-repeat: no-repeat;
+    background-size: 24px;
+    padding: 0 0 -5px 0;
+    margin: 0 5px 0 0;
+}
 
 .ico-code::before {
     content: "";
