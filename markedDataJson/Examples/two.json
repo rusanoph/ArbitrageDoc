@@ -1,0 +1,18 @@
+[
+    {
+        "adjacent": [
+            {
+                "adjacent": [],
+                "type": "Word",
+                "value": "г. москва"
+            }
+        ],
+        "type": "Keyword",
+        "value": "р е ш е н и е"
+    },
+    {
+        "adjacent": [],
+        "type": "Word",
+        "value": "г. москва"
+    }
+]

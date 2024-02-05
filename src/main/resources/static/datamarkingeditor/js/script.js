@@ -149,7 +149,7 @@ async function saveAsButtonClickEvent() {
     const saveType = document.getElementById("save-as-select").value;
     const dataToSave = textarea.value;
 
-    await dmeService.save(dataToSave, saveType);
+    await dmeService.saveMarkedText(dataToSave, saveType);
 }
 
 function textareaMouseupEvent() {
@@ -223,6 +223,12 @@ function undoButtonClickEvent() {
 
 function redoButtonClickEvent() {
     redoState();
+}
+
+async function combineAllClickEvent() {
+    const jsonScope = document.getElementById("json-scope-select").value;
+
+    await dmeService.saveCombinedText(jsonScope);
 }
 //#endregion
 
@@ -328,6 +334,7 @@ let filepath = null;
 let filename = null;
 
 const saveAsButton = document.getElementById("save-as-button");
+const saveAsSelect = document.getElementById("save-as-select");
 
 let textarea = document.getElementById("text-data-marking");
 let textareaView = document.getElementById("text-data-marking-view");
@@ -363,12 +370,15 @@ if (localStorage.getItem("stateStack")) {
 } else {
     saveState(getCurrentState());
 }
+
+const combineAllInJsonScopeButton = document.getElementById("combine-all-json-button");
+const jsonScopeSelect = document.getElementById("json-scope-select");
 //#endregion
 
 //#region Evet Listeners
 saveAsButton.addEventListener('click', saveAsButtonClickEvent);
 // When click on select element, button element click event listener don't call
-document.getElementById("save-as-select").addEventListener('click', (e) => {e.stopPropagation();});
+saveAsSelect.addEventListener('click', (e) => {e.stopPropagation();});
 
 textarea.addEventListener('mouseup', textareaMouseupEvent);
 textarea.addEventListener('keyup', textareaMouseupEvent);
@@ -382,6 +392,9 @@ editButton.addEventListener("click", editButtonClickEvent);
 
 undoButton.addEventListener('click', undoButtonClickEvent);
 redoButton.addEventListener('click', redoButtonClickEvent);
+
+combineAllInJsonScopeButton.addEventListener('click', combineAllClickEvent);
+jsonScopeSelect.addEventListener('click', (e) => {e.stopPropagation();});
 //#endregion
 
 

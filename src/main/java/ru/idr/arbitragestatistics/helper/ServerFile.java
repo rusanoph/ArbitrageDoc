@@ -12,12 +12,20 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ServerFile {
-    
-    public static String fileText(String documentPath, String documentFileName) throws IOException {
-        Path documentURI = Paths.get("", "txtFiles", documentPath, documentFileName).toAbsolutePath();
+
+    @SafeVarargs
+    public static String fileText(String documentFileName, String documentPath, String... restDocumentPath) throws IOException {
+        String directoryURI = Paths.get(documentPath, restDocumentPath).toString();
+        Path documentURI = Paths.get(directoryURI, documentFileName).toAbsolutePath();
+
         String text = new String(Files.readAllBytes(documentURI), StandardCharsets.UTF_8);
         
         return text;
+    }
+    
+    public static String fileText(String documentPath, String documentFileName) throws IOException {
+        
+        return ServerFile.fileText(documentFileName, documentPath);
     }
 
     public static Set<String> listDirectoryServer(String directoryPath) {
@@ -59,8 +67,9 @@ public class ServerFile {
         return currentDepthLevelDirectories;
     }
 
-    public static Set<String> listFilesServer(String directoryPath) {
-        String directoryURI = Paths.get("", "txtFiles", directoryPath).toAbsolutePath().toString();
+    @SafeVarargs
+    public static Set<String> listFilesServer(String directoryPath, String... RestDirectoryPath) {
+        String directoryURI = Paths.get(directoryPath, RestDirectoryPath).toAbsolutePath().toString();
 
         File directory = new File(directoryURI);
         File[] directoryListFiles = directory.listFiles();
@@ -73,6 +82,10 @@ public class ServerFile {
             .filter(file -> !file.isDirectory())
             .map(File::getName)
             .collect(Collectors.toSet());
+    }
+
+    public static Set<String> listFilesServer(String directoryPath) {
+        return ServerFile.listFilesServer("", "txtFiles", directoryPath);
     }
 
 }

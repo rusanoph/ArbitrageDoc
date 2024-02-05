@@ -22,7 +22,7 @@ export class DMEService {
         });
     }
 
-    async save(dataToSave, saveType) {
+    async saveMarkedText(dataToSave, saveType) {
 
         let dataBlob;
         let writableStream;
@@ -46,6 +46,18 @@ export class DMEService {
         await writableStream.write(dataBlob);
         await writableStream.close();
     }
+
+    async saveCombinedText(jsonScope) {
+        let dataBlob = await this.getCombineAllJson(jsonScope)
+        .then(dataToSave => {
+            const jsonDataToSave = JSON.stringify(dataToSave);
+            return new Blob([jsonDataToSave]);
+        });
+        let writableStream = await this.createJsonFileHandler().then(handler => handler.createWritable());
+
+        await writableStream.write(dataBlob);
+        await writableStream.close(); 
+    }
     
     async postParseMarkedText(dataToSave) {
         let url = `/api/markdata/parse`;
@@ -55,6 +67,14 @@ export class DMEService {
             body: dataToSave,
         });
         
+        let data = await response.json();
+
+        return data;
+    }
+
+    async getCombineAllJson(jsonScope) {
+        let url = `/api/markdata/combine/${jsonScope}`;
+        const response = await fetch(url);
         let data = await response.json();
 
         return data;

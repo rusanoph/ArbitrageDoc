@@ -1,33 +1,26 @@
 package ru.idr.arbitragestatistics.model.arbitrage;
 
-import java.util.HashMap;
-import java.util.Map;
+import ru.idr.arbitragestatistics.model.IToken;
 
-public enum ArbitrageToken {
-    Complainant("Complainant", "#FFD1DC"),
-    Defendant("Defendant", "#ADD8E6"),
-    ThirdParty("ThirdParty", "#b8e7c9"),
+public enum ArbitrageToken implements IToken {
+    Complainant("Complainant"),
+    Defendant("Defendant"),
+    ThirdParty("ThirdParty"),
 
-    FinancialManager("FinancialManager", "#FFDAB9"),
+    FinancialManager("FinancialManager"),
 
-    CourtCaseSum("CourtCaseSum", "#F0E68C"),
-    Keyword("Keyword", "#FFD700"),
+    CourtCaseSum("CourtCaseSum"),
+    Keyword("Keyword"),
     ;
 
-    private String color;
-    private String label;
+    String label;
 
-    private ArbitrageToken(String label, String color) {
+    private ArbitrageToken(String label) {
         this.label = label;
-        this.color = color;
     }
 
     public static ArbitrageToken getByLabel(String label) {
         return ArbitrageToken.valueOf(label);
-    }
-
-    public String getColor() {
-        return this.color;
     }
 
     public String getLabel() {

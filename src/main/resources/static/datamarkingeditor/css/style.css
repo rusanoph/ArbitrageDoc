@@ -304,6 +304,16 @@ pre {
 }
 /* #endregion */
 
+/* #region General Actions */
+
+.general-actions {
+    padding: 20px 0;
+    width: 100%;
+    border-top: 1px solid #aaa;
+    margin: 0 0 50px 0;
+}
+/* #endregion */
+
 /* #region footer */
 .footer {
     width: 100%;

@@ -86,7 +86,7 @@ public class DocumentProcessor {
         if (files != null) {
                 for (String file : files) {
 
-                String title = getArbitrageTextTitle(ServerFile.fileText(currentDir, file), " ");
+                String title = getArbitrageTextTitle(ServerFile.fileText(file, currentDir), " ");
                 String filapath = Paths.get(currentDir, file).toString();
 
                 // Add or Increment title data

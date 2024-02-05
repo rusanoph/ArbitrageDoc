@@ -17,6 +17,19 @@ public class TokenType {
         this.adjacentTokens = new HashSet<>();
     }
 
+    public static TokenType fromJsonObject(JSONObject json) {
+        
+        TokenType token = new TokenType(json.getString("value"), json.getString("type"));
+
+        for (var adjToken : json.getJSONArray("adjacent")) {
+            JSONObject adjTokenJson = (JSONObject) adjToken;
+            token.getAdjacentTokens()
+            .add(new TokenType(adjTokenJson.getString("value"), adjTokenJson.getString("type")));
+        }
+
+        return token;
+    }
+
     public JSONObject toJsonObject() {
         JSONObject tokenJson = new JSONObject();
 
