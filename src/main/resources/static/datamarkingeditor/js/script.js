@@ -1,6 +1,8 @@
 import { DocumentService } from "../../arbitragestatistics/js/api/DocumentService.js";
 import { DMEService } from "./api/DMEService.js";
 
+const dmeService = new DMEService();
+
 //#region Helper
 function wrapText(txt, startIndex, endIndex, startWrap, endWrap) {
 
@@ -143,14 +145,11 @@ function FileListElement(fileName, currDir=null) {
 
 
 //#region Event Listener Handlers
-function saveAsButtonClickEvent() {
+async function saveAsButtonClickEvent() {    
     const saveType = document.getElementById("save-as-select").value;
-
     const dataToSave = textarea.value;
 
-    // Something like this
-    let saveDialog = DMEService.save(dataToSave, saveType);
-    saveDialog();
+    await dmeService.save(dataToSave, saveType);
 }
 
 function textareaMouseupEvent() {
@@ -364,12 +363,12 @@ if (localStorage.getItem("stateStack")) {
 } else {
     saveState(getCurrentState());
 }
-
-
 //#endregion
 
 //#region Evet Listeners
 saveAsButton.addEventListener('click', saveAsButtonClickEvent);
+// When click on select element, button element click event listener don't call
+document.getElementById("save-as-select").addEventListener('click', (e) => {e.stopPropagation();});
 
 textarea.addEventListener('mouseup', textareaMouseupEvent);
 textarea.addEventListener('keyup', textareaMouseupEvent);
@@ -386,6 +385,7 @@ redoButton.addEventListener('click', redoButtonClickEvent);
 //#endregion
 
 
+//#region File Catalog
 function treeViewToggler() {
     let treeViewToggler = document.getElementsByClassName("caret");
     for (let i = 0; i < treeViewToggler.length; i++) {
@@ -437,3 +437,6 @@ async function generateDocumentList(elementId, currDir=null) {
 }
 
 generateDocumentList("file-catalog");
+//#endregion
+
+
