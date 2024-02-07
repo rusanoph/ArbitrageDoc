@@ -1,1 +1,18 @@
-[{"adjacent":[{"adjacent":[],"type":"Complainant","value":"зао «цивссм», астраханская область"}],"type":"Word","value":"арбитражный"},{"adjacent":[],"type":"Complainant","value":"зао «цивссм», астраханская область"}]
+[
+    {
+        "adjacent": [
+            {
+                "adjacent": [],
+                "type": "Complainant",
+                "value": "зао «цивссм», астраханская область"
+            }
+        ],
+        "type": "Word",
+        "value": "арбитражный"
+    },
+    {
+        "adjacent": [],
+        "type": "Complainant",
+        "value": "зао «цивссм», астраханская область"
+    }
+]

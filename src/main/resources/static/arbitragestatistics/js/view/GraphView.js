@@ -219,6 +219,10 @@ export class GraphView {
                     <div class="value copyable" onclick="copyToClipboard(this)">${d.value.replaceAll("<", "&lt;").replaceAll(">", "&gt;")}</div>
                 </div>
                 <div class="key-value-row">
+                    <div class="key">Тип: </div>
+                    <div class="value copyable" onclick="copyToClipboard(this)">${d.type.replaceAll("<", "&lt;").replaceAll(">", "&gt;")}</div>
+                </div>
+                <div class="key-value-row">
                     <div class="key">Глубина: </div>
                     <div class="value">${d.depth}</div>
                 </div>

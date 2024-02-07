@@ -53,13 +53,6 @@ public class Graph<T> implements IJsonSerializable {
         return this;
     }
 
-    public Graph<T> addOrEdge(Integer depthFrom, T valueFrom, Integer depthTo, T valueTo) {
-        Vertex<T> vertexFrom = this.getVertexByDepthValue(depthFrom, valueFrom);        
-        Vertex<T> vertexTo = this.getVertexByDepthValue(depthTo, valueTo);
-
-        return this.addOrEdge(vertexFrom, vertexTo);
-    }
-
     @SafeVarargs
     public final Graph<T> addOrEdge(Vertex<T> vertexFrom, Vertex<T>... verteciesTo) {
         boolean verteciesToContainsNull = false;
@@ -103,6 +96,13 @@ public class Graph<T> implements IJsonSerializable {
         return this;
     }
 
+    public Graph<T> addOrEdge(Integer depthFrom, T valueFrom, Integer depthTo, T valueTo) {
+        Vertex<T> vertexFrom = this.getVertexByDepthValue(depthFrom, valueFrom);        
+        Vertex<T> vertexTo = this.getVertexByDepthValue(depthTo, valueTo);
+
+        return this.addOrEdge(vertexFrom, vertexTo);
+    }
+
     //#region Getters
     public List<Vertex<T>> getVerticesSet() {
         return new ArrayList<>(adjacentVertices.keySet());
@@ -113,15 +113,18 @@ public class Graph<T> implements IJsonSerializable {
     }
 
     public Vertex<T> getVertexByDepthValue(Integer depth, T value) {
-        return verticesIndex.get(depth).get(value);
+        
+        if (verticesIndex.containsKey(depth) && verticesIndex.get(depth).containsKey(value))
+            return verticesIndex.get(depth).get(value);
+        else 
+            return null;
+
     }
 
     public boolean hasChildren(Vertex<String> vertex) {
         return !this.adjacentVertices.get(vertex).isEmpty(); 
     }
     //#endregion
-
-    
     
     //#region Json Serialization
     public JSONArray vertexIndexToJson() {
@@ -165,6 +168,7 @@ public class Graph<T> implements IJsonSerializable {
             for (Vertex<T> vertexTo : this.getAdjacentVertices(vertexFrom)) {
                 JSONObject edgeJson = new JSONObject();
 
+                // System.out.println(vertexFrom.hashCode());
                 edgeJson.put("source", vertexFrom.hashCode())
                     .put("target", vertexTo.hashCode());
 

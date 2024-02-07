@@ -13,6 +13,24 @@
 </head>
 <body>
     <script th:inline="javascript">
+        //#region Example MarkedGraph vertices and edges 
+        
+        let verticesMarkedExampleGraph = /*[[${verticesMarkedExampleGraph}]]*/ "{}";
+        let verticesMarkedExampleGraphJson = JSON.parse(verticesMarkedExampleGraph);
+
+        let edgesMarkedExampleGraph = /*[[${edgesMarkedExampleGraph}]]*/ "{}";
+        let edgesMarkedExampleGraphJson = JSON.parse(edgesMarkedExampleGraph);
+
+        //#endregion
+
+        // #region MarkedGraph vertices and edges 
+        let verticesMarkedGraph = /*[[${verticesMarkedGraph}]]*/ "{}";
+        let verticesMarkedGraphJson = JSON.parse(verticesMarkedGraph);
+
+        let edgesMarkedGraph = /*[[${edgesMarkedGraph}]]*/ "{}";
+        let edgesMarkedGraphJson = JSON.parse(edgesMarkedGraph);
+        //#endregion
+
         // #region cdpGraph vertices and edges 
         let verticesCdpGraph = /*[[${verticesCdpGraph}]]*/ "{}";
         let verticesCdpGraphJson = JSON.parse(verticesCdpGraph);

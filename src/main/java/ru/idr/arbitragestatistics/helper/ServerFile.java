@@ -24,8 +24,7 @@ public class ServerFile {
     }
     
     public static String fileText(String documentPath, String documentFileName) throws IOException {
-        
-        return ServerFile.fileText(documentFileName, documentPath);
+        return ServerFile.fileText(documentFileName, documentPath, new String[]{});
     }
 
     public static Set<String> listDirectoryServer(String directoryPath) {

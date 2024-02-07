@@ -1,11 +1,18 @@
 package ru.idr.arbitragestatistics.model.datastructure;
 
 
+import java.util.Set;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import ru.idr.arbitragestatistics.helper.regex.RegExBuilder;
 import ru.idr.arbitragestatistics.helper.regex.RegExRepository;
 import ru.idr.arbitragestatistics.util.datastructure.Graph;
 import ru.idr.arbitragestatistics.util.datastructure.ValueVertexMap;
 import ru.idr.arbitragestatistics.util.datastructure.Vertex;
+import ru.idr.datamarkingeditor.helper.MarkedDataParser;
+import ru.idr.datamarkingeditor.model.TokenType;
 
 public class StaticGraphs {
 
@@ -33,7 +40,7 @@ public class StaticGraphs {
             "(финансовых\\s+санкций)" +                         "|"+
             "(несостоятельн(ым|ой)\\s+\\(?банкротом\\)?)" +     "|"+
             "(банкротстве)" + "|"+
-            "(замене\\s+кредитора)" +                           "|" + 
+            "(замене\\s+кредитора)" +                           "|"+ 
             "(выдаче\\s+судебного\\s+приказа)"+                 "|"+
             "(процессуальном\\s+правопреемстве)"+
         "))";
@@ -59,12 +66,13 @@ public class StaticGraphs {
     private static String getDefendantToken() {
         String defendantToken = PARSE_DEFENDANT + 
             rb.set(
-            rb.set("(о|к|и)").notEnds("\\s+почтовый").asWord().build() + "|"+
-                "треть(е|и)\\s+лиц(о|а)|"+
-                "несостоятельн(ым|ой)|"+
-                "финансовых\\s+санкций|"+
-                "ходатайство"
-            ).asStaticToken()
+                rb.set("(о|к|и)").notEnds("\\s+почтовый").asWord().build() + "|"+
+                    "треть(е|и)\\s+лиц(о|а)|"+
+                    "несостоятельн(ым|ой)|"+
+                    "финансовых\\s+санкций|"+
+                    "ходатайство"
+                )
+            .asStaticToken()
             .ends()
             .build();
 
@@ -291,5 +299,7 @@ public class StaticGraphs {
 
         return cdpGraph;
     }
+    
+
     
 }

@@ -1,20 +1,39 @@
 package ru.idr.datamarkingeditor.model;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class TokenType {
+import ru.idr.arbitragestatistics.model.arbitrage.ArbitrageToken;
+
+public class TokenType implements IToken {
+    public static final Set<String> SPECIAL_TOKEN_TYPE = 
+        Set.of(ArbitrageToken.values())
+        .stream()
+        .map(ArbitrageToken::getLabel)
+        .map(t -> t.toLowerCase())
+        .collect(Collectors.toSet());
+
     String value;
     String tokenType;
     Set<TokenType> adjacentTokens;
 
     public TokenType(String value, String tokeyType) {
-        this.value = value.trim().toLowerCase();
+        this.value = value;
         this.tokenType = tokeyType;
         this.adjacentTokens = new HashSet<>();
+
+
+        // if (this.isSpecial()) {
+        //     this.value = ArbitrageToken.getByLabel(tokeyType).getRegex();
+        // } else {
+        //     this.value = value.trim().toLowerCase();
+        // }
+        
     }
 
     public static TokenType fromJsonObject(JSONObject json) {
@@ -49,6 +68,10 @@ public class TokenType {
         return value;
     }
 
+    public void setValue(String value) {
+        this.value = value;
+    }
+
     public String getTokenType() {
         return tokenType;
     }
@@ -57,5 +80,27 @@ public class TokenType {
         return adjacentTokens;
     }
 
-    
+    public boolean isSpecial() {
+        return SPECIAL_TOKEN_TYPE.contains(this.tokenType.toLowerCase());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || this.getClass() != obj.getClass()) return false;
+
+        TokenType other = (TokenType) obj;
+
+        return Objects.equals(this.tokenType, other.tokenType) && 
+            (Objects.equals(this.value, other.value) || this.isSpecial());
+    }
+
+    @Override
+    public int hashCode() {
+        if (this.isSpecial()) 
+            return Objects.hash(this.tokenType);
+        else 
+            return Objects.hash(this.value, this.tokenType);
+    }
+  
 }
