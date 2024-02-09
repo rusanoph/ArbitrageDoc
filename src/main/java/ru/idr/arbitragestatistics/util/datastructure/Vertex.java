@@ -101,7 +101,7 @@ public class Vertex<T> {
     
     //#region Type
     public boolean isSpecial() {
-        return TokenType.SPECIAL_TOKEN_TYPE.contains(this.type);
+        return TokenType.SPECIAL_TOKEN_TYPE.contains(this.type.toLowerCase());
     }
     //#endregion
 

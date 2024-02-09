@@ -141,6 +141,12 @@ function FileListElement(fileName, currDir=null) {
 
     return li;
 }
+
+function OptionElement(value, text) {
+    return `
+        <option value="${value}">${text}</option>
+    `;
+}
 //#endregion
 
 
@@ -229,6 +235,17 @@ async function combineAllClickEvent() {
     const jsonScope = document.getElementById("json-scope-select").value;
 
     await dmeService.saveCombinedText(jsonScope);
+}
+
+async function combineSelectClickEvent() {
+    // jsonScopeSelect.innerHTML = "";
+
+    await dmeService.getMarkedDataDirectories()
+    .then(dirs => {
+        let dirOptionList = "";
+        dirs.forEach(dir => dirOptionList += OptionElement(dir, dir));
+        jsonScopeSelect.innerHTML = dirOptionList;
+    });
 }
 //#endregion
 
@@ -394,7 +411,7 @@ undoButton.addEventListener('click', undoButtonClickEvent);
 redoButton.addEventListener('click', redoButtonClickEvent);
 
 combineAllInJsonScopeButton.addEventListener('click', combineAllClickEvent);
-jsonScopeSelect.addEventListener('click', (e) => {e.stopPropagation();});
+jsonScopeSelect.addEventListener('click', async (e) => {e.stopPropagation(); await combineSelectClickEvent()});
 //#endregion
 
 

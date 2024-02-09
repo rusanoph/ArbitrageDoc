@@ -4,7 +4,7 @@ const sideRatio = 16 / 9;
 const width = 1280;
 const height = width / sideRatio;
 
-const cdpTreeGraphView = new GraphView("graph-cdp", width, height, verticesMarkedGraphJson, edgesMarkedGraphJson);
+const cdpTreeGraphView = new GraphView("graph", width, height, verticesGraphJson, edgesGraphJson);
 cdpTreeGraphView.startSimulation();
 
 

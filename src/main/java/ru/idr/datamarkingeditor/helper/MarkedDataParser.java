@@ -1,10 +1,13 @@
 package ru.idr.datamarkingeditor.helper;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.naming.OperationNotSupportedException;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -18,10 +21,16 @@ import ru.idr.arbitragestatistics.helper.regex.RegExBuilder;
 import ru.idr.arbitragestatistics.model.arbitrage.ArbitrageToken;
 import ru.idr.arbitragestatistics.util.datastructure.Graph;
 import ru.idr.arbitragestatistics.util.datastructure.Vertex;
+import ru.idr.datamarkingeditor.model.CommonToken;
 import ru.idr.datamarkingeditor.model.TokenType;
 
 @Component
 public class MarkedDataParser {
+    // * Нужно отдельно предобрабатывать каждый тип токена
+    // * Отдельно склеивать два токена одинакового типа
+    // * Нужно провести рефакторинг и очистить код от лишней логики
+    // * Требуется покрыть тестами методы
+
 
     private RegExBuilder rb;
 
@@ -46,12 +55,14 @@ public class MarkedDataParser {
         return tokenJsonArray;
     }
 
-    public static Set<TokenType> fromJSON(JSONArray json) {
+    public Set<TokenType> fromJSON(JSONArray json) {
         Set<TokenType> parsedText = new HashSet<>();
 
-        for (Object token : json) {
-            JSONObject tokenJson = (JSONObject) token;
-            parsedText.add(TokenType.fromJsonObject(tokenJson));
+        for (Object o : json) {
+            JSONObject tokenJson = (JSONObject) o;
+            TokenType token = TokenType.fromJsonObject(tokenJson);
+
+            parsedText = addTokenTypeToSet(parsedText, token);
         }
 
         return parsedText;
@@ -71,11 +82,12 @@ public class MarkedDataParser {
     //         "adjacent": [{...}, ..., {...}]
     //     }
     // ]
-    public static Graph<String> getGraphFromJson(JSONArray parsedTokensJson) {
-        Set<TokenType> parsedTokens = MarkedDataParser.fromJSON(parsedTokensJson);
+    public Graph<String> getGraphFromJson(JSONArray parsedTokensJson) {
+        Set<TokenType> parsedTokens = this.fromJSON(parsedTokensJson);
 
         return MarkedDataParser.getGraphFromTokenSet(parsedTokens);
     }
+    //#endregion
 
     public static Graph<String> getGraphFromTokenSet(Set<TokenType> parsedTokens) {
         Graph<String> graph = new Graph<>();
@@ -89,26 +101,86 @@ public class MarkedDataParser {
                 v = graph.getVertexByDepthValue(0, token.getValue());
             }
             graph.addVertex(v);
-
+            
+            System.out.println();
+            System.out.println(String.format("Token: (v: %s, t: %s, spec: %s, id: %s)", token.getValue(), token.getTokenType(), token.isSpecial(), token));
             for (TokenType adjToken : token.getAdjacentTokens()) {
+                System.out.println(String.format("\tAdjToken: (v: %s, t: %s, spec: %s, id: %s)", adjToken.getValue(), adjToken.getTokenType(), adjToken.isSpecial(), adjToken));
+
                 Vertex<String> u;
                 if (graph.getVertexByDepthValue(0, adjToken.getValue()) == null) {
-                    u = new Vertex<String>(adjToken.getValue(), token.getTokenType());
+                    u = new Vertex<String>(adjToken.getValue(), adjToken.getTokenType());
                 } else {
                     u = graph.getVertexByDepthValue(0, adjToken.getValue());
                 }
-
+                
                 graph.addOrEdge(v, u);
             }
-
-            System.out.println(String.format("Token: (v: %s, t: %s, spec: %s)", token.getValue(), token.getTokenType(), token.isSpecial()));
             System.out.println(String.format("Vertex: (v: %s, t: %s, spec: %s)", v.getValue(), v.getType(), v.isSpecial()));
+            
         }
-
+        
         return graph;
     }
 
-    //#endregion
+    private Set<TokenType> addTokenTypeToSet(Set<TokenType> tokens, TokenType otherToken) {
+
+        if (tokens.contains(otherToken)) {
+            for (TokenType token : tokens) {
+                if (token.equals(otherToken)) {
+
+                    // === Arbitrage === 
+                    if (token.bothOfType(otherToken, ArbitrageToken.Complainant)) {
+                        token.setValue(processComplainant(token, otherToken));
+                    }
+
+                    if (token.bothOfType(otherToken, ArbitrageToken.Defendant)) {
+                        token.setValue(processDefendant(token, otherToken));                                                    
+                    }
+
+                    if (token.bothOfType(otherToken, ArbitrageToken.ThirdParty)) {
+                        token.setValue(processThirdParty(token, otherToken));                                                
+                    }
+
+                    if (token.bothOfType(otherToken, ArbitrageToken.CompetitionManager)) {
+                        token.setValue(processCompetitionManager(token, otherToken));                                                
+                    }
+
+                    if (token.bothOfType(otherToken, ArbitrageToken.FinancialManager)) {
+                        token.setValue(processFinancialManager(token, otherToken));                                                
+                    }
+
+
+                    if (token.bothOfType(otherToken, ArbitrageToken.Keyword)) {
+                        token.setValue(processKeyword(token, otherToken));
+                    }
+
+                    // === Common ===
+                    if (token.bothOfType(otherToken, CommonToken.Word)) {
+                        token.setValue(processWord(token));
+                    }
+
+                    // Merge adjacent tokens
+                    token.getAdjacentTokens()
+                    .addAll(otherToken.getAdjacentTokens());
+                    break;
+                }
+            }
+        } else {
+            tokens.add(otherToken);
+        }
+
+        return tokens;
+    }
+
+    private TokenType getTokenInstanceFromSet(Set<TokenType> container, TokenType patternToken) {
+        if (container.contains(patternToken)) {
+            for (TokenType token : container) {
+                if (token.equals(patternToken)) return token;
+            }
+        }
+        return patternToken; 
+    }
 
     public Set<TokenType> parse(String text) {
         Set<TokenType> parsedText = new HashSet<>();
@@ -124,47 +196,51 @@ public class MarkedDataParser {
             Element nextToken = root.children().get(i + 1);
 
             current = new TokenType(currentToken.text(), currentToken.tagName());
+            if (parsedText.contains(current)) current = getTokenInstanceFromSet(parsedText, current);
+
             next = new TokenType(nextToken.text(), nextToken.tagName());
+            if (parsedText.contains(next)) next = getTokenInstanceFromSet(parsedText, next);
+
             current.getAdjacentTokens().add(next);
 
 
             // Parse here special tags
+            // parsedText = addTokenTypeToSet(parsedText, current);
             parsedText.add(current);
         }
 
         if (next != null) {
+            // parsedText = addTokenTypeToSet(parsedText, next);
             parsedText.add(next);
         }
 
-        return parsedText;
+        // return parsedText;
+        return processTokenValues(parsedText);
     } 
+
+    public Set<TokenType> processTokenValues(Set<TokenType> parsedText) {
+        Set<TokenType> preprocessedParsedText = new HashSet<>(parsedText);
+        for (TokenType token : preprocessedParsedText) {
+            preprocessedParsedText = addTokenTypeToSet(preprocessedParsedText, token);
+        }
+
+        //#region Debug output
+        // for (TokenType token : preprocessedParsedText) {
+        //     System.out.println(String.format("\n\nToken: (v: %s, t: %s, spec: %s, id: %s)\n", token.getValue(), token.getTokenType(), token.isSpecial(), token));
+
+        //     for (TokenType adjToken : token.getAdjacentTokens()) {
+        //         System.out.println(String.format("  AdjToken: (v: %s, t: %s, spec: %s, id: %s)", adjToken.getValue(), adjToken.getTokenType(), adjToken.isSpecial(), adjToken));
+        //     }
+        // }
+        //#endregion
+
+        return preprocessedParsedText;
+    }
 
     public Set<TokenType> combine(Set<TokenType> tokens, Set<TokenType> otherTokens) {
         
         for (TokenType otherToken : otherTokens) {
-
-            // Extract to a separate method
-            // Make uniqueness and token preprocessing bulletproof through all the parser
-            // Even file, json, combination or any other structure or operation 
-            // is on incorrect data parser must return correct object.
-            if (!tokens.contains(otherToken)) {
-                tokens.add(otherToken);
-            } else {
-                for (TokenType token : tokens) {
-                    if (token.equals(otherToken)) {
-
-                        if (otherToken.getTokenType().equals(ArbitrageToken.Keyword.getLabel()) && 
-                            token.getTokenType().equals(otherToken.getTokenType())) {
-
-                            token.setValue(processKeyword(token, otherToken));
-                        }
-
-                        token.getAdjacentTokens()
-                        .addAll(otherToken.getAdjacentTokens());
-                        break;
-                    }
-                }
-            }
+            tokens = addTokenTypeToSet(tokens, otherToken);
         }
 
         return tokens;
@@ -180,7 +256,7 @@ public class MarkedDataParser {
             String rawJson = ServerFile.fileText(filename, directoryPath, restDirectoryPath);
             JSONArray json = new JSONArray(rawJson);
 
-            Set<TokenType> currentSet = MarkedDataParser.fromJSON(json);
+            Set<TokenType> currentSet = this.fromJSON(json);
             resultTokens = this.combine(resultTokens, currentSet);
         }
 
@@ -188,57 +264,150 @@ public class MarkedDataParser {
     }
 
 
-    // ??? to Set
-    private Set<TokenType> processSpecialArbitrageTokens(Set<TokenType> parsedToken) {
+    //#region Token Value processing 
 
-        for (TokenType token : parsedToken) {
-            
-            String type = token.getTokenType();
-            if (isSpecial(type)) {
-                Set<TokenType> adjTokens = token.getAdjacentTokens();
+    public String processTokenValue(TokenType token) {
+        // Method, that recognizes type of token and process it with corresponding method
 
-                if (type == "Word") {
-                    token.setValue(processWord(token, adjTokens));
-                }
-
-
-            }
-        }
-
-        return parsedToken;
-    }
-
-    private String processPerson() {
         return "";
     }
 
-    private String processComplainant() { return processPerson(); }
-    private String processDefendant() { return processPerson(); }
-    private String processThirdParty() { return processPerson(); }
-    private String processCompetitionManager() { return processPerson(); }
-    private String processFinancialManager() { return processPerson(); }
-
-    private String processKeyword(TokenType token, TokenType otherToken) {
-        String t = "(" + token.getValue() + ")";
-        String ot = "(" + token.getValue() + ")";
-
-        if (t.startsWith("(?<Keyword>") && t.endsWith(")") &&
-            ot.startsWith("(?<Keyword>") && ot.endsWith(")")) {
-            
-            // Length of string
-            // "(?<Keyword>".length() -> 11
-            t = ot.substring(11, ot.length() - 1);
-            ot = t.substring(11, t.length() - 1);
-
-        }
-        return "(?<Keyword>" + String.join("|", ot, t) + ")";
-    }
-
-    private String processWord(TokenType vertex, Set<TokenType> adjTokens) {
+    public String processTokenValue(TokenType token, TokenType otherToken) {
         return "";
     }
 
-    private boolean isSpecial(String type) {
-        return TokenType.SPECIAL_TOKEN_TYPE.contains(type);
+    public String processPerson(TokenType token) {
+        String tokenValue = token.getValue()
+            .replaceAll("\\(", "\\\\(")
+            .replaceAll("\\)", "\\\\)");
+
+        //(?<Complainant>.+?)(?=( #regex# ))
+        String patternStart = "(?<"+token.getTokenType()+">.+?)(?=(";
+        String patternEnd = "))";
+
+        boolean tokenHasPersonNamedRegexValue = token.hasNamedRegexValue(ArbitrageToken.Complainant) ||
+            token.hasNamedRegexValue(ArbitrageToken.Defendant) ||
+            token.hasNamedRegexValue(ArbitrageToken.ThirdParty) ||
+            token.hasNamedRegexValue(ArbitrageToken.FinancialManager) ||
+            token.hasNamedRegexValue(ArbitrageToken.CompetitionManager);
+
+        Set<String> tokenAdjWord;
+        if (tokenHasPersonNamedRegexValue) {
+            String tokenRegex = tokenValue.substring(patternStart.length(), tokenValue.length() - patternEnd.length());
+            tokenAdjWord = Set.of(tokenRegex.split("|"));
+
+        } else {
+            tokenAdjWord = token.getAdjacentTokens().stream()
+                .filter(t -> t.ofType(CommonToken.Word))
+                .map(TokenType::getValue)
+                .collect(Collectors.toSet());
+        }
+
+        return patternStart + String.join("|", tokenAdjWord) + patternEnd;
     }
+
+    public String mergePerson(TokenType token, TokenType otherToken) {
+        return "";
+    }
+
+    public String processPerson(TokenType token, TokenType otherToken) {
+
+        String tokenValue = token.getValue()
+            .replaceAll("\\(", "\\\\(")
+            .replaceAll("\\)", "\\\\)");
+        String otherTokenValue = otherToken.getValue()
+            .replaceAll("\\(", "\\\\(")
+            .replaceAll("\\)", "\\\\)");
+
+        //(?<Complainant>.+?)(?=( #regex# ))
+        String patternStart = "(?<"+token.getTokenType()+">.+?)(?=(";
+        String patternEnd = "))";
+
+        boolean tokenHasPersonNamedRegexValue = token.hasNamedRegexValue(ArbitrageToken.Complainant) ||
+            token.hasNamedRegexValue(ArbitrageToken.Defendant) ||
+            token.hasNamedRegexValue(ArbitrageToken.ThirdParty) ||
+            token.hasNamedRegexValue(ArbitrageToken.FinancialManager) ||
+            token.hasNamedRegexValue(ArbitrageToken.CompetitionManager);
+
+        boolean otherTokenHasPersonNamedRegexValue = otherToken.hasNamedRegexValue(ArbitrageToken.Complainant) ||
+            otherToken.hasNamedRegexValue(ArbitrageToken.Defendant) ||
+            otherToken.hasNamedRegexValue(ArbitrageToken.ThirdParty) ||
+            otherToken.hasNamedRegexValue(ArbitrageToken.FinancialManager) ||
+            otherToken.hasNamedRegexValue(ArbitrageToken.CompetitionManager);
+
+        Set<String> tokenAdjWord;
+        if (tokenHasPersonNamedRegexValue) {
+            String tokenRegex = tokenValue.substring(patternStart.length(), tokenValue.length() - patternEnd.length());
+            tokenAdjWord = Set.of(tokenRegex.split("|"));
+
+        } else {
+            tokenAdjWord = token.getAdjacentTokens().stream()
+                .filter(t -> t.ofType(CommonToken.Word))
+                .map(TokenType::getValue)
+                .collect(Collectors.toSet());
+        }
+
+        Set<String> otherTokenAdjWord;
+        if (otherTokenHasPersonNamedRegexValue) {
+            String otherTokenRegex = otherTokenValue.substring(patternStart.length(), otherTokenValue.length() - patternEnd.length());
+            otherTokenAdjWord = Set.of(otherTokenRegex.split("|"));
+        } else {
+            otherTokenAdjWord = otherToken.getAdjacentTokens().stream()
+                .filter(t -> t.ofType(CommonToken.Word))
+                .map(TokenType::getValue)
+                .collect(Collectors.toSet());
+        }
+
+        otherTokenAdjWord.addAll(tokenAdjWord);
+
+        return patternStart + String.join("|", otherTokenAdjWord) + patternEnd;
+    }
+
+    private String processComplainant(TokenType token, TokenType otherToken) { return processPerson(token, otherToken); }
+    private String processDefendant(TokenType token, TokenType otherToken) { return processPerson(token, otherToken); }
+    private String processThirdParty(TokenType token, TokenType otherToken) { return processPerson(token, otherToken); }
+    private String processCompetitionManager(TokenType token, TokenType otherToken) { return processPerson(token, otherToken); }
+    private String processFinancialManager(TokenType token, TokenType otherToken) { return processPerson(token, otherToken); }
+
+    public String processKeyword(TokenType token, TokenType otherToken) {
+        String tokenValue = token.getValue()
+            .replaceAll("\\(", "\\\\(")
+            .replaceAll("\\)", "\\\\)");
+        String otherTokenValue = otherToken.getValue()
+            .replaceAll("\\(", "\\\\(")
+            .replaceAll("\\)", "\\\\)");
+
+        // Length of string
+        // "(?<Keyword>".length() -> 11
+        if (token.hasNamedRegexValue(ArbitrageToken.Keyword)) {
+            tokenValue = tokenValue.substring(11, tokenValue.length() - 1);
+        } else {
+            tokenValue = "(" + tokenValue + ")";
+        }
+
+        if (otherToken.hasNamedRegexValue(ArbitrageToken.Keyword)) {
+            otherTokenValue = otherTokenValue.substring(11, otherTokenValue.length() - 1);
+        } else {
+            otherTokenValue = "(" + otherTokenValue + ")";
+        }
+
+        return "(?<Keyword>" + String.join("|", otherTokenValue, tokenValue) + ")";
+    }
+
+    private String processWord(TokenType token) {
+
+        String tokenValue = token.getValue().toLowerCase()
+            .replaceAll("\\(", "\\\\(")
+            .replaceAll("\\)", "\\\\)");
+        
+        // Words shorter or equal than 3 letters 
+        if (tokenValue.length() <= 3) {
+            tokenValue = "(^|\\s*)" + tokenValue + "($|\\s+)";
+        }
+
+        return tokenValue;
+    }
+
+
+    //#endregion
 }

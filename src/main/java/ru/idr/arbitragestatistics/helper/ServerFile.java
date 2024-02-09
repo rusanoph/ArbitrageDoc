@@ -27,8 +27,10 @@ public class ServerFile {
         return ServerFile.fileText(documentFileName, documentPath, new String[]{});
     }
 
-    public static Set<String> listDirectoryServer(String directoryPath) {
-        String directoryURI = Paths.get("", "txtFiles", directoryPath).toAbsolutePath().toString();
+
+
+    public static Set<String> listDirectoryServer(String directoryPath, String... restDocumentPath) {
+        String directoryURI = Paths.get(directoryPath, restDocumentPath).toAbsolutePath().toString();
 
         File directory = new File(directoryURI);
         File[] directoryListFiles = directory.listFiles();
@@ -43,6 +45,7 @@ public class ServerFile {
             .collect(Collectors.toSet());
     }
     
+
     public static Set<String> deepListDirectoryServer(String directoryPath) {
         String directoryURI = Paths.get("", "txtFiles", directoryPath).toAbsolutePath().toString();
 

@@ -198,7 +198,7 @@ public class DocumentService {
     @GetMapping(value="/api/document/list/dir", produces="application/json")
     public String getListOfDirectories(@RequestParam("directoryPath") String directoryPath) {
 
-        Set<String> listOfDirectories = ServerFile.listDirectoryServer(directoryPath);
+        Set<String> listOfDirectories = ServerFile.listDirectoryServer("txtFiles", directoryPath);
 
         JSONArray returnJson = new JSONArray();
         

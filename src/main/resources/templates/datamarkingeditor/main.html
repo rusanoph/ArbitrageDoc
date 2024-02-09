@@ -35,7 +35,7 @@
                     </div>
                 </div>
                 
-                <div class="tool">
+                <div id="tool" class="tool">
                     <div class="tokens">Standard Tokens: 
                         <select id="standard-tokens-select">
                             <option value="Word">Слово</option>
@@ -99,7 +99,9 @@
 
                     <div class="text">
                         <pre class="textarea panel" id="text-data-marking-view" style="display: none; resize: none;"></pre>
-                        <textarea class="textarea" name="text" id="text-data-marking" onchange='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
+                        <!-- This version changes its height to fit all text onchange -->
+                        <!-- <textarea class="textarea" name="text" id="text-data-marking" onchange='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea> -->
+                        <textarea class="textarea" name="text" id="text-data-marking"></textarea>
                     </div>
                 </div>
 

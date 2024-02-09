@@ -65,7 +65,7 @@ public class DocumentProcessor {
         Map<String, TitleData> titleMap = new HashMap<>();
 
         // Check all directories for existing files
-        Set<String> dirs = ServerFile.listDirectoryServer(currentDir);
+        Set<String> dirs = ServerFile.listDirectoryServer("txtFiles", currentDir);
         if (dirs != null) {
             for (String dir : dirs) {
                 // If there dir, then recursively search files inside of it

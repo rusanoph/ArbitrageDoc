@@ -15,6 +15,16 @@
     <script th:inline="javascript">
         //#region Example MarkedGraph vertices and edges 
         
+        let verticesGraph = /*[[${verticesGraph}]]*/ "{}";
+        let verticesGraphJson = JSON.parse(verticesGraph);
+
+        let edgesGraph = /*[[${edgesGraph}]]*/ "{}";
+        let edgesGraphJson = JSON.parse(edgesGraph);
+
+        //#endregion
+
+        //#region Example MarkedGraph vertices and edges 
+        
         let verticesMarkedExampleGraph = /*[[${verticesMarkedExampleGraph}]]*/ "{}";
         let verticesMarkedExampleGraphJson = JSON.parse(verticesMarkedExampleGraph);
 
@@ -50,7 +60,7 @@
             <div class="wrapper">
 
                 <th:block th:replace="~{/arbitragestatistics/fragments/components/_graphview :: 
-                    graph-view('graph-cdp', 'Граф разбора истец и ответчик', '(ЛКМ - перетаскивание узлов; ПКМ - просмотр значений узла)')}">
+                    graph-view('graph', 'Граф разбора истец и ответчик', '(ЛКМ - перетаскивание узлов; ПКМ - просмотр значений узла)')}">
                 </th:block>
 
             </div>

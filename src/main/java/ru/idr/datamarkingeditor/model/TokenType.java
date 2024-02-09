@@ -10,7 +10,7 @@ import org.json.JSONObject;
 
 import ru.idr.arbitragestatistics.model.arbitrage.ArbitrageToken;
 
-public class TokenType implements IToken {
+public class TokenType {
     public static final Set<String> SPECIAL_TOKEN_TYPE = 
         Set.of(ArbitrageToken.values())
         .stream()
@@ -22,18 +22,22 @@ public class TokenType implements IToken {
     String tokenType;
     Set<TokenType> adjacentTokens;
 
-    public TokenType(String value, String tokeyType) {
+    public TokenType(String value, String tokenType) {
         this.value = value;
-        this.tokenType = tokeyType;
+        this.tokenType = tokenType;
         this.adjacentTokens = new HashSet<>();
+    }
 
+    public boolean ofType(IToken type) {
+        return this.getTokenType().equals(type.getLabel());
+    }
 
-        // if (this.isSpecial()) {
-        //     this.value = ArbitrageToken.getByLabel(tokeyType).getRegex();
-        // } else {
-        //     this.value = value.trim().toLowerCase();
-        // }
-        
+    public boolean bothOfType(TokenType otherToken, IToken type) {
+
+        boolean isOfType = this.ofType(type);
+        boolean hasSameType = otherToken.getTokenType().equals(this.getTokenType());
+
+        return  isOfType && hasSameType;
     }
 
     public static TokenType fromJsonObject(JSONObject json) {
@@ -82,6 +86,10 @@ public class TokenType implements IToken {
 
     public boolean isSpecial() {
         return SPECIAL_TOKEN_TYPE.contains(this.tokenType.toLowerCase());
+    }
+
+    public boolean hasNamedRegexValue(IToken type) {
+        return this.getValue().startsWith("(?<"+type.getLabel()+">") && this.getValue().endsWith(")");
     }
 
     @Override

@@ -71,7 +71,16 @@ h2 {
 /* #endregion */
 
 /* #region Tool */
-.tool {
+#tool {
+    
+}
+
+.tool {position: sticky;
+    top: 0;
+    background: #fff;
+    padding: 10px 0 10px 0;
+
+    z-index: 1;
     width: 100%;
 
     font-size: 1.1rem;

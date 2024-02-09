@@ -79,4 +79,12 @@ export class DMEService {
 
         return data;
     }
+
+    async getMarkedDataDirectories() {
+        let url = `/api/markdata/list/dir`;
+        const response = await fetch(url);
+        let data = await response.json();
+
+        return data;
+    }
 }
