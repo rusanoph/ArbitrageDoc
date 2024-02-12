@@ -1,6 +1,7 @@
 package ru.idr.arbitragestatistics.helper.regex;
 
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 public class RegExRepository {
 
@@ -62,6 +63,16 @@ public class RegExRepository {
     public static String wrapStaticTokenAsRegex(String staticToken) {
         staticToken = staticToken.replaceAll(" ", "\\\\s+");
         return String.format("(^|\\s*)%s(\\s*|$)", staticToken, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+    }
+
+    public static boolean validateRegex(String regex) {
+        try {
+            Pattern.compile(regex);
+        } catch (PatternSyntaxException pse) {
+            return false;
+        }
+
+        return true;
     }
     //#endregion
 }

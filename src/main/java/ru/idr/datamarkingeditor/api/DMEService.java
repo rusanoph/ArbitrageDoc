@@ -1,8 +1,6 @@
 package ru.idr.datamarkingeditor.api;
 
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Set;
 
 import org.json.JSONArray;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ru.idr.arbitragestatistics.helper.ServerFile;
 import ru.idr.datamarkingeditor.helper.MarkedDataParser;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController

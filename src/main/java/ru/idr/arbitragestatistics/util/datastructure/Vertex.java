@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 import org.json.JSONObject;
 
 import ru.idr.arbitragestatistics.helper.regex.RegExRepository;
-import ru.idr.datamarkingeditor.model.TokenType;
+import ru.idr.datamarkingeditor.model.Entity;
 
 public class Vertex<T> {
     private int depth = 0;
@@ -101,7 +101,7 @@ public class Vertex<T> {
     
     //#region Type
     public boolean isSpecial() {
-        return TokenType.SPECIAL_TOKEN_TYPE.contains(this.type.toLowerCase());
+        return Entity.SPECIAL_TOKEN_TYPE.contains(this.type.toLowerCase());
     }
     //#endregion
 

@@ -13,8 +13,8 @@ public class StaticGraphsOld {
     private static final String PARSE_COMPETITION_MANAGER = "(?<competitionManager>.*?)";
     private static final String PARSE_FINANCIAL_MANAGER = "(?<financialManager>.*?)";
 
-    private static final String PARSE_PERSON_ID = "(?<personId>.*?)";
-    private static final String PARSE_PERSON_ADDRESS = "(?<personAddress>.*?)";
+    // private static final String PARSE_PERSON_ID = "(?<personId>.*?)";
+    // private static final String PARSE_PERSON_ADDRESS = "(?<personAddress>.*?)";
     private static final String PARSE_COURT_CASE_SUM = "(?<courtCaseSum>"+RegExRepository.regexCourtCaseSum+")";
 
     private static final String PARSE_KEYWORD = "(?<keyword>.*?)";

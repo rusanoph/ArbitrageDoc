@@ -1,18 +1,10 @@
 package ru.idr.arbitragestatistics.model.datastructure;
 
-
-import java.util.Set;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import ru.idr.arbitragestatistics.helper.regex.RegExBuilder;
 import ru.idr.arbitragestatistics.helper.regex.RegExRepository;
 import ru.idr.arbitragestatistics.util.datastructure.Graph;
 import ru.idr.arbitragestatistics.util.datastructure.ValueVertexMap;
 import ru.idr.arbitragestatistics.util.datastructure.Vertex;
-import ru.idr.datamarkingeditor.helper.MarkedDataParser;
-import ru.idr.datamarkingeditor.model.TokenType;
 
 public class StaticGraphs {
 
@@ -25,11 +17,11 @@ public class StaticGraphs {
     private static final String PARSE_DEFENDANT = "(?<Defendant>.+?)";
     private static final String PARSE_THIRD_PARTY = "(?<ThirdParty>.+?)";
     
-    private static final String PARSE_PERSON_ID = "(?<PersonId>.+?)";
-    private static final String PARSE_PERSON_ADDRESS = "(?<PersonAddress>.+?)";
+    // private static final String PARSE_PERSON_ID = "(?<PersonId>.+?)";
+    // private static final String PARSE_PERSON_ADDRESS = "(?<PersonAddress>.+?)";
     private static final String PARSE_COURT_CASE_SUM = "(?<CourtCaseSum>"+RegExRepository.regexCourtCaseSum+")";
     
-    private static final String PARSE_COMPETITION_MANAGER = "(?<CompetitionManager>.+?)";
+    // private static final String PARSE_COMPETITION_MANAGER = "(?<CompetitionManager>.+?)";
     private static final String PARSE_FINANCIAL_MANAGER = "(?<FinancialManager>.+?)";
 
     private static final String PARSE_KEYWORD = "(?<Keyword>"+

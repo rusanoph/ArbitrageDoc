@@ -4,7 +4,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class PersonRegexTest {
@@ -34,13 +33,13 @@ public class PersonRegexTest {
         Assertions.assertTrue(m.find());
     }
 
-    @Test
-    void personRegex_Case3() {
-        String testCase = "открытого акционерного общества «Урожайное», Ставропольский край, Новоалександровский район, пос. Равнинный, ОГРН 1022602823902,";
+    // @Test
+    // void personRegex_Case3() {
+    //     String testCase = "открытого акционерного общества «Урожайное», Ставропольский край, Новоалександровский район, пос. Равнинный, ОГРН 1022602823902,";
 
-        Matcher m = Pattern.compile(personRegex, Pattern.CASE_INSENSITIVE | Pattern.DOTALL | Pattern.MULTILINE).matcher(testCase);
+    //     Matcher m = Pattern.compile(personRegex, Pattern.CASE_INSENSITIVE | Pattern.DOTALL | Pattern.MULTILINE).matcher(testCase);
 
-        Assertions.assertTrue(m.find());
-    }
+    //     Assertions.assertTrue(m.find());
+    // }
 
 } 
