@@ -8,10 +8,10 @@ import java.util.regex.Pattern;
 import org.springframework.stereotype.Component;
 
 import ru.idr.arbitragestatistics.helper.regex.RegExRepository;
-import ru.idr.arbitragestatistics.model.arbitrage.ArbitrageToken;
 import ru.idr.arbitragestatistics.model.datastructure.StaticGraphs;
 import ru.idr.arbitragestatistics.util.datastructure.Graph;
 import ru.idr.arbitragestatistics.util.datastructure.Vertex;
+import ru.idr.datamarkingeditor.model.token.ArbitrageToken;
 
 @Component
 public class ArbitrageTemplateSeeker {

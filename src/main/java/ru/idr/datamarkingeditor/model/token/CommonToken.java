@@ -1,4 +1,4 @@
-package ru.idr.datamarkingeditor.model;
+package ru.idr.datamarkingeditor.model.token;
 
 public enum CommonToken implements IToken {
     Word("Word")
@@ -14,5 +14,8 @@ public enum CommonToken implements IToken {
         return this.label;
     }
 
-
+    @Override
+    public boolean notCommon() {
+        return false;
+    }
 }

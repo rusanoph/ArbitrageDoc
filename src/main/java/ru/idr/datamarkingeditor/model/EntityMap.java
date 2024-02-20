@@ -3,7 +3,15 @@ package ru.idr.datamarkingeditor.model;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import ru.idr.datamarkingeditor.model.entity.Entity;
+import ru.idr.datamarkingeditor.model.token.IToken;
 
 public class EntityMap implements Iterable<Entity> {
     
@@ -46,6 +54,12 @@ public class EntityMap implements Iterable<Entity> {
     public Entity get(Entity patternToken) {
         return this.map.get(patternToken.hashCode());
     }
+    
+    public Set<Entity> getOfType(IToken token) {
+        return this.stream()
+            .filter(entity -> entity.ofType(token))
+            .collect(Collectors.toSet());
+    }
     //#endregion
 
     //#region Stream
@@ -56,8 +70,31 @@ public class EntityMap implements Iterable<Entity> {
 
     //#region Iterable Implementation
     @Override
-    public Iterator<Entity> iterator() {
-        return new EntityMapIterator(this.map);
+    public Iterator<Entity> iterator() { return new EntityMapIterator(this.map); }
+    //#endregion
+
+    //#region JSON Serializatoin
+
+    public JSONArray toJSONArray() {
+        
+        JSONArray entitiesJson = new JSONArray();
+        for (Entity entity : map.values()) {
+            entitiesJson.put(entity.toJsonObject());
+        }
+
+        return entitiesJson;
     }
+
+    public static EntityMap fromJsonArray(JSONArray json) {
+        EntityMap entityMap = new EntityMap();
+
+        for (Object o : json) {
+            Entity entity = Entity.fromJsonObject((JSONObject) o);
+            entityMap.add(entity);
+        }   
+
+        return entityMap;
+    }
+
     //#endregion
 }

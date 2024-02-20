@@ -18,11 +18,11 @@ import org.springframework.stereotype.Component;
 
 import ru.idr.arbitragestatistics.helper.ServerFile;
 import ru.idr.arbitragestatistics.helper.regex.RegExBuilder;
-import ru.idr.arbitragestatistics.model.arbitrage.ArbitrageToken;
 import ru.idr.arbitragestatistics.util.datastructure.Graph;
 import ru.idr.arbitragestatistics.util.datastructure.Vertex;
-import ru.idr.datamarkingeditor.model.CommonToken;
-import ru.idr.datamarkingeditor.model.Entity;
+import ru.idr.datamarkingeditor.model.entity.Entity;
+import ru.idr.datamarkingeditor.model.token.ArbitrageToken;
+import ru.idr.datamarkingeditor.model.token.CommonToken;
 
 @Component
 public class MarkedDataParser {
@@ -83,41 +83,6 @@ public class MarkedDataParser {
             for (Entity token : tokens) {
                 if (token.equals(otherToken)) {
 
-                    // // === Arbitrage === 
-                    // if (token.bothOfType(otherToken, ArbitrageToken.Complainant)) {
-                    //     token.setValue(processComplainant(token, otherToken));
-                    // }
-
-                    // if (token.bothOfType(otherToken, ArbitrageToken.Defendant)) {
-                    //     token.setValue(processDefendant(token, otherToken));                                                    
-                    // }
-
-                    // if (token.bothOfType(otherToken, ArbitrageToken.ThirdParty)) {
-                    //     token.setValue(processThirdParty(token, otherToken));                                                
-                    // }
-
-                    // if (token.bothOfType(otherToken, ArbitrageToken.CompetitionManager)) {
-                    //     token.setValue(processCompetitionManager(token, otherToken));                                                
-                    // }
-
-                    // if (token.bothOfType(otherToken, ArbitrageToken.FinancialManager)) {
-                    //     token.setValue(processFinancialManager(token, otherToken));                                                
-                    // }
-
-
-                    // if (token.bothOfType(otherToken, ArbitrageToken.Keyword)) {
-                    //     token.setValue(processKeyword(token, otherToken));
-                    // }
-
-                    // // === Common ===
-                    // if (token.bothOfType(otherToken, CommonToken.Word)) {
-                    //     // token.setValue(processWord(token));
-                    // }
-
-                    // // Merge adjacent tokens
-                    // token.getAdjacentTokens()
-                    // .addAll(otherToken.getAdjacentTokens());
-                    // break;
                 }
             }
         } else {
@@ -191,14 +156,6 @@ public class MarkedDataParser {
         return preprocessedParsedText;
     }
 
-    public Set<Entity> combine(Set<Entity> tokens, Set<Entity> otherTokens) {
-        
-        for (Entity otherToken : otherTokens) {
-            tokens = addTokenTypeToSet(tokens, otherToken);
-        }
-
-        return tokens;
-    }
 
     @SafeVarargs
     public final Set<Entity> combineAll(String directoryPath, String... restDirectoryPath) throws IOException {
@@ -268,76 +225,4 @@ public class MarkedDataParser {
     }
     //#endregion
 
-    //#region Token Value processing 
-
-    public String processTokenValue(Entity token) {
-        // Method, that recognizes type of token and process it with corresponding method
-
-        return "";
-    }
-
-    public String processTokenValue(Entity token, Entity otherToken) {
-        return "";
-    }
-
-    
-
-    public String mergePerson(Entity token, Entity otherToken) {
-        return "";
-    }
-
-    public String processPerson(Entity token, Entity otherToken) {
-
-        String tokenValue = token.getValue()
-            .replaceAll("\\(", "\\\\(")
-            .replaceAll("\\)", "\\\\)");
-        String otherTokenValue = otherToken.getValue()
-            .replaceAll("\\(", "\\\\(")
-            .replaceAll("\\)", "\\\\)");
-
-        //(?<Complainant>.+?)(?=( #regex# ))
-        String patternStart = "(?<"+token.getType()+">.+?)(?=(";
-        String patternEnd = "))";
-
-        boolean tokenHasPersonNamedRegexValue = token.hasNamedRegexValue(ArbitrageToken.Complainant) ||
-            token.hasNamedRegexValue(ArbitrageToken.Defendant) ||
-            token.hasNamedRegexValue(ArbitrageToken.ThirdParty) ||
-            token.hasNamedRegexValue(ArbitrageToken.FinancialManager) ||
-            token.hasNamedRegexValue(ArbitrageToken.CompetitionManager);
-
-        boolean otherTokenHasPersonNamedRegexValue = otherToken.hasNamedRegexValue(ArbitrageToken.Complainant) ||
-            otherToken.hasNamedRegexValue(ArbitrageToken.Defendant) ||
-            otherToken.hasNamedRegexValue(ArbitrageToken.ThirdParty) ||
-            otherToken.hasNamedRegexValue(ArbitrageToken.FinancialManager) ||
-            otherToken.hasNamedRegexValue(ArbitrageToken.CompetitionManager);
-
-        // Set<String> tokenAdjWord;
-        // if (tokenHasPersonNamedRegexValue) {
-        //     String tokenRegex = tokenValue.substring(patternStart.length(), tokenValue.length() - patternEnd.length());
-        //     tokenAdjWord = Set.of(tokenRegex.split("|"));
-
-        // } else {
-        //     tokenAdjWord = token.getAdjacentTokens().stream()
-        //         .filter(t -> t.ofType(CommonToken.Word))
-        //         .map(Entity::getValue)
-        //         .collect(Collectors.toSet());
-        // }
-
-        // Set<String> otherTokenAdjWord;
-        // if (otherTokenHasPersonNamedRegexValue) {
-        //     String otherTokenRegex = otherTokenValue.substring(patternStart.length(), otherTokenValue.length() - patternEnd.length());
-        //     otherTokenAdjWord = Set.of(otherTokenRegex.split("|"));
-        // } else {
-        //     otherTokenAdjWord = otherToken.getAdjacentTokens().stream()
-        //         .filter(t -> t.ofType(CommonToken.Word))
-        //         .map(Entity::getValue)
-        //         .collect(Collectors.toSet());
-        // }
-
-        // otherTokenAdjWord.addAll(tokenAdjWord);
-
-        // return patternStart + String.join("|", otherTokenAdjWord) + patternEnd;
-        return "";
-    }
-    //#endregion
 }

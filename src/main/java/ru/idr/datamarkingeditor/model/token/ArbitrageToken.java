@@ -1,7 +1,6 @@
-package ru.idr.arbitragestatistics.model.arbitrage;
+package ru.idr.datamarkingeditor.model.token;
 
 import ru.idr.arbitragestatistics.helper.regex.RegExRepository;
-import ru.idr.datamarkingeditor.model.IToken;
 
 public enum ArbitrageToken implements IToken {
     Complainant("Complainant"),
@@ -45,6 +44,18 @@ public enum ArbitrageToken implements IToken {
 
     public String getRegex() {
         return this.regex;
+    }
+
+    public boolean isPerson() {
+        return this == ArbitrageToken.Complainant ||
+        this == ArbitrageToken.Defendant ||
+        this == ArbitrageToken.ThirdParty ||
+        this == ArbitrageToken.FinancialManager ||
+        this == ArbitrageToken.CompetitionManager;
+    }
+
+    public boolean isKeyword() {
+        return this == ArbitrageToken.Keyword;
     }
 
     // Assignin regex values
