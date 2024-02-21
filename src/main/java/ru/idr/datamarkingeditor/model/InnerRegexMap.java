@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.json.JSONObject;
 
@@ -28,7 +29,11 @@ public class InnerRegexMap {
         }
     }
 
-    public boolean isEmpty() {
+    public boolean isEmpty(IToken token) {
+        return this.innerRegexMap.get(token).isEmpty();
+    }
+
+    public boolean isEmptyAll() {
         for (IToken key : this.keySet())
             if (!this.innerRegexMap.get(key).isEmpty()) return false;
 
@@ -43,9 +48,9 @@ public class InnerRegexMap {
         return this.innerRegexMap.get(token);
     }
 
+    //#region Put/PutAll
     public InnerRegexMap put(IToken token, String value) {
         this.innerRegexMap.get(token).add(value);
-
         return this;
     }
 
@@ -58,10 +63,23 @@ public class InnerRegexMap {
         for (String value : values) this.put(token, value);
         return this;
     }
+    //#endregion
 
+    //#region Get/GetAll
     public String get(IToken token) {
         return String.join("|", this.innerRegexMap.get(token));
     }
+
+    public String getAll(IToken... tokens) {
+        return String.join(
+            "|", 
+            Stream.of(tokens)
+                .filter(token -> !this.isEmpty(token))
+                .map(token -> this.get(token))
+                .collect(Collectors.toList())
+        );
+    }
+    //#endregion
 
     //#region JSON Serialization
     public static InnerRegexMap fromJsonObject(String rawJson) {
@@ -86,9 +104,7 @@ public class InnerRegexMap {
     }
 
     public JSONObject toJsonObject() {
-        JSONObject json = new JSONObject(this.innerRegexMap);
-
-        return json;
+        return new JSONObject(this.innerRegexMap);
     }
     //#endregion
 

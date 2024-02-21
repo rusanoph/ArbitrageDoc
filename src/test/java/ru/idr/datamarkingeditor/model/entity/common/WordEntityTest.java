@@ -1,20 +1,22 @@
-package ru.idr.datamarkingeditor.model.entity;
+package ru.idr.datamarkingeditor.model.entity.common;
 
 import java.util.Set;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import ru.idr.datamarkingeditor.model.InnerRegexMap;
+import ru.idr.datamarkingeditor.model.entity.Entity;
+import ru.idr.datamarkingeditor.model.entity.arbitrage.KeywordEntity;
 import ru.idr.datamarkingeditor.model.token.ArbitrageToken;
 import ru.idr.datamarkingeditor.model.token.CommonToken;
 
-public class WordTest {
+public class WordEntityTest {
 
      //#region Process Test 
 
      @Test
-     void processWord_CorrectBracesReplacing() {
+     public void processWord_CorrectBracesReplacing() {
         Entity entity = new WordEntity("word (braces)", CommonToken.Word);
 
         String textExpected = "(word \\(braces\\))";
@@ -23,7 +25,7 @@ public class WordTest {
      }
  
      @Test
-     void processWord_ShortWordWrapping() {
+     public void processWord_ShortWordWrapping() {
         // Word length = 1
         Entity entityShort1 = new WordEntity("s", CommonToken.Word);
 
@@ -61,7 +63,7 @@ public class WordTest {
 
     //#region Merge Test
     @Test
-    void mergeWord_TryMergeDifferentWords_ThrowsException() {
+    public void mergeWord_TryMergeDifferentWords_ThrowsException() {
         Entity entity1 = new WordEntity("word1", CommonToken.Word);
         Entity entity2 = new WordEntity("word2", CommonToken.Word);
 
@@ -71,7 +73,7 @@ public class WordTest {
     }
 
     @Test
-    void mergeWord_otherIsNotTypeOfWord_ThrowsException() {
+    public void mergeWord_otherIsNotTypeOfWord_ThrowsException() {
         Entity entity1 = new WordEntity("word1", CommonToken.Word);
         Entity entity2 = new KeywordEntity("word1", ArbitrageToken.Keyword);
 
@@ -81,25 +83,21 @@ public class WordTest {
     }
 
     @Test
-    void mergeWord_BothNotProcessedBefore() {
+    public void mergeWord_BothNotProcessedBefore() {
         Entity entity = new WordEntity("word1", CommonToken.Word);
+        entity.connect(new WordEntity("A"));
+
         Entity otherEntity = new WordEntity("word1", CommonToken.Word);
-
-        Entity entity1 = new WordEntity("A", CommonToken.Word);
-        Entity otherEntity1 = new WordEntity("oA", CommonToken.Word);
-        Entity otherEntity2 = new WordEntity("oB", CommonToken.Word);
-
-        entity.getRelated().add(entity1);
-
-        otherEntity.getRelated().add(otherEntity1);
-        otherEntity.getRelated().add(otherEntity2);
+        otherEntity
+            .connect(new WordEntity("oA"))
+            .connect(new WordEntity("oB"));
 
         entity.merge(otherEntity);
 
         Set<Entity> testRelated = Set.of(
-            new WordEntity("A", CommonToken.Word),
-            new WordEntity("oA", CommonToken.Word),
-            new WordEntity("oB", CommonToken.Word)
+            new WordEntity("A"),
+            new WordEntity("oA"),
+            new WordEntity("oB")
         );
         
         for (Entity testEntity : testRelated) {
@@ -107,5 +105,6 @@ public class WordTest {
         }
     }
     //#endregion
+    
     
 }

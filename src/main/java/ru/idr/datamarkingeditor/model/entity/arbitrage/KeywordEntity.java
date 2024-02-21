@@ -1,5 +1,6 @@
-package ru.idr.datamarkingeditor.model.entity;
+package ru.idr.datamarkingeditor.model.entity.arbitrage;
 
+import ru.idr.datamarkingeditor.model.entity.Entity;
 import ru.idr.datamarkingeditor.model.token.ArbitrageToken;
 import ru.idr.datamarkingeditor.model.token.IToken;
 
@@ -10,7 +11,7 @@ public class KeywordEntity extends Entity {
 
     @Override
     public String getValue() {
-        if (this.innerRegexMap.isEmpty()) return this.value;
+        if (this.innerRegexMap.isEmpty(ArbitrageToken.Keyword)) return this.value;
 
         return Entity.PATTERN_KEYWORD_START + 
             this.innerRegexMap.get(ArbitrageToken.Keyword) + 
@@ -32,10 +33,9 @@ public class KeywordEntity extends Entity {
             ArbitrageToken.Keyword, 
             otherEntity.getInnerRegexMap().values(ArbitrageToken.Keyword)
         );
-        this.related.addAll(otherEntity.related);
+        this.related.addAll(otherEntity.getRelated());
 
         return this;
     }
 
-    
 }

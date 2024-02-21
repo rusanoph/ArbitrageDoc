@@ -1,7 +1,7 @@
-package ru.idr.datamarkingeditor.model;
+package ru.idr.datamarkingeditor.model.token;
 
+import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 
 import ru.idr.datamarkingeditor.model.token.ArbitrageToken;
 import ru.idr.datamarkingeditor.model.token.CommonToken;
@@ -42,7 +42,7 @@ public class ITokenTest {
 
     @Test
     public void isPerson_CourtCaseSum_NotPerson() {
-        IToken notPerson = ArbitrageToken.CourtCaseSum;
+        IToken notPerson = CommonToken.MoneySum;
         Assertions.assertFalse(notPerson.isPerson());
     }
 

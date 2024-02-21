@@ -1,14 +1,17 @@
-package ru.idr.datamarkingeditor.model.entity;
+package ru.idr.datamarkingeditor.model.entity.arbitrage.person;
 
 import java.util.Set;
 
+import ru.idr.datamarkingeditor.model.entity.Entity;
 import ru.idr.datamarkingeditor.model.token.ArbitrageToken;
 import ru.idr.datamarkingeditor.model.token.CommonToken;
 import ru.idr.datamarkingeditor.model.token.IToken;
 
 public abstract class PersonEntity extends Entity {
     
-    public PersonEntity(String value, IToken type) { super(value, type); }
+    public PersonEntity(String value, IToken type) { 
+        super(value, type); 
+    }
 
     abstract public String getValue();
 
@@ -35,7 +38,7 @@ public abstract class PersonEntity extends Entity {
 
     @Override
     public Entity merge(Entity otherEntity) {
-        if (!(otherEntity instanceof PersonEntity)) throw new IllegalArgumentException("Merging enitties must have the same type.");
+        if (this.getClass() != otherEntity.getClass()) throw new IllegalArgumentException("Merging enitties must have the same type.");
 
         this.innerRegexMap.putAll(
             ArbitrageToken.Keyword, 
@@ -45,7 +48,15 @@ public abstract class PersonEntity extends Entity {
             CommonToken.Word, 
             otherEntity.getInnerRegexMap().values(CommonToken.Word)    
         );
-        this.related.addAll(otherEntity.related);        
+        this.related.addAll(otherEntity.getRelated());        
+
+        return this;
+    }
+
+    @Override
+    public Entity connect(Entity otherEntity) {
+        super.connect(otherEntity);
+        this.process();
 
         return this;
     }

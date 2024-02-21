@@ -10,8 +10,15 @@ import java.util.stream.Stream;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import ru.idr.datamarkingeditor.model.EntityMap;
 import ru.idr.datamarkingeditor.model.InnerRegexMap;
+import ru.idr.datamarkingeditor.model.entity.arbitrage.KeywordEntity;
+import ru.idr.datamarkingeditor.model.entity.arbitrage.person.CompetitionManagerEntity;
+import ru.idr.datamarkingeditor.model.entity.arbitrage.person.ComplainantEntity;
+import ru.idr.datamarkingeditor.model.entity.arbitrage.person.DefendantEntity;
+import ru.idr.datamarkingeditor.model.entity.arbitrage.person.FinancialManagerEntity;
+import ru.idr.datamarkingeditor.model.entity.arbitrage.person.ThirdPartyEntity;
+import ru.idr.datamarkingeditor.model.entity.common.MoneySumEntity;
+import ru.idr.datamarkingeditor.model.entity.common.WordEntity;
 import ru.idr.datamarkingeditor.model.token.ArbitrageToken;
 import ru.idr.datamarkingeditor.model.token.CommonToken;
 import ru.idr.datamarkingeditor.model.token.IToken;
@@ -78,13 +85,16 @@ public abstract class Entity {
         this.process();
     }
     
-    abstract public Entity merge(Entity entity);
     abstract public Entity process();
+    abstract public Entity merge(Entity otherEntity);
+
+    public Entity connect(Entity otherEnity) {
+        this.related.add(otherEnity);
+        return this;
+    }
 
     //#region Getter/Setter
-    public String getValue() { 
-        return value; 
-    }
+    public String getValue() { return value; }
     public IToken getType() { return type; }
     public InnerRegexMap getInnerRegexMap() { return innerRegexMap; }
     public EntityMap getRelated() { return related; }
@@ -110,13 +120,10 @@ public abstract class Entity {
     };
     
     public static Entity fromJsonObject(JSONObject json) {
-        // throw new UnsupportedOperationException("Unimplemented method 'fromJsonObject'"); 
-
         IToken type = IToken.fromString(json.getString("type"));
         Entity entity = Entity.createInctance(type);
 
         entity.value = json.getString("value");
-        entity.type = type;
         entity.innerRegexMap = InnerRegexMap.fromJsonObject(json.getJSONObject("innerRegex"));
         entity.related = EntityMap.fromJsonArray(json.getJSONArray("related"));
 
@@ -131,10 +138,10 @@ public abstract class Entity {
         JSONObject entityJson = new JSONObject();
 
         entityJson
-        .put("value", getValue())
-        .put("type", getType())
-        .put("innerRegex", getInnerRegexMap().toJsonObject())
-        .put("related", new JSONArray());
+            .put("value", getValue())
+            .put("type", getType().getLabel())
+            .put("innerRegex", getInnerRegexMap().toJsonObject())
+            .put("related", new JSONArray());
 
         return entityJson; 
     }
@@ -164,19 +171,17 @@ public abstract class Entity {
     //#region Helper methods
 
     private static  Entity createInctance(IToken token) {
-        // Complainant
-        // Defendant
-        // ThirdParty
-        // CompetitionManager
-        // FinancialManager
-        // Keyword
-        // CourtCaseSum
-
-        // Word
-
         switch (token) {
-            // case ArbitrageToken.Complainant: return new 
-        
+            case CommonToken.Word: return new WordEntity("", token);
+            case CommonToken.MoneySum: return new MoneySumEntity("", token);
+
+            case ArbitrageToken.Complainant: return new ComplainantEntity("", token);
+            case ArbitrageToken.Defendant: return new DefendantEntity("", token);
+            case ArbitrageToken.ThirdParty: return new ThirdPartyEntity("", token);
+            case ArbitrageToken.CompetitionManager: return new CompetitionManagerEntity("", token);
+            case ArbitrageToken.FinancialManager: return new FinancialManagerEntity("", token);
+            case ArbitrageToken.Keyword: return new KeywordEntity("", token);
+            
             default: return null;
         }
     }
@@ -187,7 +192,10 @@ public abstract class Entity {
             .trim()
             .toLowerCase();
 
-        return escapeSpecialRegex(value);
+        value = escapeSpecialRegex(value);
+        value = wrapIfShort(value);
+
+        return "("+ value +")";
     }
 
     private String escapeSpecialRegex(String value) {
@@ -196,14 +204,12 @@ public abstract class Entity {
         String escapeRegexChars = "(([\\^$.|?*+()\\[\\]{}]))";
         value = value.replaceAll(escapeRegexChars, "\\\\$1");
         
-        // Words shorter or equal than 3 letters 
-        if (value.length() <= 3) {
-            value = "(^|\\s*)" + value + "($|\\s+)";
-        }
-
-        value = "("+ value +")";
-        
         return value;
+    }
+
+    private String wrapIfShort(String value) {
+        // Words shorter or equal than 3 letters 
+        return 0 < value.length() && value.length() <= 3 ? "(^|\\s*)" + value + "($|\\s+)" : value;
     }
     //#endregion
 

@@ -1,4 +1,4 @@
-package ru.idr.datamarkingeditor.model;
+package ru.idr.datamarkingeditor.model.entity;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -10,7 +10,6 @@ import java.util.stream.Stream;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import ru.idr.datamarkingeditor.model.entity.Entity;
 import ru.idr.datamarkingeditor.model.token.IToken;
 
 public class EntityMap implements Iterable<Entity> {
@@ -35,6 +34,11 @@ public class EntityMap implements Iterable<Entity> {
             this.map.put(hash, entity);
         }
         
+        return this;
+    }
+
+    public EntityMap addAll(Entity... entities) {
+        for (Entity e : entities) this.add(e);
         return this;
     }
 

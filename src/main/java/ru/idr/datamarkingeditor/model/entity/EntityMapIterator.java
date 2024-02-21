@@ -1,11 +1,9 @@
-package ru.idr.datamarkingeditor.model;
+package ru.idr.datamarkingeditor.model.entity;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import ru.idr.datamarkingeditor.model.entity.Entity;
 
 public class EntityMapIterator implements Iterator<Entity> {
     private int cursor;
