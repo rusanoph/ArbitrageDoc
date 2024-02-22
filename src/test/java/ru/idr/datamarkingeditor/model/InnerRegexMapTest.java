@@ -77,17 +77,25 @@ public class InnerRegexMapTest {
         InnerRegexMap irm = new InnerRegexMap();
 
         JSONObject irmJson = irm.toJsonObject();
-        JSONObject testJson = (new JSONObject())
-            .put("FinancialManager", new JSONArray())
-            .put("Word", new JSONArray())
-            .put("Keyword", new JSONArray())
-            .put("Complainant", new JSONArray())
-            .put("CompetitionManager", new JSONArray())
-            .put("MoneySum", new JSONArray())
-            .put("Defendant", new JSONArray())
-            .put("ThirdParty", new JSONArray());
+        JSONObject testJson = new JSONObject();
 
         Assertions.assertEquals(testJson.toString(), irmJson.toString());
     }
 
+    @Test
+    public void toJsonObject_NotEmptySerialization() {
+        InnerRegexMap irm = new InnerRegexMap();
+        irm
+            .put(CommonToken.MoneySum, "sum")
+            .put(ArbitrageToken.Defendant, "sum")
+            .put(ArbitrageToken.ThirdParty, "sum");
+
+        JSONObject irmJson = irm.toJsonObject();
+        JSONObject testJson = (new JSONObject())
+            .put("MoneySum", new JSONArray("[\"sum\"]"))
+            .put("Defendant", new JSONArray("[\"sum\"]"))
+            .put("ThirdParty", new JSONArray("[\"sum\"]"));
+
+        Assertions.assertEquals(testJson.toString(), irmJson.toString());
+    }
 }

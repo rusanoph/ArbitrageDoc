@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import ru.idr.datamarkingeditor.model.entity.Entity;
@@ -29,17 +30,23 @@ public class InnerRegexMap {
         }
     }
 
+    //#region Is Empty
     public boolean isEmpty(IToken token) {
         return this.innerRegexMap.get(token).isEmpty();
     }
 
     public boolean isEmptyAll() {
-        for (IToken key : this.keySet())
-            if (!this.innerRegexMap.get(key).isEmpty()) return false;
+        for (IToken key : this.keySet()) {
+            if (!this.innerRegexMap.get(key).isEmpty()) {
+                return false;
+            }
+        }
 
         return true;
     }
+    //#endregion
 
+    //#region Get Keys/Values
     public Set<IToken> keySet() {
         return this.innerRegexMap.keySet();
     }
@@ -47,6 +54,7 @@ public class InnerRegexMap {
     public Set<String> values(IToken token) {
         return this.innerRegexMap.get(token);
     }
+    //#endregion
 
     //#region Put/PutAll
     public InnerRegexMap put(IToken token, String value) {
@@ -90,21 +98,31 @@ public class InnerRegexMap {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public static InnerRegexMap fromJsonObject(JSONObject json) {
         InnerRegexMap innerRegexMap = new InnerRegexMap();
-        
-        Map<String, Object> rawInnerRegexMap = json.toMap();
 
-        for (String rawToken : rawInnerRegexMap.keySet()) {
-            IToken token = IToken.fromString(rawToken);
-            Set<String> set = new HashSet<String>((List) rawInnerRegexMap.get(rawToken));
+        for (IToken token : allowedTokens) {
+            List<Object> tokenArray = 
+                Objects.requireNonNullElse(
+                    json.optJSONArray(token.getLabel()), 
+                    new JSONArray()
+                )
+                .toList();
             
-            innerRegexMap.putAll(token, set);
+            innerRegexMap.putAll(token, new HashSet<String>((List) tokenArray));
         }
 
         return innerRegexMap;
     }
 
     public JSONObject toJsonObject() {
-        return new JSONObject(this.innerRegexMap);
+        JSONObject innerRegexMapJson = new JSONObject();
+
+        for (IToken token : allowedTokens) {
+            if (!this.innerRegexMap.get(token).isEmpty()) {
+                innerRegexMapJson.put(token.getLabel(), this.innerRegexMap.get(token));
+            }
+        }
+
+        return innerRegexMapJson;
     }
     //#endregion
 

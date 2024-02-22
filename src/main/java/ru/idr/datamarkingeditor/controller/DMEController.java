@@ -14,8 +14,6 @@ public class DMEController {
     @RequestMapping(value = {"/datamarkingeditor", "/datamarkingeditor/main"})
     public String pageMethod(Model model, HttpServletRequest request, HttpServletResponse response) {
 
-        
-
         model.addAttribute("activePage", "main");
         return "datamarkingeditor/main.html";
     }

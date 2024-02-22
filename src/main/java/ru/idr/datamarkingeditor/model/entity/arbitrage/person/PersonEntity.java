@@ -40,14 +40,18 @@ public abstract class PersonEntity extends Entity {
     public Entity merge(Entity otherEntity) {
         if (this.getClass() != otherEntity.getClass()) throw new IllegalArgumentException("Merging enitties must have the same type.");
 
+        // Merge All Related Keywords Tokens
         this.innerRegexMap.putAll(
             ArbitrageToken.Keyword, 
             otherEntity.getInnerRegexMap().values(ArbitrageToken.Keyword)
         );
+
+        // Merge All Related Words Tokens
         this.innerRegexMap.putAll(
             CommonToken.Word, 
             otherEntity.getInnerRegexMap().values(CommonToken.Word)    
         );
+
         this.related.addAll(otherEntity.getRelated());        
 
         return this;

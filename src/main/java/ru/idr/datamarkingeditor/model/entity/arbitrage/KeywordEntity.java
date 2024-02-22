@@ -21,7 +21,6 @@ public class KeywordEntity extends Entity {
     @Override
     public Entity process() {
         this.innerRegexMap.put(ArbitrageToken.Keyword, this.value);
-
         return this;
     }
 

@@ -15,16 +15,11 @@ public class EntityMapIterator implements Iterator<Entity> {
         this.map = map;
         this.elements = new ArrayList<>(this.map.values());
     }
-
+    
     @Override
-    public boolean hasNext() {
-        return this.cursor != this.map.size();
-    }
-
+    public boolean hasNext() { return this.cursor != this.map.size(); }
     @Override
-    public Entity next() {
-        return getNextElement();
-    }
+    public Entity next() { return getNextElement(); }
 
     private Entity getNextElement() {
         int current = this.cursor;

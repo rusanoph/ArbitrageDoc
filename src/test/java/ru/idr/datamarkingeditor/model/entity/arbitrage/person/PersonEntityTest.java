@@ -155,8 +155,6 @@ public class PersonEntityTest {
 
         String testExpected = "(word2)|(word3)|(repeated word)|(hello)";
 
-        System.out.println(entity1.getValue());
-
         Assertions.assertEquals("(?<ThirdParty>.+?)(?=("+testExpected+"))", entity1.getValue());
         Assertions.assertEquals(
             testExpected, 

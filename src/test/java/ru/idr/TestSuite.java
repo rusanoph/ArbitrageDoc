@@ -4,7 +4,9 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import ru.idr.datamarkingeditor.helper.MarkedDataParserTest;
 import ru.idr.datamarkingeditor.model.InnerRegexMapTest;
+import ru.idr.datamarkingeditor.model.entity.EntityMapTest;
 import ru.idr.datamarkingeditor.model.entity.EntityTest;
 import ru.idr.datamarkingeditor.model.entity.arbitrage.KeywordEntityTest;
 import ru.idr.datamarkingeditor.model.entity.arbitrage.person.CompetitionManagerTest;
@@ -21,10 +23,12 @@ import ru.idr.datamarkingeditor.model.token.ITokenTest;
 @SpringBootTest
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+    //#region Data Marking Editor
     InnerRegexMapTest.class,
     ITokenTest.class,
     
     EntityTest.class,
+    EntityMapTest.class,
     
     WordEntityTest.class,
     MoneySumEntityTest.class,
@@ -36,6 +40,9 @@ import ru.idr.datamarkingeditor.model.token.ITokenTest;
     FinancialManagerTest.class,
     ThirdPartyTest.class,
     KeywordEntityTest.class,
+
+    MarkedDataParserTest.class,
+    //#endregion
 })
 public class TestSuite {
 

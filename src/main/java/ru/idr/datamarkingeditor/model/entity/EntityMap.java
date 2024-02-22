@@ -1,9 +1,11 @@
 package ru.idr.datamarkingeditor.model.entity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -17,9 +19,7 @@ public class EntityMap implements Iterable<Entity> {
     private Map<Integer, Entity> map = new HashMap<>();
 
     //#region Check Properties 
-    public boolean contains(Entity entity) {
-        return map.containsValue(entity);
-    }
+    public boolean contains(Entity entity) { return map.containsValue(entity); }
     //#endregion
 
     //#region Add/Get
@@ -43,9 +43,6 @@ public class EntityMap implements Iterable<Entity> {
     }
 
     public EntityMap addAll(EntityMap entityMap, EntityMap... entityMaps) {
-        
-        // Logic to correctly merge all Entities
-
         for (Entity e : entityMap) this.add(e);
 
         for (EntityMap em : entityMaps) {
@@ -55,9 +52,8 @@ public class EntityMap implements Iterable<Entity> {
         return this;
     }
 
-    public Entity get(Entity patternToken) {
-        return this.map.get(patternToken.hashCode());
-    }
+    public Entity get(Integer hash) { return this.map.get(hash); }
+    public Entity get(Entity patternToken) { return this.map.get(patternToken.hashCode()); }
     
     public Set<Entity> getOfType(IToken token) {
         return this.stream()
@@ -67,9 +63,7 @@ public class EntityMap implements Iterable<Entity> {
     //#endregion
 
     //#region Stream
-    public Stream<Entity> stream() {
-        return map.values().stream();
-    }
+    public Stream<Entity> stream() { return map.values().stream(); }
     //#endregion
 
     //#region Iterable Implementation
@@ -78,24 +72,61 @@ public class EntityMap implements Iterable<Entity> {
     //#endregion
 
     //#region JSON Serializatoin
+    public String toJsonStringAsHashCodes() { return this.toJsonStringAsHashCodes().toString(); }
+    public String toJsonString() { return this.toJsonObject().toString(); }
 
-    public JSONArray toJSONArray() {
+    public JSONArray toJsonArrayAsHashCodes() {
+        JSONArray entitiesHashCodeJson = new JSONArray();
+        for (Entity entity : map.values()) entitiesHashCodeJson.put(entity.hashCode());
+
+        return entitiesHashCodeJson;
+    }
+
+    public JSONObject toJsonObject() {
         
-        JSONArray entitiesJson = new JSONArray();
+        JSONObject entitiesJson = new JSONObject();
+
         for (Entity entity : map.values()) {
-            entitiesJson.put(entity.toJsonObject());
+            entitiesJson.put(
+                "" + entity.hashCode(), 
+                entity.toJsonObject()
+            );
         }
 
         return entitiesJson;
     }
 
-    public static EntityMap fromJsonArray(JSONArray json) {
+    public static List<Integer> fromJSONArrayToHashList(JSONArray hashArray) {
+        List<Integer> hashList = new ArrayList<>();   
+        for (int i = 0; i < hashArray.length(); i++) hashList.add(hashArray.getInt(i));
+
+        return hashList;
+    }
+
+    public static EntityMap fromJsonObject(String rawJson) {
+        JSONObject json = new JSONObject(rawJson);
+        return EntityMap.fromJsonObject(json);
+    }
+
+    public static EntityMap fromJsonObject(JSONObject json) {
+        
         EntityMap entityMap = new EntityMap();
 
-        for (Object o : json) {
-            Entity entity = Entity.fromJsonObject((JSONObject) o);
-            entityMap.add(entity);
-        }   
+        // Add Entities
+        for (String hash : json.keySet()) {
+            entityMap.add(Entity.fromJsonObject(json.getJSONObject(hash)));
+        }
+
+        // Setting relations between entities
+        for (String hash : json.keySet()) {
+            
+            Entity current = entityMap.get(Integer.parseInt(hash));
+            List<Integer> relatedHashes = EntityMap.fromJSONArrayToHashList(json.getJSONObject(hash).getJSONArray("related"));
+            
+            for (Integer relatedHash : relatedHashes) {
+                current.connect(entityMap.get(relatedHash));
+            }
+        }
 
         return entityMap;
     }

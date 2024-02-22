@@ -1,6 +1,7 @@
 package ru.idr.datamarkingeditor.model.token;
 
 public enum ArbitrageToken implements IToken {
+
     Complainant("Complainant"),
     Defendant("Defendant"),
     ThirdParty("ThirdParty"),
@@ -9,9 +10,9 @@ public enum ArbitrageToken implements IToken {
     FinancialManager("FinancialManager"),
 
     Keyword("Keyword"),
-    
     ;
 
+    //#region Token Regexes
     private static final String ComplainantRegex = "(?<Complainant>.+?)(?=())";
     private static final String DefendantRegex = "(?<Defendant>.+?)(?=())";
     private static final String ThirdPartyRegex = "(?<ThirdParty>.+?)(?=())";
@@ -20,6 +21,7 @@ public enum ArbitrageToken implements IToken {
     private static final String FinancialManagerRegex = "(?<FinancialManager>.+?)(?=())";
     
     private static final String KeywordRegex = "(?<Keyword>)";  
+    //#endregion
           
     String label;
     String regex;
@@ -29,10 +31,9 @@ public enum ArbitrageToken implements IToken {
     }
 
     public static ArbitrageToken getByLabel(String label) { return ArbitrageToken.valueOf(label); }
-
     public String getLabel() { return this.label; }
-
     public String getRegex() { return this.regex; }
+    public boolean isKeyword() { return this == ArbitrageToken.Keyword; }
 
     public boolean isPerson() {
         return this == ArbitrageToken.Complainant ||
@@ -41,9 +42,8 @@ public enum ArbitrageToken implements IToken {
         this == ArbitrageToken.FinancialManager ||
         this == ArbitrageToken.CompetitionManager;
     }
-    public boolean isKeyword() { return this == ArbitrageToken.Keyword; }
 
-    // Assignin regex values
+    //#region Assignin Regex Values
     static {
         Complainant.regex = ArbitrageToken.ComplainantRegex;
         Defendant.regex = ArbitrageToken.DefendantRegex;
@@ -53,6 +53,6 @@ public enum ArbitrageToken implements IToken {
         FinancialManager.regex = ArbitrageToken.FinancialManagerRegex;
 
         Keyword.regex = ArbitrageToken.KeywordRegex;
-        
     }
+    //#endregion
 }

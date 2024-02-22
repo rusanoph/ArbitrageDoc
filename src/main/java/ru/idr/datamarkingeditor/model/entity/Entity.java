@@ -7,7 +7,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import ru.idr.datamarkingeditor.model.InnerRegexMap;
@@ -121,11 +120,11 @@ public abstract class Entity {
     
     public static Entity fromJsonObject(JSONObject json) {
         IToken type = IToken.fromString(json.getString("type"));
-        Entity entity = Entity.createInctance(type);
+        Entity entity = Entity.createInstance(type);
 
         entity.value = json.getString("value");
         entity.innerRegexMap = InnerRegexMap.fromJsonObject(json.getJSONObject("innerRegex"));
-        entity.related = EntityMap.fromJsonArray(json.getJSONArray("related"));
+        entity.related = new EntityMap();
 
         return entity;
     }
@@ -141,7 +140,7 @@ public abstract class Entity {
             .put("value", getValue())
             .put("type", getType().getLabel())
             .put("innerRegex", getInnerRegexMap().toJsonObject())
-            .put("related", new JSONArray());
+            .put("related", getRelated().toJsonArrayAsHashCodes());
 
         return entityJson; 
     }
@@ -162,25 +161,28 @@ public abstract class Entity {
     @Override
     public int hashCode() {
         if (this.type.notCommon()) 
-            return Objects.hash(this.type);
+            return Objects.hash(this.type.getLabel());
         else 
-            return Objects.hash(this.value, this.type);
+            return Objects.hash(this.value, this.type.getLabel());
     } 
     //#endregion
 
     //#region Helper methods
+    public static  Entity createInstance(IToken token) {
+        return Entity.createInstance("", token);
+    }
 
-    private static  Entity createInctance(IToken token) {
+    public static  Entity createInstance(String value, IToken token) {
         switch (token) {
-            case CommonToken.Word: return new WordEntity("", token);
-            case CommonToken.MoneySum: return new MoneySumEntity("", token);
+            case CommonToken.Word: return new WordEntity(value, token);
+            case CommonToken.MoneySum: return new MoneySumEntity(value, token);
 
-            case ArbitrageToken.Complainant: return new ComplainantEntity("", token);
-            case ArbitrageToken.Defendant: return new DefendantEntity("", token);
-            case ArbitrageToken.ThirdParty: return new ThirdPartyEntity("", token);
-            case ArbitrageToken.CompetitionManager: return new CompetitionManagerEntity("", token);
-            case ArbitrageToken.FinancialManager: return new FinancialManagerEntity("", token);
-            case ArbitrageToken.Keyword: return new KeywordEntity("", token);
+            case ArbitrageToken.Complainant: return new ComplainantEntity(value, token);
+            case ArbitrageToken.Defendant: return new DefendantEntity(value, token);
+            case ArbitrageToken.ThirdParty: return new ThirdPartyEntity(value, token);
+            case ArbitrageToken.CompetitionManager: return new CompetitionManagerEntity(value, token);
+            case ArbitrageToken.FinancialManager: return new FinancialManagerEntity(value, token);
+            case ArbitrageToken.Keyword: return new KeywordEntity(value, token);
             
             default: return null;
         }
@@ -192,8 +194,8 @@ public abstract class Entity {
             .trim()
             .toLowerCase();
 
-        value = escapeSpecialRegex(value);
-        value = wrapIfShort(value);
+        value = this.escapeSpecialRegex(value);
+        value = this.wrapIfShort(value);
 
         return "("+ value +")";
     }

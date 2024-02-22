@@ -1,17 +1,22 @@
 package ru.idr.datamarkingeditor.api;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
 import java.util.Set;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.websocket.server.PathParam;
 import ru.idr.arbitragestatistics.helper.ServerFile;
 import ru.idr.datamarkingeditor.helper.MarkedDataParser;
 
@@ -26,23 +31,33 @@ public class DMEService {
     private MarkedDataParser parser;
 
     
+    @SuppressWarnings("null")
     @PostMapping(value="/api/markdata/parse", produces="application/json")
-    public String postMarkedTextToParse(@RequestBody String text) {
-        JSONArray jsonObject = parser.toJson(parser.parse(text));
-
-        return jsonObject.toString();
+    public ResponseEntity<Map<String, Object>> postMarkedTextToParse(@RequestBody String text) {
+        JSONObject jsonObject = parser.parse(text).toJsonObject();
+        
+        return ResponseEntity
+            .ok()
+            .contentType(new MediaType("application", "json", StandardCharsets.UTF_8))
+            .body(jsonObject.toMap());
     }
 
-    @GetMapping(value="/api/markdata/combine/{localDirPath}", produces = "application/json")
-    public String getCombineAllJson(@PathVariable String localDirPath) throws IOException {
 
-        var combined = parser.combineAll(MARKED_DATA_URI, localDirPath);
+    @SuppressWarnings("null")
+    @GetMapping(value="/api/markdata/combine", produces = "application/json")
+    public ResponseEntity<Map<String, Object>> getCombineAllJson(@PathParam("path") String path) throws IOException {
 
-        return parser.toJson(combined).toString();
+        var combined = parser.combineAll(MARKED_DATA_URI, path);
+
+        return ResponseEntity
+            .ok()
+            .contentType(new MediaType("application", "json", StandardCharsets.UTF_8))
+            .body(combined.toJsonObject().toMap());
     }
 
+    
     @GetMapping(value="/api/markdata/list/dir")
-    public String getMethodName() {
+    public String getMarkedDataDirs() {
         Set<String> listOfDirectories = ServerFile.listDirectoryServer("markedDataJson");
 
         JSONArray returnJson = new JSONArray();

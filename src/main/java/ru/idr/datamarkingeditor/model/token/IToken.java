@@ -5,8 +5,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public interface IToken {
+    //#region IToken Inheritors Classes (Static)
     public static final List<Class<?>> tokenEnumClasses = 
-        List.of(ArbitrageToken.class, CommonToken.class);
+        List.of(
+            ArbitrageToken.class, 
+            CommonToken.class
+        );
+    //#endregion
 
     public String getLabel();
     

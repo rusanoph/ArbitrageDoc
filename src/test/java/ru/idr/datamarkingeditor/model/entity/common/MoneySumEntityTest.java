@@ -38,17 +38,20 @@ public class MoneySumEntityTest {
         entity1.merge(entity2);
 
         List<Entity> testExpected = List.of(
+            new WordEntity("hello"),
             new KeywordEntity("keyword"),
             new ComplainantEntity(""),
-            new WordEntity("world"),
-            new WordEntity("hello")
+            new WordEntity("world")
         );
 
         Iterator<Entity> testIterator = testExpected.iterator();
         Iterator<Entity> entity1Iterator = entity1.getRelated().iterator();
     
         while (entity1Iterator.hasNext() && testIterator.hasNext()) {
-            Assertions.assertTrue(entity1Iterator.next().equals(testIterator.next()));
+            Entity entity = entity1Iterator.next();
+            Entity test = testIterator.next();
+
+            Assertions.assertTrue(entity.equals(test));
         }
     }
 
