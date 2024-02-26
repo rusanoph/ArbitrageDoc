@@ -18,6 +18,12 @@ public class EntityMap implements Iterable<Entity> {
     
     private Map<Integer, Entity> map = new HashMap<>();
 
+    public EntityMap() {}
+    public EntityMap(JSONObject configJson) {
+        EntityMap configEntityMap = EntityMap.fromJsonObject(configJson);
+        this.map = configEntityMap.map;
+    } 
+
     //#region Check Properties 
     public boolean contains(Entity entity) { return map.containsValue(entity); }
     //#endregion

@@ -27,13 +27,11 @@ public class DMEService {
     @Value("${dme.markeddata.path}")
     private String MARKED_DATA_URI;
 
-    @Autowired
-    private MarkedDataParser parser;
 
-    
     @SuppressWarnings("null")
     @PostMapping(value="/api/markdata/parse", produces="application/json")
     public ResponseEntity<Map<String, Object>> postMarkedTextToParse(@RequestBody String text) {
+        MarkedDataParser parser = new MarkedDataParser();
         JSONObject jsonObject = parser.parse(text).toJsonObject();
         
         return ResponseEntity
@@ -47,6 +45,7 @@ public class DMEService {
     @GetMapping(value="/api/markdata/combine", produces = "application/json")
     public ResponseEntity<Map<String, Object>> getCombineAllJson(@PathParam("path") String path) throws IOException {
 
+        MarkedDataParser parser = new MarkedDataParser();
         var combined = parser.combineAll(MARKED_DATA_URI, path);
 
         return ResponseEntity

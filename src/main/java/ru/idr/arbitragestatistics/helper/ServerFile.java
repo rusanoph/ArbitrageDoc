@@ -69,6 +69,7 @@ public class ServerFile {
         return currentDepthLevelDirectories;
     }
 
+    
     @SafeVarargs
     public static Set<String> listFilesServer(String directoryPath, String... RestDirectoryPath) {
         String directoryURI = Paths.get(directoryPath, RestDirectoryPath).toAbsolutePath().toString();

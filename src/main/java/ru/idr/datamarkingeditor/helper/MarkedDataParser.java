@@ -15,6 +15,7 @@ import ru.idr.arbitragestatistics.helper.ServerFile;
 import ru.idr.datamarkingeditor.model.entity.Entity;
 import ru.idr.datamarkingeditor.model.entity.EntityMap;
 import ru.idr.datamarkingeditor.model.token.IToken;
+import ru.idr.datamarkingeditor.model.token.UtilityToken;
 
 @Component
 public class MarkedDataParser {
@@ -35,6 +36,13 @@ public class MarkedDataParser {
             Element currentToken = root.children().get(i);
             IToken currentType = IToken.fromString(currentToken.tagName());
             current = Entity.createInstance(currentToken.text(), currentType);
+
+            // On first iteration
+            if (i == 0) {
+                Entity initial = Entity.createInstance(UtilityToken.Initial);
+                initial.connect(current);
+                this.entities.add(initial);
+            }
             
             Element nextToken = root.children().get(i + 1);
             IToken nextType = IToken.fromString(nextToken.tagName());

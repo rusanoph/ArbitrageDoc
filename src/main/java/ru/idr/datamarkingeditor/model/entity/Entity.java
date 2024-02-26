@@ -7,7 +7,9 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.catalina.Service;
 import org.json.JSONObject;
+import org.springframework.boot.autoconfigure.integration.IntegrationProperties.RSocket.Server;
 
 import ru.idr.datamarkingeditor.model.InnerRegexMap;
 import ru.idr.datamarkingeditor.model.entity.arbitrage.KeywordEntity;
@@ -18,9 +20,11 @@ import ru.idr.datamarkingeditor.model.entity.arbitrage.person.FinancialManagerEn
 import ru.idr.datamarkingeditor.model.entity.arbitrage.person.ThirdPartyEntity;
 import ru.idr.datamarkingeditor.model.entity.common.MoneySumEntity;
 import ru.idr.datamarkingeditor.model.entity.common.WordEntity;
+import ru.idr.datamarkingeditor.model.entity.utility.InitialEntity;
 import ru.idr.datamarkingeditor.model.token.ArbitrageToken;
 import ru.idr.datamarkingeditor.model.token.CommonToken;
 import ru.idr.datamarkingeditor.model.token.IToken;
+import ru.idr.datamarkingeditor.model.token.UtilityToken;
 
 
 public abstract class Entity {
@@ -29,6 +33,7 @@ public abstract class Entity {
 
     public static final List<IToken> ALLOWED_TOKENS = Stream.of(
 
+        // Arrays.asList(Service),
         Arrays.asList(ArbitrageToken.values()),
         Arrays.asList(CommonToken.values())
 
@@ -75,6 +80,7 @@ public abstract class Entity {
     protected InnerRegexMap innerRegexMap;
     protected EntityMap related;
 
+    protected Entity() {}
     public Entity(String value, IToken type) {
         this.value = preprocess(value);
         this.type = type;
@@ -174,6 +180,8 @@ public abstract class Entity {
 
     public static  Entity createInstance(String value, IToken token) {
         switch (token) {
+            case UtilityToken.Initial: return new InitialEntity();
+
             case CommonToken.Word: return new WordEntity(value, token);
             case CommonToken.MoneySum: return new MoneySumEntity(value, token);
 

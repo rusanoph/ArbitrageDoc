@@ -8,12 +8,14 @@ public interface IToken {
     //#region IToken Inheritors Classes (Static)
     public static final List<Class<?>> tokenEnumClasses = 
         List.of(
+            UtilityToken.class,
             ArbitrageToken.class, 
             CommonToken.class
         );
     //#endregion
 
     public String getLabel();
+    public String getRegex();
     
     default public boolean isPerson() { return false; };
     default public boolean isKeyword() { return false; };
