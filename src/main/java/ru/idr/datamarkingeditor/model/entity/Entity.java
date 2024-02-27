@@ -74,6 +74,7 @@ public abstract class Entity {
     //#endregion
 
     protected String value;
+    protected String rawValue;
     protected IToken type;
     protected InnerRegexMap innerRegexMap;
     protected EntityMap related;
@@ -81,6 +82,7 @@ public abstract class Entity {
 
     protected Entity() {}
     protected Entity(String value, IToken type) {
+        this.rawValue = replaceSpaces(value);
         this.value = preprocess(value);
         this.type = type;
         this.innerRegexMap = new InnerRegexMap();
@@ -99,7 +101,7 @@ public abstract class Entity {
     }
 
     //#region Getter/Setter
-    public String getRawValue() { return value; }  
+    public String getRawValue() { return rawValue; }  
     public String getValue() { return value; }  // This method can be overrided in inheritors
     public IToken getType() { return type; }
     public InnerRegexMap getInnerRegexMap() { return innerRegexMap; }
@@ -161,15 +163,17 @@ public abstract class Entity {
     public String toString() {
         
         // toString this object
-        String result = String.format("%s %s -> %d\r\n", this.getType(), this.getValue(), this.hashCode());
+        String result = String.format("%s %s -> %d (%s)\r\n", this.getType(), this.getValue(), this.hashCode(), this.link());
 
         // toString related/child objects
         for (Entity relatedEntity : this.related) {
-            result += String.format("\t%s %s -> %d\r\n", relatedEntity.getType(), relatedEntity.getValue(), relatedEntity.hashCode());
+            result += String.format("\t%s %s -> %d (%s)\r\n", relatedEntity.getType(), relatedEntity.getValue(), relatedEntity.hashCode(), relatedEntity.link());
         }
-
+        
         return result;
     }
+
+    private String link() { return super.toString(); }
 
     @Override
     public boolean equals(Object obj) {
@@ -217,7 +221,7 @@ public abstract class Entity {
 
     //#region Value preprocessing
     private String preprocess(String value) {
-        value = value
+        value = replaceSpaces(value)
             .trim()
             .toLowerCase();
 
@@ -225,6 +229,10 @@ public abstract class Entity {
         value = this.wrapIfShort(value);
 
         return "("+ value +")";
+    }
+
+    private String replaceSpaces(String value) {
+        return value.replaceAll("[\\s\\r\\n]+", " ");
     }
 
     private String escapeSpecialRegex(String value) {
@@ -238,7 +246,7 @@ public abstract class Entity {
 
     private String wrapIfShort(String value) {
         // Words shorter or equal than 3 letters 
-        return 0 < value.length() && value.length() <= 3 ? "(^|\\s*)" + value + "($|\\s+)" : value;
+        return 0 < value.length() && value.length() <= 3 ? "(^|\\s+)" + value + "($|\\s+)" : value;
     }
     //#endregion
 

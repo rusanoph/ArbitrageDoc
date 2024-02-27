@@ -136,30 +136,30 @@ public class ArbitrageTemplateSeeker {
 
             boolean continueSearch = false;
             
-            System.out.println();
+            // System.out.println();
             for (Vertex<String> vertex : adjacentVertices) {
                 
                 String regex = vertex.getValue().length() > 2 ? vertex.getValue() : RegExRepository.wrapWordAsRegex(vertex.getValue());
                 Matcher m = Pattern.compile(regex, Pattern.CASE_INSENSITIVE | Pattern.DOTALL | Pattern.MULTILINE).matcher(text.toLowerCase());
                 
-                System.out.println("Try regex: '" + regex + "'");
+                // System.out.println("Try regex: '" + regex + "'");
                 if (m.find()) {
-                    System.out.println(
-                        String.format("'%s' (i: %d-%d)", regex, m.start(), m.end())
-                    );
+                    // System.out.println(
+                        // String.format("'%s' (i: %d-%d)", regex, m.start(), m.end())
+                    // );
 
-                    System.out.println(text.substring(0, Math.min(100, text.length())));
+                    // System.out.println(text.substring(0, Math.min(100, text.length())));
 
                     // minHasNamedGroups = !minHasNamedGroups && m.namedGroups().isEmpty();
                     
                     if (minMatchIndexStart > m.start()) {
                         if (m.namedGroups().keySet().contains(ArbitrageToken.Complainant.getLabel()) && hasComplainant) {
-                            System.out.println("Has comp");
+                            // System.out.println("Has comp");
                             continue;
                         }
 
                         if (m.namedGroups().keySet().contains(ArbitrageToken.Defendant.getLabel()) && hasDefendant) {
-                            System.out.println("Has def");
+                            // System.out.println("Has def");
                             continue;
                         }
 

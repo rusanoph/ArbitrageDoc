@@ -3,7 +3,7 @@ word {
     border: 1px solid #333;
 }
 
-complainant, defendant, thirdparty, financialmanager, courtcasesum, keyword {
+complainant, defendant, thirdparty, financialmanager, competitionmanager, courtcasesum, keyword {
     border: 1px solid transparent;
 }
 
@@ -19,11 +19,15 @@ thirdparty {
     background: #b8e7c9;
 }
 
+competitionmanager {
+    background: #ADD8E6;
+}
+
 financialmanager {
     background: #FFDAB9;
 }
 
-courtcasesum {
+moneysum {
     background: #F0E68C;
 }
 

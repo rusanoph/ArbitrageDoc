@@ -32,6 +32,10 @@ public class GraphController {
 
         MarkedDataParser parser = new MarkedDataParser();
         EntityMap em = parser.combine(Set.of(fileName), MARKED_DATA_URI, pathDirectories);
+
+        int i = 0;
+        for (var e : em) i++;
+        System.out.println(i); 
         
         setGraphDataToModel(model, em.toGraph(), "verticesGraph", "edgesGraph");
 

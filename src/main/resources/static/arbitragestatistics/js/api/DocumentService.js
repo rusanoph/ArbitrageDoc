@@ -1,5 +1,17 @@
 
 export class DocumentService {
+
+    static async postTextToGetEntities(text) {
+        const url = "/api/markdata/entities";
+
+        const response = await fetch(url, {
+            method: 'POST',
+            body: text,
+        });
+        let data = await response.json();
+
+        return data;
+    }
     
     static async getDocumentText(path, filename, formated=false, lemma=false) {
         let params = {

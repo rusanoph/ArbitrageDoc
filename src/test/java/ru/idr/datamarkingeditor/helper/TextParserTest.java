@@ -4,7 +4,8 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import ru.idr.arbitragestatistics.helper.ServerFile;
+import ru.idr.arbitragestatistics.helper.DocumentProcessor;
+import ru.idr.datamarkingeditor.model.entity.EntityMap;
 
 public class TextParserTest {
 
@@ -13,9 +14,18 @@ public class TextParserTest {
     @Test
     public void constructorTest() throws IOException {
 
-        String modelRawJson = ServerFile.fileText("model.json", MARKED_DATA_URI, "JsonTest", "TextParserTest");
-        TextParser parser = new TextParser(modelRawJson);
+        MarkedDataParser markedParser = new MarkedDataParser();
+        EntityMap model = markedParser.combineAll(MARKED_DATA_URI, "JsonTest", "ModelOn20Files", "json");
+        TextParser parser = new TextParser(model);
 
-        System.out.println(parser.getEM().toJsonObject());
+        String textToParse = DocumentProcessor.getText("2022010315_txt", "Parsed_0b4a95fc-a199-49f3-afa9-9b15918a51d1.txt");
+
+        // var foundEntities = parser.parseEntities(textToParse);
+        // for (Entity e : foundEntities) System.out.println(String.format("%s: %s {%s}", e.getType(), e.getRawValue(), e.getValue()));
+        // for (Entity e : foundEntities) System.out.println(String.format("%s: %s", e.getType(), e.getRawValue()));
+
+        // System.out.println(parser.getEM().toJsonObject());
+
+        System.out.println(parser.parseEntitiesAsJson(textToParse).toString(4));
     }
 }

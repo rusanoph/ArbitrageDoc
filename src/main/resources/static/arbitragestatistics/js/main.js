@@ -119,6 +119,22 @@ class MainPageDocument {
                     previouslySelected.classList.remove('selected');
                 }
                 li.classList.add('selected');
+
+                await DocumentService.postTextToGetEntities(document.getElementById("document-text").innerText)
+                .then(data => {
+                    console.log(data);
+                    const entitiesList = document.getElementById("document-entities");
+
+                    entitiesList.innerHTML = "";
+                    
+                    entitiesList.innerHTML += data.path.map(step => 
+                        `${step.value.length > 50 ? step.value.substring(0, 50)+"..." : step.value} (${step.start}-${step.end})`
+                    ).join(" ⟶ ");
+                    
+                    for (let entity of data.entities) {
+                        entitiesList.innerHTML += this.EntityComponent(entity); 
+                    }
+                });
             });
 
             documentListElement.appendChild(li);
@@ -131,14 +147,12 @@ class MainPageDocument {
         }
     }
 
-/*
---- main structure ---
-
-
---- subject structure ---
-
-*/
-
+    EntityComponent(entity) {
+        return `<div class="entity">
+            <div>${entity.type}</div>
+            <div>${entity.value}</div>
+        </div>`
+    }
 
 }
 

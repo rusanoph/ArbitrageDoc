@@ -80,5 +80,4 @@ public class MarkedDataParser {
 
         return this.combine(filesInDirectory, directoryPath, restDirectoryPath);
     }
-
 }

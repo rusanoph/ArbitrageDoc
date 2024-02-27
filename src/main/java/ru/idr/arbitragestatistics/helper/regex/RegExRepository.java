@@ -33,7 +33,7 @@ public class RegExRepository {
     public static  String regexMoneySumComma = "([\\s*.]?\\d+)+,\\s*([\\s*.]?\\d+)+\\s*(р\\.|руб\\.|рублей)";
     public static  String regexMoneySumComment = "([\\s*.]?\\d+)+\\s*(\\([А-Яа-я ]*\\))?\\s*(р\\.|руб\\.|рублей)\\s*(([\\s*.]?\\d+)+\\s*(к\\.|коп\\.|копеек))";    
 
-    public static String regexCourtCaseSum = String.join("|", regexMoneySum, regexMoneySumFull, regexMoneySumComma, regexMoneySumComment);
+    public static String regexCourtCaseSum = String.join("|", regexMoneySumFull, regexMoneySumComma, regexMoneySumComment, regexMoneySum);
     //#endregion
 
     //#region Other

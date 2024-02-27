@@ -1,7 +1,10 @@
 package ru.idr.arbitragestatistics.helper;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -91,4 +94,18 @@ public class ServerFile {
         return ServerFile.listFilesServer("", "txtFiles", directoryPath);
     }
 
+
+    public static void saveString(String text, String directoryPath, String filename) {
+        File fileToSave = new File(Paths.get(directoryPath, filename).toString());
+
+        try (FileOutputStream fileOutputStream = new FileOutputStream(fileToSave);
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream, StandardCharsets.UTF_8);
+            BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter);) {
+
+            bufferedWriter.write(text);
+
+        } catch (IOException ioEx) {
+            ioEx.printStackTrace();
+        }
+    }
 }

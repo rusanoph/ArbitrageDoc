@@ -14,6 +14,9 @@ import org.json.JSONObject;
 
 import ru.idr.arbitragestatistics.util.datastructure.Graph;
 import ru.idr.arbitragestatistics.util.datastructure.Vertex;
+import ru.idr.datamarkingeditor.model.entity.arbitrage.person.DefendantEntity;
+import ru.idr.datamarkingeditor.model.entity.common.WordEntity;
+import ru.idr.datamarkingeditor.model.token.ArbitrageToken;
 import ru.idr.datamarkingeditor.model.token.IToken;
 
 public class EntityMap implements Iterable<Entity> {
@@ -161,15 +164,31 @@ public class EntityMap implements Iterable<Entity> {
             graph.addVertex(
                 new Vertex<String>(e.getValue(), e.getType().getLabel())
             );
+
+            // System.out.println(e);
         }
+
+        // for (var v : graph.getVerticesSet()) System.out.print(String.format("{v: %s, d: %d}, \n", v.getValue(), v.getDepth()));
+
+        // System.out.println(graph.getVertexByDepthValue(0, "(?<Defendant>.+?)(?=((установил)|((^|\\s*)о($|\\s+))))").getValue());
 
         for (Entity e : this) {
             Vertex<String> v = graph.getVertexByDepthValue(0, e.getValue());
-
+            
+            // System.out.println(v.getType() + " " + v.getValue() + " " + v.getDepth());
+            // System.out.println(e);
             for (Entity oe : e.getRelated()) {
+
                 Vertex<String> u = graph.getVertexByDepthValue(0, oe.getValue());
 
+                if (u == null) {
+                    // System.out.println(oe.getValue());
+                    continue;
+                }
+                // System.out.println("\t" + oe.getType() + " " + oe.getValue());
+                
                 graph.addOrEdge(v, u);
+
             }
         }
 
