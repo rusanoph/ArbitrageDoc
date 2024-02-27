@@ -5,14 +5,12 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
 import ru.idr.arbitragestatistics.helper.regex.RegExRepository;
 import ru.idr.arbitragestatistics.model.datastructure.StaticGraphs;
 import ru.idr.arbitragestatistics.util.datastructure.Graph;
 import ru.idr.arbitragestatistics.util.datastructure.Vertex;
-import ru.idr.datamarkingeditor.model.entity.EntityMap;
 import ru.idr.datamarkingeditor.model.token.ArbitrageToken;
 
 @Component
@@ -212,24 +210,6 @@ public class ArbitrageTemplateSeeker {
 
         return "Result:\n " + result;
     }
-
-    public JSONObject parseEntities(String text, String rawJson) {
-        JSONObject json = new JSONObject(rawJson);
-        
-        return this.parseEntities(text, json);
-    }
-
-    public JSONObject parseEntities(String text, JSONObject json) {
-        JSONObject foundEntities = new JSONObject();
-
-        EntityMap entitiesModel = new EntityMap(json);
-
-        
-
-
-        return foundEntities;
-    }
-
     //#endregion
 
 

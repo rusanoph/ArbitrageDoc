@@ -83,9 +83,14 @@ public class MarkedDataParserTest {
             .add(entityWord3)
             .add(entityWord4);
 
-        System.out.println(entities.toJsonObject().toString());
-        System.out.println(testExpected.toJsonObject().toString());
-
         Assertions.assertTrue(entities.toJsonObject().similar(testExpected.toJsonObject()));
+    }
+
+
+    @Test
+    public void combine() throws IOException {
+        MarkedDataParser parser = new MarkedDataParser();
+        EntityMap entities = parser.combineAll("markedDataJson", "JsonTest", "CombineCyclicTest");
+        System.out.println(entities.toJsonObject().toString(4));
     }
 }

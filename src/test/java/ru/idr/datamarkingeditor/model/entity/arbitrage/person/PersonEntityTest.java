@@ -103,6 +103,8 @@ public class PersonEntityTest {
 
         entity1.merge(entity2);
 
+        System.out.println(entity1);
+
         Entity testEntity = new DefendantEntity("");
         testEntity
             .connect(new WordEntity("hello"))

@@ -316,10 +316,14 @@ pre {
 /* #region General Actions */
 
 .general-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
     padding: 20px 0;
     width: 100%;
     border-top: 1px solid #aaa;
-    margin: 0 0 50px 0;
+    margin: 20px 0 50px 0;
 }
 /* #endregion */
 

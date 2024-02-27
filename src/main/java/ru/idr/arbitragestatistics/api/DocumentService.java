@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,12 +21,30 @@ import ru.idr.arbitragestatistics.helper.ArbitrageTemplateSeeker;
 import ru.idr.arbitragestatistics.helper.DocumentProcessor;
 import ru.idr.arbitragestatistics.helper.ServerFile;
 import ru.idr.arbitragestatistics.model.TitleData;
+import ru.idr.datamarkingeditor.helper.TextParser;
 
 @RestController
 public class DocumentService {
 
+    @Value("${dme.markeddata.path}")
+    private String MARKED_DATA_URI;
+
     @Autowired
     ArbitrageTemplateSeeker ats;
+
+    //#region Parsing
+    @GetMapping(value = "/api/document/parsing", produces="application/json")
+    public String getMethodName(@RequestParam("documentPath") String documentPath, @RequestParam("documentFileName") String documentFileName) throws IOException {
+
+        String modelRawJson = ServerFile.fileText("model.json", MARKED_DATA_URI, "JsonTest", "TextParserTest");
+        TextParser parser = new TextParser(modelRawJson);
+
+        // ... not implemented ...
+
+        return new String();
+    }
+    
+    //#endregion
 
     //#region Document Object
     @GetMapping(value="/api/document/text", produces="application/json")    

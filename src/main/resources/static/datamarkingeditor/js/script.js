@@ -232,21 +232,11 @@ function redoButtonClickEvent() {
 }
 
 async function combineAllClickEvent() {
-    const jsonScope = document.getElementById("json-scope-select").value;
+    const jsonScope = document.getElementById("json-combine-path").value;
 
     await dmeService.saveCombinedText(jsonScope);
 }
 
-async function combineSelectClickEvent() {
-    // jsonScopeSelect.innerHTML = "";
-
-    await dmeService.getMarkedDataDirectories()
-    .then(dirs => {
-        let dirOptionList = "";
-        dirs.forEach(dir => dirOptionList += OptionElement(dir, dir));
-        jsonScopeSelect.innerHTML = dirOptionList;
-    });
-}
 //#endregion
 
 //#region State 
@@ -389,7 +379,7 @@ if (localStorage.getItem("stateStack")) {
 }
 
 const combineAllInJsonScopeButton = document.getElementById("combine-all-json-button");
-const jsonScopeSelect = document.getElementById("json-scope-select");
+const jsonScopeInput = document.getElementById("json-combine-path");
 //#endregion
 
 //#region Evet Listeners
@@ -411,7 +401,6 @@ undoButton.addEventListener('click', undoButtonClickEvent);
 redoButton.addEventListener('click', redoButtonClickEvent);
 
 combineAllInJsonScopeButton.addEventListener('click', combineAllClickEvent);
-jsonScopeSelect.addEventListener('click', async (e) => {e.stopPropagation(); await combineSelectClickEvent()});
 //#endregion
 
 

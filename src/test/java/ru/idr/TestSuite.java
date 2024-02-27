@@ -1,10 +1,16 @@
 package ru.idr;
 
+
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.google.code.regexp.Matcher;
+import com.google.code.regexp.Pattern;
+
 import ru.idr.datamarkingeditor.helper.MarkedDataParserTest;
+import ru.idr.datamarkingeditor.helper.TextParserTest;
 import ru.idr.datamarkingeditor.model.InnerRegexMapTest;
 import ru.idr.datamarkingeditor.model.entity.EntityMapTest;
 import ru.idr.datamarkingeditor.model.entity.EntityTest;
@@ -42,6 +48,7 @@ import ru.idr.datamarkingeditor.model.token.ITokenTest;
     KeywordEntityTest.class,
 
     MarkedDataParserTest.class,
+    TextParserTest.class,
     //#endregion
 })
 public class TestSuite {

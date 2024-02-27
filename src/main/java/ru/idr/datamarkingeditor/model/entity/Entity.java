@@ -7,9 +7,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.catalina.Service;
 import org.json.JSONObject;
-import org.springframework.boot.autoconfigure.integration.IntegrationProperties.RSocket.Server;
 
 import ru.idr.datamarkingeditor.model.InnerRegexMap;
 import ru.idr.datamarkingeditor.model.entity.arbitrage.KeywordEntity;
@@ -79,9 +77,10 @@ public abstract class Entity {
     protected IToken type;
     protected InnerRegexMap innerRegexMap;
     protected EntityMap related;
+    protected Boolean visited = false;
 
     protected Entity() {}
-    public Entity(String value, IToken type) {
+    protected Entity(String value, IToken type) {
         this.value = preprocess(value);
         this.type = type;
         this.innerRegexMap = new InnerRegexMap();
@@ -95,14 +94,19 @@ public abstract class Entity {
 
     public Entity connect(Entity otherEnity) {
         this.related.add(otherEnity);
+        this.visited = false;
         return this;
     }
 
     //#region Getter/Setter
-    public String getValue() { return value; }
+    public String getRawValue() { return value; }  
+    public String getValue() { return value; }  // This method can be overrided in inheritors
     public IToken getType() { return type; }
     public InnerRegexMap getInnerRegexMap() { return innerRegexMap; }
     public EntityMap getRelated() { return related; }
+    public Boolean isVisited() { return visited; }
+    
+    public void setVisit(Boolean visited) { this.visited = visited; } 
     //#endregion
 
     //#region Property Checking
@@ -154,12 +158,27 @@ public abstract class Entity {
     
     //#region Object Overrides
     @Override
+    public String toString() {
+        
+        // toString this object
+        String result = String.format("%s %s -> %d\r\n", this.getType(), this.getValue(), this.hashCode());
+
+        // toString related/child objects
+        for (Entity relatedEntity : this.related) {
+            result += String.format("\t%s %s -> %d\r\n", relatedEntity.getType(), relatedEntity.getValue(), relatedEntity.hashCode());
+        }
+
+        return result;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || this.getClass() != obj.getClass()) return false;
 
         Entity other = (Entity) obj;
 
+        // If entity is common, then equals by type and value, else only by type
         return Objects.equals(this.type, other.type) && 
             (Objects.equals(this.value, other.value) || this.type.notCommon());
     }

@@ -73,15 +73,7 @@ export class DMEService {
     }
 
     async getCombineAllJson(jsonScope) {
-        let url = `/api/markdata/combine/${jsonScope}`;
-        const response = await fetch(url);
-        let data = await response.json();
-
-        return data;
-    }
-
-    async getMarkedDataDirectories() {
-        let url = `/api/markdata/list/dir`;
+        let url = `/api/markdata/combine/all?path=${jsonScope}`;
         const response = await fetch(url);
         let data = await response.json();
 

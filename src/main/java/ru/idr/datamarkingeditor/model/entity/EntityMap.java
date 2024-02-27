@@ -12,6 +12,8 @@ import java.util.stream.Stream;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import ru.idr.arbitragestatistics.util.datastructure.Graph;
+import ru.idr.arbitragestatistics.util.datastructure.Vertex;
 import ru.idr.datamarkingeditor.model.token.IToken;
 
 public class EntityMap implements Iterable<Entity> {
@@ -26,6 +28,17 @@ public class EntityMap implements Iterable<Entity> {
 
     //#region Check Properties 
     public boolean contains(Entity entity) { return map.containsValue(entity); }
+
+    public boolean isEmpty() { return this.map.isEmpty(); }
+    public boolean notEmpty() { return !this.map.isEmpty(); }
+
+    public boolean hasUnvisited() {
+        for (Entity e : this) if (!e.isVisited()) return true;
+        return false;
+    }
+    public void unvisitAll() {
+        for (Entity e : this) e.setVisit(false);
+    }
     //#endregion
 
     //#region Add/Get
@@ -33,18 +46,20 @@ public class EntityMap implements Iterable<Entity> {
 
         int hash = entity.hashCode();
 
-        if (this.map.values().contains(entity)) {
+        if (this.map.containsValue(entity)) {
             Entity current = this.map.get(hash);
-            this.map.put(hash, current.merge(entity));
+
+            // If not visited block current entity with visited property and
+            // after merging set unvisited
+            if (!current.isVisited()) {
+                current.setVisit(true);
+                this.map.put(hash, current.merge(entity));
+                current.setVisit(false);
+            }
         } else {
             this.map.put(hash, entity);
         }
         
-        return this;
-    }
-
-    public EntityMap addAll(Entity... entities) {
-        for (Entity e : entities) this.add(e);
         return this;
     }
 
@@ -136,6 +151,30 @@ public class EntityMap implements Iterable<Entity> {
 
         return entityMap;
     }
-
     //#endregion
+
+    //#region To Graph<> & Vertex
+    public Graph<String> toGraph() {
+        Graph<String> graph = new Graph<>();
+
+        for (Entity e : this) {
+            graph.addVertex(
+                new Vertex<String>(e.getValue(), e.getType().getLabel())
+            );
+        }
+
+        for (Entity e : this) {
+            Vertex<String> v = graph.getVertexByDepthValue(0, e.getValue());
+
+            for (Entity oe : e.getRelated()) {
+                Vertex<String> u = graph.getVertexByDepthValue(0, oe.getValue());
+
+                graph.addOrEdge(v, u);
+            }
+        }
+
+        return graph;
+    }
+    //#endregion
+
 }

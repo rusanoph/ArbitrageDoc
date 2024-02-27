@@ -1,49 +1,46 @@
 package ru.idr.arbitragestatistics.controller;
 
 import java.io.IOException;
+import java.util.Set;
 
 import org.json.JSONArray;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.websocket.server.PathParam;
 import ru.idr.arbitragestatistics.util.IJsonSerializable;
 import ru.idr.arbitragestatistics.util.datastructure.Graph;
 import ru.idr.datamarkingeditor.helper.MarkedDataParser;
+import ru.idr.datamarkingeditor.model.entity.EntityMap;
+
 import org.springframework.web.bind.annotation.RequestMethod;
 
 
 @Controller
 public class GraphController {
 
-    @Autowired
-    MarkedDataParser parser;
-
     @Value("${dme.markeddata.path}")
     private String MARKED_DATA_URI;
 
-    @RequestMapping(value = {"/graph/{pathDirectories}/{fileName}"}, method=RequestMethod.GET)
-    public String pageMethodWithSegments(Model model, @PathVariable("pathDirectories") String[] pathDirectories, @PathVariable("fileName") String fileName) throws IOException {
+    @RequestMapping(value = {"/graph/file"}, method=RequestMethod.GET)
+    public String pageMethodWithSegments(Model model, @PathParam("pathDirectories") String[] pathDirectories, @PathParam("fileName") String[] fileName) throws IOException {
+
+
+        MarkedDataParser parser = new MarkedDataParser();
+        EntityMap em = parser.combine(Set.of(fileName), MARKED_DATA_URI, pathDirectories);
+        
+        setGraphDataToModel(model, em.toGraph(), "verticesGraph", "edgesGraph");
 
         return "arbitragestatistics/graph.html";
     }
-    
-
 
     @RequestMapping(value = {"/graph"})
     public String pageMethod(Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        
-        //#region cdpGraph
-        // var cdpGraph = StaticGraphs.getCdpGraph();
-        // setGraphDataToModel(model, cdpGraph, "verticesCdpGraph", "edgesCdpGraph");
-        IJsonSerializable g = new Graph<String>();
-        setGraphDataToModel(model, g, "verticesCdpGraph", "edgesCdpGraph");
-        //#endregion
+        setGraphDataToModel(model, new Graph<String>(), "verticesGraph", "edgesGraph");
 
         return "arbitragestatistics/graph.html";
     }
