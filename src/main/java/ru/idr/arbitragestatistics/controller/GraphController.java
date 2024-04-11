@@ -26,6 +26,14 @@ public class GraphController {
     @Value("${dme.markeddata.path}")
     private String MARKED_DATA_URI;
 
+    @RequestMapping(value="/graph/input", method=RequestMethod.GET)
+    public String graphInputPage(HttpServletRequest request, Model model) {    
+        
+        model.addAttribute("activePage", "graph");
+        
+        return "arbitragestatistics/graph-input.html";
+    }
+
     @RequestMapping(value = {"/graph/file"}, method=RequestMethod.GET)
     public String pageMethodWithSegments(Model model, @PathParam("pathDirectories") String[] pathDirectories, @PathParam("fileName") String[] fileName) throws IOException {
 
@@ -33,11 +41,8 @@ public class GraphController {
         MarkedDataParser parser = new MarkedDataParser();
         EntityMap em = parser.combine(Set.of(fileName), MARKED_DATA_URI, pathDirectories);
 
-        int i = 0;
-        for (var e : em) i++;
-        System.out.println(i); 
-        
         setGraphDataToModel(model, em.toGraph(), "verticesGraph", "edgesGraph");
+        model.addAttribute("activePage", "graph");
 
         return "arbitragestatistics/graph.html";
     }
@@ -45,6 +50,8 @@ public class GraphController {
     @RequestMapping(value = {"/graph"})
     public String pageMethod(Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
         setGraphDataToModel(model, new Graph<String>(), "verticesGraph", "edgesGraph");
+
+        model.addAttribute("activePage", "graph");
 
         return "arbitragestatistics/graph.html";
     }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.websocket.server.PathParam;
+import ru.idr.arbitragestatistics.helper.ArbitrageTemplateSeeker;
 import ru.idr.datamarkingeditor.helper.MarkedDataParser;
 import ru.idr.datamarkingeditor.helper.TextParser;
 import ru.idr.datamarkingeditor.model.entity.EntityMap;
@@ -76,11 +77,23 @@ public class DMEService {
         JSONObject response;
         try {
             MarkedDataParser markedParser = new MarkedDataParser();
+            
+            
+            // Using model - ModelOn20Files (actually 11 jsons inside)
             EntityMap model = markedParser.combineAll(MARKED_DATA_URI, "JsonTest", "ModelOn20Files", "json");
+
+            // Prepare text
+            ArbitrageTemplateSeeker seeker = new ArbitrageTemplateSeeker();
+            String headerText = seeker.getHeaderPart(text);
+
             TextParser parser = new TextParser(model);
             response = new JSONObject()
-                .put("entities", parser.parseEntitiesAsJson(text))
-                .put("path", parser.getPathAsJson());
+                .put(
+                    "header", 
+                    new JSONObject()
+                        .put("entities", parser.parseEntitiesAsJson(headerText))
+                        .put("path", parser.getPathAsJson())
+                );
 
         } catch (IOException ioEx) {
             response = new JSONObject()

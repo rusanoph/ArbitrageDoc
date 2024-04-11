@@ -226,9 +226,14 @@ public abstract class Entity {
             .toLowerCase();
 
         value = this.escapeSpecialRegex(value);
-        value = this.wrapIfShort(value);
+        // value = this.wrapIfShort(value);
+        value = this.wrapAsWord(value);
 
         return "("+ value +")";
+    }
+
+    private String wrapAsWord(String value) {
+        return "(^|\\s+)" + value + "($|\\s+)";
     }
 
     private String replaceSpaces(String value) {

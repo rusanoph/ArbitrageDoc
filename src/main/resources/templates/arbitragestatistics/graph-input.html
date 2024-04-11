@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Граф разбора</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/arbitragestatistics/css/components.css">
+    
+    <link rel="stylesheet" href="/arbitragestatistics/css/main.css">
+    <link rel="stylesheet" href="/arbitragestatistics/css/graph.css"/>
+
+    <style>
+        main .wrapper {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: start;
+            width: 100%;
+        }
+
+        .form-block, .delimiter-block, .info-block {
+            width: 100%;
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <script th:inline="javascript">
+        //#region Vertices and edges 
+        
+        let verticesGraph = /*[[${verticesGraph}]]*/ "{}";
+        let verticesGraphJson = JSON.parse(verticesGraph);
+
+        let edgesGraph = /*[[${edgesGraph}]]*/ "{}";
+        let edgesGraphJson = JSON.parse(edgesGraph);
+
+        //#endregion
+    </script>
+
+    <header th:replace="~{/arbitragestatistics/fragments/_header :: header}"></header>
+
+    <div id="backToBottom"></div>
+
+    <main>
+        <div class="container">
+            <div class="wrapper">
+
+                <div class="form-block">
+                    <h1>Выбрать граф</h1>
+                    <form action="/graph/file" method="GET">
+                        <div class="form-row" style="width: 80%;">
+                            <input id="path-directories" name="pathDirectories" type="text" placeholder="">
+                            <label for="pathDirectories">Путь относительно /markedDataJson</label>
+                        </div>
+                        <div class="form-row" style="width: 80%;">
+                            <input id="document-path" name="fileName" type="text" placeholder="">
+                            <label for="fileName">Имя файла .json</label>
+                        </div>
+                        <input class="button-component" type="submit" value="Открыть">
+                    </form>
+                </div>
+
+                <div class="delimiter-block"></div>
+
+                <div class="info-block">
+                    <h1>Информация</h1>
+                    <p>Вводится путь до файла json формата модели разбора текста, построенного с помощью DME.</p>
+                    <p>Пусть вычисляется относительно #/markedDataJson, где # - корень проекта.</p>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+
+    <footer th:replace="~{/arbitragestatistics/fragments/_footer :: footer}"></footer>
+
+    <div id="backToTop"></div>
+
+    <!-- JS Library -->
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+
+    <!-- JS -->
+    <script src="/arbitragestatistics/js/component.js"></script>
+    <script src="/arbitragestatistics/js/main.js" type="module"></script>
+    <script type="module" src="/arbitragestatistics/js/graph.js"></script>
+</body>
+</html>

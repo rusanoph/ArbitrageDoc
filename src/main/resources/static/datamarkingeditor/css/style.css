@@ -48,6 +48,8 @@ select {
 
 /* #region Header */
 .header {
+    display: flex;
+    justify-content: space-between;
     width: 100%;
 
     border-bottom: 1px solid #aaa;
@@ -185,6 +187,9 @@ h2 {
     min-height: 350px;
     /* height: fit-content; */
 
+    border-bottom: 1px solid #aaa;
+    box-shadow: 5px 5px 5px -10px #aaa;
+
     font-size: 1.2rem;
     line-height: 1.8rem;
 
@@ -314,6 +319,12 @@ pre {
 /* #endregion */
 
 /* #region General Actions */
+
+.info {
+    display: flex;
+    width: 100%;
+    font-size: 1.2rem;
+}
 
 .general-actions {
     display: flex;

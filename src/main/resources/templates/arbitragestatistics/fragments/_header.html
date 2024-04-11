@@ -26,6 +26,10 @@
                             <div th:class="(${activePage == 'documenttable'} ? 'button-component-active' : '') + ' button-component'">Таблица документов</div>
                         </a>
 
+                        <a href="/graph/input">
+                            <div th:class="(${activePage == 'graph'} ? 'button-component-active' : '') + ' button-component'">Просмотр графа модели</div>
+                        </a>
+
                         <a href="/datamarkingeditor">
                             <div id="ico-dme" th:class="(${activePage == 'datamarkingeditor'} ? 'button-component-active' : '') + ' button-component'">DME</div>
                         </a>

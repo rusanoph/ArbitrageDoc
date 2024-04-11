@@ -120,21 +120,26 @@ class MainPageDocument {
                 }
                 li.classList.add('selected');
 
+                //#region Update Entities view
                 await DocumentService.postTextToGetEntities(document.getElementById("document-text").innerText)
                 .then(data => {
-                    console.log(data);
-                    const entitiesList = document.getElementById("document-entities");
 
+                    const header = data.header;
+
+                    const entitiesList = document.getElementById("document-entities");
                     entitiesList.innerHTML = "";
                     
-                    entitiesList.innerHTML += data.path.map(step => 
+                    entitiesList.innerHTML += `<h1>Заголовок</h1>`
+                    
+                    entitiesList.innerHTML += header.path.map(step => 
                         `${step.value.length > 50 ? step.value.substring(0, 50)+"..." : step.value} (${step.start}-${step.end})`
                     ).join(" ⟶ ");
                     
-                    for (let entity of data.entities) {
+                    for (let entity of header.entities) {
                         entitiesList.innerHTML += this.EntityComponent(entity); 
                     }
                 });
+                //#endregion
             });
 
             documentListElement.appendChild(li);
@@ -149,7 +154,7 @@ class MainPageDocument {
 
     EntityComponent(entity) {
         return `<div class="entity">
-            <div>${entity.type}</div>
+            <div><b>${entity.type}</b></div>
             <div>${entity.value}</div>
         </div>`
     }
